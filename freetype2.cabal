@@ -1,33 +1,77 @@
--- The name of the package.
 Name:                freetype2
 Version:             0.1
 Synopsis:            Haskell binding for the excellent freetype2 library
--- Description:         
+Description:         Wrapper around freetype2 library.
 License:             BSD3
 License-file:        LICENSE
 Author:              Jason Dagit <dagitj@gmail.com>
 Maintainer:          Jason Dagit <dagitj@gmail.com>
--- Copyright:           
+Copyright:           Copyright Jason Dagit 2011
 Category:            Graphics
 Build-type:          Simple
--- Extra-source-files:  
-Cabal-version:       >=1.2
+Extra-source-files:  objs/ftmodule.h
+                     include/*.h
+                     include/freetype/*.h
+                     include/freetype/config/*.h
+                     include/freetype/internal/*.h
+                     include/freetype/internal/services/*.h
+                     src/base/*.h
+                     src/base/*.c
+                     src/truetype/*.h
+                     src/truetype/*.c
+                     src/type1/*.h
+                     src/type1/*.c
+                     src/cff/*.h
+                     src/cff/*.c
+                     src/cid/*.h
+                     src/cid/*.c
+                     src/pfr/*.h
+                     src/pfr/*.c
+                     src/type42/*.h
+                     src/type42/*.c
+                     src/winfonts/*.h
+                     src/winfonts/*.c
+                     src/pcf/*.h
+                     src/pcf/*.c
+                     src/bdf/*.h
+                     src/bdf/*.c
+                     src/sfnt/*.h
+                     src/sfnt/*.c
+                     src/autofit/*.h
+                     src/autofit/*.c
+                     src/pshinter/*.h
+                     src/pshinter/*.c
+                     src/raster/*.h
+                     src/raster/*.c
+                     src/smooth/*.h
+                     src/smooth/*.c
+                     src/cache/*.h
+                     src/cache/*.c
+                     src/gzip/*.h
+                     src/gzip/*.c
+                     src/lzw/*.h
+                     src/lzw/*.c
+                     src/psaux/*.h
+                     src/psaux/*.c
+                     src/psnames/*.h
+                     src/psnames/*.c
+                     
+Cabal-version:       >=1.6
 
 Library
   -- Modules exported by the library.
-  -- Exposed-modules:     
+  Exposed-modules: Graphics.Rendering.FreeType.Internal
   
   -- Packages needed in order to build this package.
-  -- Build-depends:       
+  Build-depends: base > 3 && < 5
   
   -- Modules not exported by this package.
   -- Other-modules:       
   
   -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
   -- Build-tools:
---  if os(windows)      
---    c-sources: builds/win32/ftdebug.c
-  include-dirs: objs builds/ansi include include/freetype/config/
+  include-dirs: objs include include/freetype/config
+                include/freetype
                 src/base
                 src/truetype
                 src/type1
@@ -51,7 +95,7 @@ Library
   cc-options: -DFT_CONFIG_CONFIG_H=<ftconfig.h>
               -DFT2_BUILD_LIBRARY
               -DFT_CONFIG_MODULES_H=<ftmodule.h>
-              -pedantic -ansi -DDARWIN_NO_CARBON
+              -DDARWIN_NO_CARBON
 
   c-sources:
              src/base/ftsystem.c
@@ -96,3 +140,7 @@ Library
              src/bzip2/ftbzip2.c
              src/psaux/psaux.c
              src/psnames/psmodule.c
+source-repository head
+  type: git
+  location: git://github.com/dagit/freetype2.git
+
