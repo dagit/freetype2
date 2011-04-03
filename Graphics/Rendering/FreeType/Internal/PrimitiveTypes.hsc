@@ -61,3 +61,12 @@ type FT_F26Dot6 = CLong
 type FT_Fixed   = CLong
 type FT_Pos     = CLong
 
+newtype FT_Render_Mode = FT_Render_Mode CUInt
+
+#{enum FT_Render_Mode, FT_Render_Mode,
+  ft_RENDER_MODE_NORMAL = FT_RENDER_MODE_NORMAL,
+  ft_RENDER_MODE_LIGHT  = FT_RENDER_MODE_LIGHT,
+  ft_RENDER_MODE_MONO   = FT_RENDER_MODE_MONO,
+  ft_RENDER_MODE_LCD    = FT_RENDER_MODE_LCD,
+  ft_RENDER_MODE_LCD_V  = FT_RENDER_MODE_LCD_V
+}

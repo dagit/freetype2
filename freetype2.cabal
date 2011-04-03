@@ -73,6 +73,7 @@ Library
                    Graphics.Rendering.FreeType.Internal.Matrix
                    Graphics.Rendering.FreeType.Internal.PrimitiveTypes
                    Graphics.Rendering.FreeType.Internal.Vector
+                   Graphics.Rendering.FreeType.Internal.Glyph
 
   -- Packages needed in order to build this package.
   Build-depends: base > 3 && < 5
