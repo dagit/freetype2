@@ -1,16 +1,12 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal.Bitmap
 ( FT_Bitmap(..)
-, bitmap
-, bitmap_top
-, bitmap_left
 ) where
 
 import Foreign
 import Foreign.C.Types
 import Foreign.Storable
 
-import qualified Graphics.Rendering.FreeType.Internal.GlyphSlot as GS 
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 
 #let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
@@ -60,12 +56,3 @@ instance Storable FT_Bitmap where
     (#poke FT_Bitmap, pixel_mode) ptr (pixel_mode val)
     (#poke FT_Bitmap, palette_mode) ptr (palette_mode val)
     (#poke FT_Bitmap, palette) ptr (palette val)
-
-bitmap :: GS.FT_GlyphSlot -> Ptr FT_Bitmap
-bitmap = (#ptr struct FT_GlyphSlotRec_, bitmap)
-
-bitmap_left :: GS.FT_GlyphSlot -> Ptr FT_Int
-bitmap_left = (#ptr struct FT_GlyphSlotRec_, bitmap_left)
-
-bitmap_top :: GS.FT_GlyphSlot -> Ptr FT_Int
-bitmap_top = (#ptr struct FT_GlyphSlotRec_, bitmap_top)

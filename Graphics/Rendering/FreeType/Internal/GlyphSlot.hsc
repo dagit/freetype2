@@ -4,14 +4,18 @@ module Graphics.Rendering.FreeType.Internal.GlyphSlot
 , FT_GlyphSlot
 , library
 , advance
+, bitmap
+, bitmap_top
+, bitmap_left
 ) where
 
 import Foreign
 import Foreign.Storable
 
--- import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
+import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import qualified Graphics.Rendering.FreeType.Internal.Library as Lib
 import qualified Graphics.Rendering.FreeType.Internal.Vector  as V
+import qualified Graphics.Rendering.FreeType.Internal.Bitmap as B
 
 #include <stddef.h>
 #let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
@@ -36,3 +40,11 @@ library = (#ptr struct FT_GlyphSlotRec_, library)
 advance :: FT_GlyphSlot -> Ptr V.FT_Vector
 advance = (#ptr struct FT_GlyphSlotRec_, advance)
 
+bitmap :: FT_GlyphSlot -> Ptr B.FT_Bitmap
+bitmap = (#ptr struct FT_GlyphSlotRec_, bitmap)
+
+bitmap_left :: FT_GlyphSlot -> Ptr FT_Int
+bitmap_left = (#ptr struct FT_GlyphSlotRec_, bitmap_left)
+
+bitmap_top :: FT_GlyphSlot -> Ptr FT_Int
+bitmap_top = (#ptr struct FT_GlyphSlotRec_, bitmap_top)
