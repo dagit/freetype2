@@ -161,7 +161,6 @@ Library
              src/cache/ftcache.c
              src/gzip/ftgzip.c
              src/lzw/ftlzw.c
-             src/bzip2/ftbzip2.c
              src/psaux/psaux.c
              src/psnames/psmodule.c
 
