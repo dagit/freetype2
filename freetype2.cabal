@@ -1,5 +1,5 @@
 Name:                freetype2
-Version:             0.1
+Version:             0.1.0
 Synopsis:            Haskell binding for the excellent freetype2 library
 Description:         Wrapper around freetype2 library.
 License:             BSD3
@@ -58,9 +58,17 @@ Extra-source-files:  objs/ftmodule.h
 
 Cabal-version:       >=1.8
 
+Flag examples
+  Description: Build example programs
+  Default: False
+
 Executable freetype-example1
 
-  Build-depends: base > 3 && < 5, freetype2, array
+  if flag(examples)
+    Buildable: True
+    Build-depends: base > 3 && < 5, freetype2, array
+  else
+    Buildable: False
   Main-is:       Main.hs
 
 Library
