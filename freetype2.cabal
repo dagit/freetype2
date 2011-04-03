@@ -55,14 +55,12 @@ Extra-source-files:  objs/ftmodule.h
                      src/psaux/*.c
                      src/psnames/*.h
                      src/psnames/*.c
-                     Graphics/Rendering/FreeType/*.h
-                     Graphics/Rendering/FreeType/*.c
 
 Cabal-version:       >=1.8
 
 Executable freetype-example1
 
-  Build-depends: base > 3 && < 5, freetype2
+  Build-depends: base > 3 && < 5, freetype2, array
   Main-is:       Main.hs
 
 Library
@@ -100,7 +98,7 @@ Library
                 src/lzw
                 src/psaux
                 src/psnames
-                Graphics/Rendering/FreeType
+
   cc-options: -DFT_CONFIG_CONFIG_H=<ftconfig.h>
               -DFT2_BUILD_LIBRARY
               -DFT_CONFIG_MODULES_H=<ftmodule.h>
@@ -149,7 +147,7 @@ Library
              src/bzip2/ftbzip2.c
              src/psaux/psaux.c
              src/psnames/psmodule.c
-             Graphics/Rendering/FreeType/Internal_wrapper.c
+
 source-repository head
   type: git
   location: git://github.com/dagit/freetype2.git
