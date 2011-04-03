@@ -66,7 +66,8 @@ Executable freetype-example1
 
   if flag(examples)
     Buildable: True
-    Build-depends: base > 3 && < 5, freetype2, array
+    Build-depends: base > 3 && < 5, freetype2, array,
+                   missing-foreign >= 0.1.1 && < 0.2.0
   else
     Buildable: False
   Main-is:       Main.hs
