@@ -66,6 +66,13 @@ Executable freetype-example1
 Library
   -- Modules exported by the library.
   Exposed-modules: Graphics.Rendering.FreeType.Internal
+                   Graphics.Rendering.FreeType.Internal.Bitmap
+                   Graphics.Rendering.FreeType.Internal.Face
+                   Graphics.Rendering.FreeType.Internal.GlyphSlot
+                   Graphics.Rendering.FreeType.Internal.Library
+                   Graphics.Rendering.FreeType.Internal.Matrix
+                   Graphics.Rendering.FreeType.Internal.PrimitiveTypes
+                   Graphics.Rendering.FreeType.Internal.Vector
 
   -- Packages needed in order to build this package.
   Build-depends: base > 3 && < 5
