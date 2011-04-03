@@ -7,8 +7,6 @@ import Foreign
 import Foreign.C.Types
 import Foreign.Storable
 
-import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
-
 #let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
 
 #include "ft2build.h"
