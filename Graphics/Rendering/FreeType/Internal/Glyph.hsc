@@ -3,14 +3,15 @@ module Graphics.Rendering.FreeType.Internal.Glyph
 ( FT_GlyphRec_
 , FT_Glyph
 , library
+, format
 , advance
 ) where
 
 import Foreign
 import Foreign.Storable
 
--- import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
-import qualified Graphics.Rendering.FreeType.Internal.Library as Lib
+import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
+import qualified Graphics.Rendering.FreeType.Internal.Library as L
 import qualified Graphics.Rendering.FreeType.Internal.Vector  as V
 
 #include <stddef.h>
@@ -30,13 +31,11 @@ instance Storable FT_GlyphRec_ where
   peek = error "peek not implemented for FT_GlyphRec_"
   poke = error "peek not implemented for FT_GlyphRec_"
 
-library :: FT_Glyph -> Ptr Lib.FT_Library
+library :: FT_Glyph -> Ptr L.FT_Library
 library = #ptr struct FT_GlyphRec_, library
 
-{- TODO: implement FT_Glyph_Format
 format :: FT_Glyph -> Ptr FT_Glyph_Format
 format = #ptr struct FT_GlyphRec_, format
--}
 
 advance :: FT_Glyph -> Ptr V.FT_Vector
 advance = #ptr struct FT_GlyphRec_, advance
