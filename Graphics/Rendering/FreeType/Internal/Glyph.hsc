@@ -8,7 +8,6 @@ module Graphics.Rendering.FreeType.Internal.Glyph
 ) where
 
 import Foreign
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import qualified Graphics.Rendering.FreeType.Internal.Library as L
@@ -24,12 +23,6 @@ import qualified Graphics.Rendering.FreeType.Internal.Vector  as V
 
 data FT_GlyphRec_
 type FT_Glyph = Ptr FT_GlyphRec_
-
-instance Storable FT_GlyphRec_ where
-  sizeOf    _  = #size struct FT_GlyphRec_
-  alignment _  = #alignment struct FT_GlyphRec_
-  peek = error "peek not implemented for FT_GlyphRec_"
-  poke = error "peek not implemented for FT_GlyphRec_"
 
 library :: FT_Glyph -> Ptr L.FT_Library
 library = #ptr struct FT_GlyphRec_, library

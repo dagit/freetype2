@@ -20,7 +20,6 @@ import Prelude hiding (read)
 
 import Foreign
 import Foreign.C.Types
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.Memory
 
@@ -43,12 +42,6 @@ type FT_Stream_CloseFunc = FunPtr (FT_Stream -> IO ())
 
 data FT_StreamRec_
 type FT_Stream = Ptr FT_StreamRec_
-
-instance Storable FT_StreamRec_ where
-  sizeOf    _ = #size struct FT_StreamRec_
-  alignment _ = #alignment struct FT_StreamRec_
-  peek = error "peek not implemented for FT_StreamRec_"
-  poke = error "poke not implemented for FT_StreamRec_"
 
 base :: FT_Stream -> Ptr (Ptr CUChar)
 base = #ptr struct FT_StreamRec_, base

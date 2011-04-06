@@ -5,7 +5,6 @@ module Graphics.Rendering.FreeType.Internal.OutlineGlyph
 ) where
 
 import Foreign
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.Glyph
 import Graphics.Rendering.FreeType.Internal.Outline
@@ -23,10 +22,3 @@ data FT_OutlineGlyphRec = FT_OutlineGlyphRec
   { root    :: FT_GlyphRec_
   , outline :: FT_Outline
   }
-
-instance Storable FT_OutlineGlyphRec where
-  sizeOf    _ = #size FT_OutlineGlyphRec
-  alignment _ = #alignment FT_OutlineGlyphRec
-  peek = error "peek not implemented for FT_OutlineGlyphRec"
-  poke = error "poke not implemented for FT_OutlineGlyphRec"
-

@@ -10,11 +10,11 @@ module Graphics.Rendering.FreeType.Internal.GlyphSlot
 , linearHoriAdvance
 , linearVertAdvance
 , advance
--- , format
+, format
 , bitmap
 , bitmap_top
 , bitmap_left
--- , outline
+, outline
 , num_subglyphs
 , subglyphs
 , control_data
@@ -25,7 +25,6 @@ module Graphics.Rendering.FreeType.Internal.GlyphSlot
 
 import Foreign
 import Foreign.C.Types
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import qualified Graphics.Rendering.FreeType.Internal.Generic as G
@@ -35,23 +34,13 @@ import qualified Graphics.Rendering.FreeType.Internal.Vector  as V
 import qualified Graphics.Rendering.FreeType.Internal.Bitmap as B
 import qualified Graphics.Rendering.FreeType.Internal.SubGlyph as SG
 import qualified Graphics.Rendering.FreeType.Internal.GlyphMetrics as GM
-
-#include <stddef.h>
-#let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
+import qualified Graphics.Rendering.FreeType.Internal.Outline as O
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
-#include "internal/ftobjs.h"
-
 data FT_GlyphSlotRec_
 type FT_GlyphSlot = Ptr FT_GlyphSlotRec_
-
-instance Storable FT_GlyphSlotRec_ where
-  sizeOf _    = #size struct FT_GlyphSlotRec_
-  alignment _ = #alignment struct FT_GlyphSlotRec_
-  peek = error "peek not implemented for FT_GlyphSlotRec_"
-  poke = error "poke not implemented for FT_GlyphSlotRec_"
 
 library :: FT_GlyphSlot -> Ptr L.FT_Library
 library = #ptr struct FT_GlyphSlotRec_, library
@@ -77,10 +66,8 @@ linearVertAdvance = #ptr struct FT_GlyphSlotRec_, linearVertAdvance
 advance :: FT_GlyphSlot -> Ptr V.FT_Vector
 advance = #ptr struct FT_GlyphSlotRec_, advance
 
-{- TODO: implement FT_Glyph_Format
 format :: FT_GlyphSlot -> Ptr FT_Glyph_Format
-format = #ptr struct FT_Glyph_Format, format
--}
+format = #ptr struct FT_GlyphSlotRec_, format
 
 bitmap :: FT_GlyphSlot -> Ptr B.FT_Bitmap
 bitmap = #ptr struct FT_GlyphSlotRec_, bitmap
@@ -91,10 +78,8 @@ bitmap_left = #ptr struct FT_GlyphSlotRec_, bitmap_left
 bitmap_top :: FT_GlyphSlot -> Ptr FT_Int
 bitmap_top = #ptr struct FT_GlyphSlotRec_, bitmap_top
 
-{- TODO: implement FT_Outline
-outline :: FT_GlyphSlot -> Ptr FT_Outline
+outline :: FT_GlyphSlot -> Ptr O.FT_Outline
 outline = #ptr struct FT_GlyphSlotRec_, outline
--}
 
 num_subglyphs :: FT_GlyphSlot -> Ptr FT_UInt
 num_subglyphs = #ptr struct FT_GlyphSlotRec_, num_subglyphs

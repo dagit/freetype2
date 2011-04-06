@@ -1,4 +1,4 @@
-{-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal.Face
 ( FT_FaceRec_
 , FT_Face
@@ -56,8 +56,6 @@ import qualified Graphics.Rendering.FreeType.Internal.BBox as BB
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
-
-#include "internal/ftobjs.h"
 
 num_faces :: FT_Face -> Ptr FT_Long
 num_faces = #ptr struct FT_FaceRec_, num_faces

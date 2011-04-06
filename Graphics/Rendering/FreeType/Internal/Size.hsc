@@ -8,7 +8,6 @@ module Graphics.Rendering.FreeType.Internal.Size
 ) where
 
 import Foreign
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.FaceType
 import Graphics.Rendering.FreeType.Internal.SizeMetrics
@@ -24,12 +23,6 @@ import Graphics.Rendering.FreeType.Internal.Generic
 
 data FT_SizeRec_
 type FT_Size = Ptr FT_SizeRec_
-
-instance Storable FT_SizeRec_ where
-  sizeOf _ = #size struct FT_SizeRec_
-  alignment _ = #alignment struct FT_SizeRec_
-  peek = error "peek not implemented for FT_SizeRec_"
-  poke = error "poke not implemented for FT_SizeRec_"
 
 face :: FT_Size -> Ptr FT_Face
 face = #ptr struct FT_SizeRec_, face
