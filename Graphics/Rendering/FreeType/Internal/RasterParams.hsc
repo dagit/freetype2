@@ -1,9 +1,15 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal.RasterParams
-( FT_Raster_Params(..)
+( FT_Raster_Params
 , FT_SpanFunc
 , FT_Raster_BitTest_Func
 , FT_Raster_BitSet_Func
+, target
+, source
+, flags
+, gray_spans
+, user
+, clip_box
 ) where
 
 import Foreign
