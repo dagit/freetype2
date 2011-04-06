@@ -14,6 +14,12 @@ import Graphics.Rendering.FreeType.Internal.GlyphSlot
 import Graphics.Rendering.FreeType.Internal.OpenArgs
 import Graphics.Rendering.FreeType.Internal.SizeRequest
 import Graphics.Rendering.FreeType.Internal.CharMap
+import Graphics.Rendering.FreeType.Internal.Outline
+import Graphics.Rendering.FreeType.Internal.Memory
+import Graphics.Rendering.FreeType.Internal.BBox
+import Graphics.Rendering.FreeType.Internal.Bitmap
+import Graphics.Rendering.FreeType.Internal.RasterParams
+import Graphics.Rendering.FreeType.Internal.Size
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -143,3 +149,82 @@ foreign import ccall "FT_Get_SubGlyph_Info"
 
 foreign import ccall "FT_Get_FSType_Flags"
   ft_Get_FSType_Flags :: FT_Face -> IO FT_UShort
+
+foreign import ccall "FT_Face_GetCharVariantIndex"
+  ft_Face_GetCharVariantIndex :: FT_Face -> FT_ULong -> FT_ULong -> IO FT_UInt
+
+foreign import ccall "FT_Face_GetCharVariantIsDefault"
+  ft_Face_GetCharVariantIsDefault :: FT_Face -> FT_ULong
+                                  -> FT_ULong -> IO FT_Int
+
+foreign import ccall "FT_Face_GetVariantSelectors"
+  ft_Face_GetVariantSelectors :: FT_Face -> IO (Ptr FT_UInt32)
+
+foreign import ccall "FT_Face_GetVariantsOfChar"
+  ft_Face_GetVariantsOfChar :: FT_Face -> FT_ULong -> IO (Ptr FT_UInt32)
+
+foreign import ccall "FT_Face_GetCharsOfVariant"
+  ft_Face_GetCharsOfVariant :: FT_Face -> FT_ULong -> IO (Ptr FT_UInt32)
+
+foreign import ccall "FT_Outline_New"
+  ft_Outline_New :: FT_Library -> FT_UInt -> FT_Int
+                 -> Ptr FT_Outline -> IO FT_Error
+
+foreign import ccall "FT_Outline_New_Internal"
+  ft_Outline_New_Internal :: FT_Memory -> FT_UInt -> FT_Int
+                          -> Ptr FT_Outline -> IO FT_Error
+
+foreign import ccall "FT_Outline_Done"
+  ft_Outline_Done :: FT_Library -> Ptr FT_Outline -> IO FT_Error
+
+foreign import ccall "FT_Outline_Done_Internal"
+  ft_Outline_Done_Internal :: FT_Memory -> Ptr FT_Outline -> IO FT_Error
+
+foreign import ccall "FT_Outline_Copy"
+  ft_Outline_Copy :: Ptr FT_Outline -> Ptr FT_Outline -> IO FT_Error
+
+foreign import ccall "FT_Outline_Translate"
+  ft_Outline_Translate :: Ptr FT_Outline -> FT_Pos -> FT_Pos -> IO ()
+
+foreign import ccall "FT_Outline_Transform"
+  ft_Outline_Transform :: Ptr FT_Outline -> Ptr FT_Matrix -> IO ()
+
+foreign import ccall "FT_Outline_Embolden"
+  ft_Outline_Embolden :: Ptr FT_Outline -> FT_Pos -> IO FT_Error
+
+foreign import ccall "FT_Outline_Reverse"
+  ft_Outline_Reverse :: Ptr FT_Outline -> IO ()
+
+foreign import ccall "FT_Outline_Check"
+  ft_Outline_Check :: Ptr FT_Outline -> IO FT_Error
+
+foreign import ccall "FT_Outline_Get_BBox"
+  ft_Outline_Get_BBox :: Ptr FT_Outline -> Ptr FT_BBox -> IO FT_Error
+
+foreign import ccall "FT_Outline_Decompose"
+  ft_Outline_Decompose :: Ptr FT_Outline -> Ptr FT_Outline_Funcs
+                       -> Ptr a -> IO FT_Error
+
+foreign import ccall "FT_Outline_Get_CBox"
+  ft_Outline_Get_CBox :: Ptr FT_Outline -> Ptr FT_BBox -> IO ()
+
+foreign import ccall "FT_Outline_Get_Bitmap"
+  ft_Outline_Get_Bitmap :: FT_Library -> Ptr FT_Outline
+                        -> Ptr FT_Bitmap -> IO FT_Error
+
+foreign import ccall "FT_Outline_Render"
+  ft_Outline_Render :: FT_Library -> Ptr FT_Outline
+                    -> Ptr FT_Raster_Params -> IO FT_Error
+
+foreign import ccall "FT_Outline_Get_Orientation"
+  ft_Outline_Get_Orientation :: Ptr FT_Outline -> IO FT_Orientation
+
+foreign import ccall "FT_New_Size"
+  ft_New_Size :: FT_Face -> Ptr FT_Size -> IO FT_Error
+
+foreign import ccall "FT_Done_Size"
+  ft_Done_Size :: FT_Size -> IO FT_Error
+
+foreign import ccall "FT_Activate_Size"
+  ft_Activate_Size :: FT_Size -> IO FT_Error
+

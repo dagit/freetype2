@@ -158,6 +158,7 @@ Library
   Exposed-modules: Graphics.Rendering.FreeType.Internal
                    Graphics.Rendering.FreeType.Internal.BBox
                    Graphics.Rendering.FreeType.Internal.Bitmap
+                   Graphics.Rendering.FreeType.Internal.BitmapGlyph
                    Graphics.Rendering.FreeType.Internal.BitmapSize
                    Graphics.Rendering.FreeType.Internal.CharMap
                    Graphics.Rendering.FreeType.Internal.Driver
@@ -172,13 +173,17 @@ Library
                    Graphics.Rendering.FreeType.Internal.Memory
                    Graphics.Rendering.FreeType.Internal.Module
                    Graphics.Rendering.FreeType.Internal.OpenArgs
+                   Graphics.Rendering.FreeType.Internal.Outline
+                   Graphics.Rendering.FreeType.Internal.OutlineGlyph
                    Graphics.Rendering.FreeType.Internal.Parameter
                    Graphics.Rendering.FreeType.Internal.PrimitiveTypes
+                   Graphics.Rendering.FreeType.Internal.RasterParams
                    Graphics.Rendering.FreeType.Internal.Renderer
                    Graphics.Rendering.FreeType.Internal.Size
                    Graphics.Rendering.FreeType.Internal.SizeMetrics
                    Graphics.Rendering.FreeType.Internal.SizeRequest
                    Graphics.Rendering.FreeType.Internal.Stream
+                   Graphics.Rendering.FreeType.Internal.Span
                    Graphics.Rendering.FreeType.Internal.SubGlyph
                    Graphics.Rendering.FreeType.Internal.Vector
 
