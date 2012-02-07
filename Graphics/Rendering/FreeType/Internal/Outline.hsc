@@ -11,7 +11,6 @@ module Graphics.Rendering.FreeType.Internal.Outline
 import Foreign hiding (shift)
 import Foreign.C.Types
 import Foreign.C.String
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.Vector
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes

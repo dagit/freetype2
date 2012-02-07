@@ -2,6 +2,7 @@
 module Graphics.Rendering.FreeType.Internal where
 
 import Foreign
+import Foreign.C.Types
 import Foreign.C.String
 
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes

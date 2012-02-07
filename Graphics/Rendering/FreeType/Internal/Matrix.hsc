@@ -4,7 +4,6 @@ module Graphics.Rendering.FreeType.Internal.Matrix
 ) where
 
 import Foreign
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

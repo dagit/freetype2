@@ -4,7 +4,6 @@ module Graphics.Rendering.FreeType.Internal.BBox
 ) where
 
 import Foreign
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

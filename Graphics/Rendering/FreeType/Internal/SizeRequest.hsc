@@ -5,7 +5,6 @@ module Graphics.Rendering.FreeType.Internal.SizeRequest
 ) where
 
 import Foreign
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

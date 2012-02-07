@@ -5,7 +5,6 @@ module Graphics.Rendering.FreeType.Internal.OpenArgs
 
 import Foreign
 import Foreign.C.String
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import Graphics.Rendering.FreeType.Internal.Stream

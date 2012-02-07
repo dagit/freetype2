@@ -6,7 +6,6 @@ module Graphics.Rendering.FreeType.Internal.Memory
 
 import Foreign hiding (free, realloc)
 import Foreign.C.Types
-import Foreign.Storable
 
 #include <stddef.h>
 #let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)

@@ -5,7 +5,6 @@ module Graphics.Rendering.FreeType.Internal.Bitmap
 
 import Foreign
 import Foreign.C.Types
-import Foreign.Storable
 
 #let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
 

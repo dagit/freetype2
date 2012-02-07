@@ -14,7 +14,6 @@ module Graphics.Rendering.FreeType.Internal.RasterParams
 
 import Foreign
 import Foreign.C.Types
-import Foreign.Storable
 
 import Graphics.Rendering.FreeType.Internal.BBox
 import Graphics.Rendering.FreeType.Internal.Bitmap

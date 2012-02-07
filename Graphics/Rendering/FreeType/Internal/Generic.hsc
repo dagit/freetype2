@@ -5,7 +5,6 @@ module Graphics.Rendering.FreeType.Internal.Generic
 ) where
 
 import Foreign
-import Foreign.Storable
 
 #include <stddef.h>
 #let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
