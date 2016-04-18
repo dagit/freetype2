@@ -96,46 +96,60 @@ Extra-source-files:  objs/ftmodule.h
                      include/freetype/config/*.h
                      include/freetype/internal/*.h
                      include/freetype/internal/services/*.h
-                     src/base/*.h
-                     src/base/*.c
-                     src/truetype/*.h
-                     src/truetype/*.c
-                     src/type1/*.h
-                     src/type1/*.c
-                     src/cff/*.h
-                     src/cff/*.c
-                     src/cid/*.h
-                     src/cid/*.c
-                     src/pfr/*.h
-                     src/pfr/*.c
-                     src/type42/*.h
-                     src/type42/*.c
-                     src/winfonts/*.h
-                     src/winfonts/*.c
-                     src/pcf/*.h
-                     src/pcf/*.c
-                     src/bdf/*.h
-                     src/bdf/*.c
-                     src/sfnt/*.h
-                     src/sfnt/*.c
-                     src/autofit/*.h
                      src/autofit/*.c
-                     src/pshinter/*.h
-                     src/pshinter/*.c
-                     src/raster/*.h
-                     src/raster/*.c
-                     src/smooth/*.h
-                     src/smooth/*.c
-                     src/cache/*.h
+                     src/autofit/*.h
+                     src/base/*.c
+                     src/base/*.h
+                     src/bdf/*.c
+                     src/bdf/*.h
+                     src/bzip2/*.c
+                     src/bzip2/*.h
                      src/cache/*.c
-                     src/gzip/*.h
+                     src/cache/*.h
+                     src/cff/*.c
+                     src/cff/*.h
+                     src/cid/*.c
+                     src/cid/*.h
+                     src/gxvalid/*.c
+                     src/gxvalid/*.h
                      src/gzip/*.c
-                     src/lzw/*.h
+                     src/gzip/*.h
                      src/lzw/*.c
-                     src/psaux/*.h
+                     src/lzw/*.h
+                     src/otvalid/*.c
+                     src/otvalid/*.h
+                     src/pcf/*.c
+                     src/pcf/*.h
+                     src/pfr/*.c
+                     src/pfr/*.h
                      src/psaux/*.c
-                     src/psnames/*.h
+                     src/psaux/*.h
+                     src/pshinter/*.c
+                     src/pshinter/*.h
                      src/psnames/*.c
+                     src/psnames/*.h
+                     src/raster/*.c
+                     src/raster/*.h
+                     src/sfnt/*.c
+                     src/sfnt/*.h
+                     src/smooth/*.c
+                     src/smooth/*.h
+                     src/tools/*.c
+                     src/tools/*.h
+                     src/tools/docmaker/*.c
+                     src/tools/docmaker/*.h
+                     src/tools/ftfuzzer/*.c
+                     src/tools/ftfuzzer/*.h
+                     src/tools/ftrandom/*.c
+                     src/tools/ftrandom/*.h
+                     src/truetype/*.c
+                     src/truetype/*.h
+                     src/type1/*.c
+                     src/type1/*.h
+                     src/type42/*.c
+                     src/type42/*.h
+                     src/winfonts/*.c
+                     src/winfonts/*.h
 
 Cabal-version:       >=1.8
 
@@ -191,12 +205,13 @@ Library
   Build-depends: base > 3 && < 5
 
   -- Modules not exported by this package.
-  -- Other-modules:       
+  -- Other-modules:
 
   -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
   Build-tools: hsc2hs
   ghc-options: -Wall
-  include-dirs: objs include include/freetype/config
+  include-dirs: include
+                include/freetype/config
                 include/freetype
                 src/base
                 src/truetype
@@ -225,49 +240,53 @@ Library
               -DDARWIN_NO_CARBON
 
   c-sources:
-             src/base/ftsystem.c
-             src/base/ftdebug.c
-             src/base/ftinit.c
-             src/base/ftbase.c
-             src/base/ftbbox.c
-             src/base/ftbdf.c
-             src/base/ftbitmap.c
-             src/base/ftcid.c
-             src/base/ftfstype.c
-             src/base/ftgasp.c
-             src/base/ftglyph.c
-             src/base/ftgxval.c
-             src/base/ftlcdfil.c
-             src/base/ftmm.c
-             src/base/ftotval.c
-             src/base/ftpatent.c
-             src/base/ftpfr.c
-             src/base/ftstroke.c
-             src/base/ftsynth.c
-             src/base/fttype1.c
-             src/base/ftwinfnt.c
-             src/base/ftxf86.c
+             src/psaux/psaux.c
+             src/winfonts/winfnt.c
+             src/type42/type42.c
+             src/bdf/bdf.c
+             src/psnames/psnames.c
+             src/cache/ftcache.c
              src/truetype/truetype.c
-             src/type1/type1.c
+             src/pcf/pcf.c
              src/cff/cff.c
              src/cid/type1cid.c
-             src/pfr/pfr.c
-             src/type42/type42.c
-             src/winfonts/winfnt.c
-             src/pcf/pcf.c
-             src/bdf/bdf.c
-             src/sfnt/sfnt.c
-             src/autofit/autofit.c
-             src/pshinter/pshinter.c
-             src/raster/raster.c
-             src/smooth/smooth.c
-             src/cache/ftcache.c
-             src/gzip/ftgzip.c
              src/lzw/ftlzw.c
-             src/psaux/psaux.c
-             src/psnames/psmodule.c
+             src/gxvalid/gxvfgen.c
+             src/gxvalid/gxvalid.c
+             src/smooth/smooth.c
+             src/raster/raster.c
+             src/autofit/autofit.c
+             src/gzip/ftgzip.c
+             src/pfr/pfr.c
+             src/sfnt/sfnt.c
+             src/type1/type1.c
+             src/bzip2/ftbzip2.c
+             src/pshinter/pshinter.c
+             src/otvalid/otvalid.c
+             src/base/ftbdf.c
+             src/base/ftdebug.c
+             src/base/ftbase.c
+             src/base/ftsystem.c
+             src/base/ftapi.c
+             src/base/ftcid.c
+             src/base/ftotval.c
+             src/base/fttype1.c
+             src/base/ftlcdfil.c
+             src/base/ftbbox.c
+             src/base/ftwinfnt.c
+             src/base/ftstroke.c
+             src/base/ftgxval.c
+             src/base/ftfntfmt.c
+             src/base/ftmm.c
+             src/base/ftgasp.c
+             src/base/ftbitmap.c
+             src/base/ftglyph.c
+             src/base/ftpatent.c
+             src/base/ftsynth.c
+             src/base/ftfstype.c
+             src/base/ftinit.c
+             src/base/ftpfr.c
 
 source-repository head
   type: git
   location: git://github.com/dagit/freetype2.git
-
