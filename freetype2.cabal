@@ -239,7 +239,6 @@ Library
               -DFT_CONFIG_MODULES_H=<ftmodule.h>
               -DDARWIN_NO_CARBON
               -DFT_CONFIG_OPTION_SUBPIXEL_RENDERING
-              -DTT_CONFIG_OPTION_SUBPIXEL_HINTING
 
   c-sources:
              src/psaux/psaux.c
