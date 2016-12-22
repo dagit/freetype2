@@ -103,7 +103,6 @@ Extra-source-files:  objs/ftmodule.h
                      src/bdf/*.c
                      src/bdf/*.h
                      src/bzip2/*.c
-                     src/bzip2/*.h
                      src/cache/*.c
                      src/cache/*.h
                      src/cff/*.c
@@ -135,13 +134,7 @@ Extra-source-files:  objs/ftmodule.h
                      src/smooth/*.c
                      src/smooth/*.h
                      src/tools/*.c
-                     src/tools/*.h
-                     src/tools/docmaker/*.c
-                     src/tools/docmaker/*.h
-                     src/tools/ftfuzzer/*.c
-                     src/tools/ftfuzzer/*.h
                      src/tools/ftrandom/*.c
-                     src/tools/ftrandom/*.h
                      src/truetype/*.c
                      src/truetype/*.h
                      src/type1/*.c
