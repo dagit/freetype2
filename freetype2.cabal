@@ -90,52 +90,51 @@ Maintainer:          Jason Dagit <dagitj@gmail.com>
 Copyright:           Copyright Jason Dagit 2011
 Category:            Graphics
 Build-type:          Simple
-Extra-source-files:  objs/ftmodule.h
-                     include/*.h
-                     include/freetype/*.h
-                     include/freetype/config/*.h
-                     include/freetype/internal/*.h
-                     include/freetype/internal/services/*.h
-                     src/base/*.h
-                     src/base/*.c
-                     src/truetype/*.h
-                     src/truetype/*.c
-                     src/type1/*.h
-                     src/type1/*.c
-                     src/cff/*.h
-                     src/cff/*.c
-                     src/cid/*.h
-                     src/cid/*.c
-                     src/pfr/*.h
-                     src/pfr/*.c
-                     src/type42/*.h
-                     src/type42/*.c
-                     src/winfonts/*.h
-                     src/winfonts/*.c
-                     src/pcf/*.h
-                     src/pcf/*.c
-                     src/bdf/*.h
-                     src/bdf/*.c
-                     src/sfnt/*.h
-                     src/sfnt/*.c
-                     src/autofit/*.h
-                     src/autofit/*.c
-                     src/pshinter/*.h
-                     src/pshinter/*.c
-                     src/raster/*.h
-                     src/raster/*.c
-                     src/smooth/*.h
-                     src/smooth/*.c
-                     src/cache/*.h
-                     src/cache/*.c
-                     src/gzip/*.h
-                     src/gzip/*.c
-                     src/lzw/*.h
-                     src/lzw/*.c
-                     src/psaux/*.h
-                     src/psaux/*.c
-                     src/psnames/*.h
-                     src/psnames/*.c
+Extra-source-files:  freetype2/include/*.h
+                     freetype2/include/freetype/*.h
+                     freetype2/include/freetype/config/*.h
+                     freetype2/include/freetype/internal/*.h
+                     freetype2/include/freetype/internal/services/*.h
+                     freetype2/src/base/*.h
+                     freetype2/src/base/*.c
+                     freetype2/src/truetype/*.h
+                     freetype2/src/truetype/*.c
+                     freetype2/src/type1/*.h
+                     freetype2/src/type1/*.c
+                     freetype2/src/cff/*.h
+                     freetype2/src/cff/*.c
+                     freetype2/src/cid/*.h
+                     freetype2/src/cid/*.c
+                     freetype2/src/pfr/*.h
+                     freetype2/src/pfr/*.c
+                     freetype2/src/type42/*.h
+                     freetype2/src/type42/*.c
+                     freetype2/src/winfonts/*.h
+                     freetype2/src/winfonts/*.c
+                     freetype2/src/pcf/*.h
+                     freetype2/src/pcf/*.c
+                     freetype2/src/bdf/*.h
+                     freetype2/src/bdf/*.c
+                     freetype2/src/sfnt/*.h
+                     freetype2/src/sfnt/*.c
+                     freetype2/src/autofit/*.h
+                     freetype2/src/autofit/*.c
+                     freetype2/src/pshinter/*.h
+                     freetype2/src/pshinter/*.c
+                     freetype2/src/raster/*.h
+                     freetype2/src/raster/*.c
+                     freetype2/src/smooth/*.h
+                     freetype2/src/smooth/*.c
+                     freetype2/src/cache/*.h
+                     freetype2/src/cache/*.c
+                     freetype2/src/gzip/*.h
+                     freetype2/src/gzip/*.c
+                     freetype2/src/lzw/*.h
+                     freetype2/src/lzw/*.c
+                     freetype2/src/psaux/*.h
+                     freetype2/src/psaux/*.c
+                     freetype2/src/psnames/*.h
+                     freetype2/src/psnames/*.c
 
 Cabal-version:       >=1.8
 
@@ -144,14 +143,15 @@ Flag examples
   Default: False
 
 Executable freetype-example1
+  Main-is:       Main.hs
+  Build-depends: base > 3 && < 5,
+                 freetype2,
+                 array
 
   if flag(examples)
     Buildable: True
-    Build-depends: base > 3 && < 5, freetype2, array,
-                   missing-foreign >= 0.1.1 && < 0.2.0
   else
     Buildable: False
-  Main-is:       Main.hs
 
 Library
   -- Modules exported by the library.
@@ -196,28 +196,30 @@ Library
   -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
   Build-tools: hsc2hs
   ghc-options: -Wall
-  include-dirs: objs include include/freetype/config
-                include/freetype
-                src/base
-                src/truetype
-                src/type1
-                src/cff
-                src/cid
-                src/pfr
-                src/type42
-                src/winfonts
-                src/pcf
-                src/bdf
-                src/sfnt
-                src/autofit
-                src/pshinter
-                src/raster
-                src/smooth
-                src/cache
-                src/gzip
-                src/lzw
-                src/psaux
-                src/psnames
+  include-dirs: freetype2/objs
+                freetype2/include
+                freetype2/include/freetype/config
+                freetype2/include/freetype
+                freetype2/src/base
+                freetype2/src/truetype
+                freetype2/src/type1
+                freetype2/src/cff
+                freetype2/src/cid
+                freetype2/src/pfr
+                freetype2/src/type42
+                freetype2/src/winfonts
+                freetype2/src/pcf
+                freetype2/src/bdf
+                freetype2/src/sfnt
+                freetype2/src/autofit
+                freetype2/src/pshinter
+                freetype2/src/raster
+                freetype2/src/smooth
+                freetype2/src/cache
+                freetype2/src/gzip
+                freetype2/src/lzw
+                freetype2/src/psaux
+                freetype2/src/psnames
 
   cc-options: -DFT_CONFIG_CONFIG_H=<ftconfig.h>
               -DFT2_BUILD_LIBRARY
@@ -225,47 +227,47 @@ Library
               -DDARWIN_NO_CARBON
 
   c-sources:
-             src/base/ftsystem.c
-             src/base/ftdebug.c
-             src/base/ftinit.c
-             src/base/ftbase.c
-             src/base/ftbbox.c
-             src/base/ftbdf.c
-             src/base/ftbitmap.c
-             src/base/ftcid.c
-             src/base/ftfstype.c
-             src/base/ftgasp.c
-             src/base/ftglyph.c
-             src/base/ftgxval.c
-             src/base/ftlcdfil.c
-             src/base/ftmm.c
-             src/base/ftotval.c
-             src/base/ftpatent.c
-             src/base/ftpfr.c
-             src/base/ftstroke.c
-             src/base/ftsynth.c
-             src/base/fttype1.c
-             src/base/ftwinfnt.c
-             src/base/ftxf86.c
-             src/truetype/truetype.c
-             src/type1/type1.c
-             src/cff/cff.c
-             src/cid/type1cid.c
-             src/pfr/pfr.c
-             src/type42/type42.c
-             src/winfonts/winfnt.c
-             src/pcf/pcf.c
-             src/bdf/bdf.c
-             src/sfnt/sfnt.c
-             src/autofit/autofit.c
-             src/pshinter/pshinter.c
-             src/raster/raster.c
-             src/smooth/smooth.c
-             src/cache/ftcache.c
-             src/gzip/ftgzip.c
-             src/lzw/ftlzw.c
-             src/psaux/psaux.c
-             src/psnames/psmodule.c
+             freetype2/src/base/ftsystem.c
+             freetype2/src/base/ftdebug.c
+             freetype2/src/base/ftinit.c
+             freetype2/src/base/ftbase.c
+             freetype2/src/base/ftbbox.c
+             freetype2/src/base/ftbdf.c
+             freetype2/src/base/ftbitmap.c
+             freetype2/src/base/ftcid.c
+             freetype2/src/base/ftfstype.c
+             freetype2/src/base/ftgasp.c
+             freetype2/src/base/ftglyph.c
+             freetype2/src/base/ftgxval.c
+             freetype2/src/base/ftlcdfil.c
+             freetype2/src/base/ftmm.c
+             freetype2/src/base/ftotval.c
+             freetype2/src/base/ftpatent.c
+             freetype2/src/base/ftpfr.c
+             freetype2/src/base/ftstroke.c
+             freetype2/src/base/ftsynth.c
+             freetype2/src/base/fttype1.c
+             freetype2/src/base/ftwinfnt.c
+             freetype2/src/base/ftxf86.c
+             freetype2/src/truetype/truetype.c
+             freetype2/src/type1/type1.c
+             freetype2/src/cff/cff.c
+             freetype2/src/cid/type1cid.c
+             freetype2/src/pfr/pfr.c
+             freetype2/src/type42/type42.c
+             freetype2/src/winfonts/winfnt.c
+             freetype2/src/pcf/pcf.c
+             freetype2/src/bdf/bdf.c
+             freetype2/src/sfnt/sfnt.c
+             freetype2/src/autofit/autofit.c
+             freetype2/src/pshinter/pshinter.c
+             freetype2/src/raster/raster.c
+             freetype2/src/smooth/smooth.c
+             freetype2/src/cache/ftcache.c
+             freetype2/src/gzip/ftgzip.c
+             freetype2/src/lzw/ftlzw.c
+             freetype2/src/psaux/psaux.c
+             freetype2/src/psnames/psmodule.c
 
 source-repository head
   type: git
