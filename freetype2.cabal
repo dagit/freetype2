@@ -244,7 +244,6 @@ Library
              freetype2/src/cff/cff.c
              freetype2/src/cid/type1cid.c
              freetype2/src/lzw/ftlzw.c
-             freetype2/src/gxvalid/gxvfgen.c
              freetype2/src/gxvalid/gxvalid.c
              freetype2/src/smooth/smooth.c
              freetype2/src/raster/raster.c
