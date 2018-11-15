@@ -3,7 +3,7 @@
 #
 
 
-# Copyright 2005, 2006 by
+# Copyright 2005-2016 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -40,7 +40,11 @@ ifneq ($(EXPORTS_LIST),)
   endif
 
   # The list of public headers we're going to parse.
-  PUBLIC_HEADERS := $(wildcard $(PUBLIC_DIR)/*.h)
+  PUBLIC_HEADERS := $(filter-out $(PUBLIC_DIR)/ftmac.h, \
+                                 $(wildcard $(PUBLIC_DIR)/*.h))
+  ifneq ($(ftmac_c),)
+    PUBLIC_HEADERS += $(PUBLIC_DIR)/ftmac.h
+  endif
 
   # The `apinames' source and executable.  We use $E_BUILD as the host
   # executable suffix, which *includes* the final dot.
@@ -51,7 +55,7 @@ ifneq ($(EXPORTS_LIST),)
   APINAMES_EXE := $(subst /,$(SEP),$(OBJ_DIR)/apinames$(E_BUILD))
 
   $(APINAMES_EXE): $(APINAMES_SRC)
-	  $(CCexe) $(TE)$@ $<
+	  $(CCexe) $(CCexe_CFLAGS) $(TE)$@ $< $(CCexe_LDFLAGS)
 
   .PHONY: symbols_list
 
