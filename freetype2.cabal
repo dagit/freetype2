@@ -1,5 +1,5 @@
 Name:                freetype2
-Version:             0.1.2
+Version:             0.2
 Synopsis:            Haskell binding for FreeType 2 library
 Description:         Wrapper around FreeType 2 library.  Relevant
                      exerpts from the FreeType 2 website:
