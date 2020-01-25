@@ -170,17 +170,17 @@ foreign import ccall "FT_Face_GetCharsOfVariant"
 foreign import ccall "FT_Outline_New"
   ft_Outline_New :: FT_Library -> FT_UInt -> FT_Int
                  -> Ptr FT_Outline -> IO FT_Error
-
+{-
 foreign import ccall "FT_Outline_New_Internal"
   ft_Outline_New_Internal :: FT_Memory -> FT_UInt -> FT_Int
                           -> Ptr FT_Outline -> IO FT_Error
-
+-}
 foreign import ccall "FT_Outline_Done"
   ft_Outline_Done :: FT_Library -> Ptr FT_Outline -> IO FT_Error
-
+{-
 foreign import ccall "FT_Outline_Done_Internal"
   ft_Outline_Done_Internal :: FT_Memory -> Ptr FT_Outline -> IO FT_Error
-
+-}
 foreign import ccall "FT_Outline_Copy"
   ft_Outline_Copy :: Ptr FT_Outline -> Ptr FT_Outline -> IO FT_Error
 
