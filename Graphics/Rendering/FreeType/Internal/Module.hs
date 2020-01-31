@@ -1,11 +1,12 @@
-{-# LANGUAGE EmptyDataDecls #-}
 module Graphics.Rendering.FreeType.Internal.Module
-( FT_ModuleRec_
-, FT_Module
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_ModuleRec_
+  , FT_Module
+  ) where
 
-import Foreign
+import           Graphics.FreeType.Bindings.Support.Module (FT_ModuleRec, FT_Module)
 
-data FT_ModuleRec_
-type FT_Module = Ptr FT_ModuleRec_
+
+
+type FT_ModuleRec_ = FT_ModuleRec
 

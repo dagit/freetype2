@@ -1,27 +1,29 @@
-{-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
 module Graphics.Rendering.FreeType.Internal.GlyphSlot
-( FT_GlyphSlotRec_
-, FT_GlyphSlot
-, library
-, face
-, next
-, generic
-, metrics
-, linearHoriAdvance
-, linearVertAdvance
-, advance
-, format
-, bitmap
-, bitmap_top
-, bitmap_left
-, outline
-, num_subglyphs
-, subglyphs
-, control_data
-, control_len
-, lsb_delta
-, rsb_delta
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_GlyphSlotRec_
+  , FT_GlyphSlot
+  , library
+  , face
+  , next
+  , generic
+  , metrics
+  , linearHoriAdvance
+  , linearVertAdvance
+  , advance
+  , format
+  , bitmap
+  , bitmap_top
+  , bitmap_left
+  , outline
+  , num_subglyphs
+  , subglyphs
+  , control_data
+  , control_len
+  , lsb_delta
+  , rsb_delta
+  ) where
+
+import           Graphics.FreeType.Bindings.Core.Base (FT_GlyphSlotRec, FT_GlyphSlot)
 
 import Foreign
 import Foreign.C.Types
@@ -39,8 +41,7 @@ import qualified Graphics.Rendering.FreeType.Internal.Outline as O
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
-data FT_GlyphSlotRec_
-type FT_GlyphSlot = Ptr FT_GlyphSlotRec_
+type FT_GlyphSlotRec_ = FT_GlyphSlotRec
 
 library :: FT_GlyphSlot -> Ptr L.FT_Library
 library = #ptr struct FT_GlyphSlotRec_, library

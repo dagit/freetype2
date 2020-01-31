@@ -1,11 +1,13 @@
-{-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
 module Graphics.Rendering.FreeType.Internal.Size
-( FT_SizeRec_
-, FT_Size
-, face
-, generic
-, metrics
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_SizeRec_
+  , FT_Size
+  , face
+  , generic
+  , metrics
+  ) where
+
+import           Graphics.FreeType.Bindings.Core.Base (FT_SizeRec (..), FT_Size)
 
 import Foreign
 
@@ -13,16 +15,10 @@ import Graphics.Rendering.FreeType.Internal.FaceType
 import Graphics.Rendering.FreeType.Internal.SizeMetrics
 import Graphics.Rendering.FreeType.Internal.Generic
 
-#include <stddef.h>
-#let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
-
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
-#include "internal/ftobjs.h"
-
-data FT_SizeRec_
-type FT_Size = Ptr FT_SizeRec_
+type FT_SizeRec_ = FT_SizeRec
 
 face :: FT_Size -> Ptr FT_Face
 face = #ptr struct FT_SizeRec_, face

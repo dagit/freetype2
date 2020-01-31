@@ -1,46 +1,48 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal.Face
-( FT_FaceRec_
-, FT_Face
-, num_faces
-, face_index
-, face_flags
-, style_flags
-, num_glyphs
-, family_name
-, style_name
-, num_fixed_sizes
-, available_sizes
-, num_charmaps
-, charmaps
-, generic
-, bbox
-, units_per_EM
-, ascender
-, descender
-, height
-, max_advance_width
-, max_advance_height
-, underline_position
-, underline_thickness
-, glyph
-, size
-, charmap
-, ft_HAS_HORIZONTAL
-, ft_HAS_VERTICAL
-, ft_HAS_KERNING
-, ft_IS_SCALABLE
-, ft_IS_SFNT
-, ft_IS_FIXED_WIDTH
-, ft_HAS_FIXED_SIZES
-, ft_HAS_FAST_GLYPHS
-, ft_HAS_GLYPH_NAMES
-, ft_HAS_MULTIPLE_MASTERS
-, ft_IS_CID_KEYED
-, ft_IS_TRICKY
-, ft_STYLE_FLAG_ITALIC
-, ft_STYLE_FLAG_BOLD
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_FaceRec_
+  , FT_Face
+  , num_faces
+  , face_index
+  , face_flags
+  , style_flags
+  , num_glyphs
+  , family_name
+  , style_name
+  , num_fixed_sizes
+  , available_sizes
+  , num_charmaps
+  , charmaps
+  , generic
+  , bbox
+  , units_per_EM
+  , ascender
+  , descender
+  , height
+  , max_advance_width
+  , max_advance_height
+  , underline_position
+  , underline_thickness
+  , glyph
+  , size
+  , charmap
+  , ft_HAS_HORIZONTAL
+  , ft_HAS_VERTICAL
+  , ft_HAS_KERNING
+  , ft_IS_SCALABLE
+  , ft_IS_SFNT
+  , ft_IS_FIXED_WIDTH
+  , ft_HAS_FIXED_SIZES
+  , ft_HAS_FAST_GLYPHS
+  , ft_HAS_GLYPH_NAMES
+  , ft_HAS_MULTIPLE_MASTERS
+  , ft_IS_CID_KEYED
+  , ft_IS_TRICKY
+  , ft_STYLE_FLAG_ITALIC
+  , ft_STYLE_FLAG_BOLD
+  ) where
+
+import           Graphics.FreeType.Bindings.Core.Base
 
 import Foreign
 import Foreign.C.String
@@ -134,44 +136,34 @@ ft_HAS flag face = do
   f <- peek $ face_flags face
   return $ 0 /= (f .&. fromIntegral flag)
 
-ft_HAS_HORIZONTAL :: FT_Face -> IO Bool
+ft_HAS_HORIZONTAL
+  , ft_HAS_VERTICAL
+  , ft_HAS_KERNING
+  , ft_IS_SCALABLE
+  , ft_IS_SFNT
+  , ft_IS_FIXED_WIDTH
+  , ft_HAS_FIXED_SIZES
+  , ft_HAS_FAST_GLYPHS
+  , ft_HAS_GLYPH_NAMES
+  , ft_HAS_MULTIPLE_MASTERS
+  , ft_IS_CID_KEYED
+  , ft_IS_TRICKY
+  :: FT_Face -> IO Bool
 ft_HAS_HORIZONTAL = ft_HAS ft_FACE_FLAG_HORIZONTAL
-
-ft_HAS_VERTICAL :: FT_Face -> IO Bool
 ft_HAS_VERTICAL = ft_HAS ft_FACE_FLAG_VERTICAL
-
-ft_HAS_KERNING :: FT_Face -> IO Bool
 ft_HAS_KERNING = ft_HAS ft_FACE_FLAG_KERNING
-
-ft_IS_SCALABLE :: FT_Face -> IO Bool
 ft_IS_SCALABLE = ft_HAS ft_FACE_FLAG_SCALABLE
-
-ft_IS_SFNT :: FT_Face -> IO Bool
 ft_IS_SFNT = ft_HAS ft_FACE_FLAG_SFNT
-
-ft_IS_FIXED_WIDTH :: FT_Face -> IO Bool
 ft_IS_FIXED_WIDTH = ft_HAS ft_FACE_FLAG_FIXED_WIDTH
-
-ft_HAS_FIXED_SIZES :: FT_Face -> IO Bool
 ft_HAS_FIXED_SIZES = ft_HAS ft_FACE_FLAG_FIXED_SIZES
-
-ft_HAS_FAST_GLYPHS :: FT_Face -> IO Bool
 ft_HAS_FAST_GLYPHS = ft_HAS ft_FACE_FLAG_FAST_GLYPHS
-
-ft_HAS_GLYPH_NAMES :: FT_Face -> IO Bool
 ft_HAS_GLYPH_NAMES = ft_HAS ft_FACE_FLAG_GLYPH_NAMES
-
-ft_HAS_MULTIPLE_MASTERS :: FT_Face -> IO Bool
 ft_HAS_MULTIPLE_MASTERS = ft_HAS ft_FACE_FLAG_MULTIPLE_MASTERS
-
-ft_IS_CID_KEYED :: FT_Face -> IO Bool
 ft_IS_CID_KEYED = ft_HAS ft_FACE_FLAG_CID_KEYED
-
-ft_IS_TRICKY :: FT_Face -> IO Bool
 ft_IS_TRICKY = ft_HAS ft_FACE_FLAG_TRICKY
 
-ft_STYLE_FLAG_ITALIC :: FT_Long
-ft_STYLE_FLAG_ITALIC = #const FT_STYLE_FLAG_ITALIC
-
-ft_STYLE_FLAG_BOLD :: FT_Long
-ft_STYLE_FLAG_BOLD = #const FT_STYLE_FLAG_BOLD 
+ft_STYLE_FLAG_ITALIC
+  , ft_STYLE_FLAG_BOLD 
+ :: FT_Long
+ft_STYLE_FLAG_ITALIC = fromIntegral FT_STYLE_FLAG_ITALIC
+ft_STYLE_FLAG_BOLD = fromIntegral FT_STYLE_FLAG_BOLD

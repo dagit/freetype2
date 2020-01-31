@@ -1,11 +1,11 @@
-{-# LANGUAGE EmptyDataDecls #-}
 module Graphics.Rendering.FreeType.Internal.Library
-( FT_LibraryRec_
-, FT_Library
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_LibraryRec_
+  , FT_Library
+  ) where
 
-import Foreign
+import           Graphics.FreeType.Bindings.Core.Base (FT_LibraryRec, FT_Library)
 
-data FT_LibraryRec_
-type FT_Library = Ptr FT_LibraryRec_
 
+
+type FT_LibraryRec_ = FT_LibraryRec

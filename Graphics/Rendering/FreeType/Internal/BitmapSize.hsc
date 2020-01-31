@@ -1,40 +1,26 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal.BitmapSize
-( FT_Bitmap_Size(..)
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_Bitmap_Size (FT_Bitmap_Size)
+  , module Graphics.Rendering.FreeType.Internal.BitmapSize
+  ) where
 
-import Foreign
+import           Graphics.FreeType.Bindings.Core.Base
 
-import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
+import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 
-#include <stddef.h>
-#let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
 
-#include "ft2build.h"
-#include FT_FREETYPE_H
 
-data FT_Bitmap_Size = FT_Bitmap_Size
-  { height :: FT_Short
-  , width  :: FT_Short
-  , size   :: FT_Pos
-  , x_ppem :: FT_Pos
-  , y_ppem :: FT_Pos
-  }
-  deriving (Read, Show, Eq)
+height :: FT_Bitmap_Size -> FT_Short
+height = bsHeight
 
-instance Storable FT_Bitmap_Size where
-  sizeOf   _  = #size FT_Bitmap_Size
-  alignment _ = #alignment FT_Bitmap_Size
-  peek ptr = do
-    height' <- (#peek FT_Bitmap_Size, height) ptr
-    width'  <- (#peek FT_Bitmap_Size, width) ptr
-    size'   <- (#peek FT_Bitmap_Size, size) ptr
-    x_ppem' <- (#peek FT_Bitmap_Size, x_ppem) ptr
-    y_ppem' <- (#peek FT_Bitmap_Size, y_ppem) ptr
-    return $ FT_Bitmap_Size
-      { height = height'
-      , width = width'
-      , size = size'
-      , x_ppem = x_ppem'
-      , y_ppem = y_ppem'
-      }
+width  :: FT_Bitmap_Size -> FT_Short
+width = bsWidth
+
+size :: FT_Bitmap_Size -> FT_Pos
+size = bsSize
+
+x_ppem :: FT_Bitmap_Size -> FT_Pos
+x_ppem = bsX_ppem
+
+y_ppem :: FT_Bitmap_Size -> FT_Pos
+y_ppem = bsY_ppem

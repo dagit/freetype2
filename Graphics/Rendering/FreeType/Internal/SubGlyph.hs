@@ -1,10 +1,11 @@
-{-# LANGUAGE EmptyDataDecls #-}
 module Graphics.Rendering.FreeType.Internal.SubGlyph
-( FT_SubGlyphRec_
-, FT_SubGlyph
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_SubGlyphRec_
+  , FT_SubGlyph
+  ) where
 
-import Foreign
+import           Graphics.FreeType.Bindings.Core.Base
 
-data FT_SubGlyphRec_
-type FT_SubGlyph = Ptr FT_SubGlyphRec_
+
+
+type FT_SubGlyphRec_ = FT_SubGlyphRec

@@ -1,10 +1,10 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal.OutlineGlyph
-( FT_OutlineGlyph
-, root
-, outline
-, cast
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_OutlineGlyph
+  , root
+  , outline
+  , cast
+  ) where
 
 import Foreign
 
@@ -12,9 +12,7 @@ import Graphics.Rendering.FreeType.Internal.Glyph
 import Graphics.Rendering.FreeType.Internal.Outline
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
-
-#include "freetype/ftglyph.h"
+#include FT_GLYPH_H
 
 newtype FT_OutlineGlyph = FT_OutlineGlyph FT_Glyph
 

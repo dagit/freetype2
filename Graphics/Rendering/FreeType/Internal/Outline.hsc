@@ -1,107 +1,59 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal.Outline
-( FT_Outline(..)
-, FT_Outline_MoveToFunc
-, FT_Outline_LineToFunc
-, FT_Outline_ConicToFunc
-, FT_Outline_CubicToFunc
-, FT_Outline_Funcs(..)
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_Outline(FT_Outline)
+  , FT_Outline_MoveToFunc
+  , FT_Outline_LineToFunc
+  , FT_Outline_ConicToFunc
+  , FT_Outline_CubicToFunc
+  , FT_Outline_Funcs(FT_Outline_Funcs)
+  , module Graphics.Rendering.FreeType.Internal.Outline
+  ) where
 
-import Foreign hiding (shift)
-import Foreign.C.Types
-import Foreign.C.String
+import           Graphics.FreeType.Bindings.Support.Outline
 
-import Graphics.Rendering.FreeType.Internal.Vector
-import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
+import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
+import           Graphics.Rendering.FreeType.Internal.Vector
 
-#include <stddef.h>
-#let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
+import           Foreign.C.Types
+import           Foreign.C.String
+import           Foreign.Ptr
 
-#include "ft2build.h"
-#include FT_FREETYPE_H
 
-#include "freetype/ftimage.h"
 
-data FT_Outline = FT_Outline
-  { n_contours :: CShort
-  , n_points   :: CShort
-  , points     :: Ptr FT_Vector
-  , tags       :: CString
-  , contours   :: Ptr CShort
-  , flags      :: FT_OUTLINE_FLAGS
-  }
+n_contours :: FT_Outline -> CShort
+n_contours = oN_contours
 
-instance Storable FT_Outline where
-  sizeOf    _ = #size FT_Outline
-  alignment _ = #alignment FT_Outline
-  peek ptr = do
-    n_contours' <- (#peek FT_Outline, n_contours) ptr
-    n_points'   <- (#peek FT_Outline, n_points)   ptr
-    points'     <- (#peek FT_Outline, points)     ptr
-    tags'       <- (#peek FT_Outline, tags)       ptr
-    contours'   <- (#peek FT_Outline, contours)   ptr
-    flags'      <- (#peek FT_Outline, flags)      ptr
-    return $ FT_Outline
-      { n_contours = n_contours'
-      , n_points   = n_points'
-      , points     = points'
-      , tags       = tags'
-      , contours   = contours'
-      , flags      = flags'
-      }
-  poke ptr val = do
-    (#poke FT_Outline, n_contours) ptr (n_contours val)
-    (#poke FT_Outline, n_points)   ptr (n_points   val)
-    (#poke FT_Outline, points)     ptr (points     val)
-    (#poke FT_Outline, tags)       ptr (tags       val)
-    (#poke FT_Outline, contours)   ptr (contours   val)
-    (#poke FT_Outline, flags)      ptr (flags      val)
+n_points :: FT_Outline -> CShort
+n_points = oN_points
 
-type FT_Outline_MoveToFunc = FunPtr
-  (Ptr FT_Vector -> Ptr () -> IO CInt)
+points :: FT_Outline -> Ptr FT_Vector
+points = oPoints
 
-type FT_Outline_LineToFunc = FunPtr
-  (Ptr FT_Vector -> Ptr () -> IO CInt)
+tags :: FT_Outline -> CString
+tags = oTags
 
-type FT_Outline_ConicToFunc = FunPtr
-  (Ptr FT_Vector -> Ptr FT_Vector -> Ptr () -> IO CInt)
+contours :: FT_Outline -> Ptr CShort
+contours = oContours
 
-type FT_Outline_CubicToFunc = FunPtr
-  (Ptr FT_Vector -> Ptr FT_Vector -> Ptr FT_Vector -> Ptr () -> IO CInt)
+flags :: FT_Outline -> FT_OUTLINE_FLAGS
+flags = FT_OUTLINE_FLAGS . fromIntegral . oFlags
 
-data FT_Outline_Funcs = FT_Outline_Funcs
-  { move_to  :: FT_Outline_MoveToFunc
-  , line_to  :: FT_Outline_LineToFunc
-  , conic_to :: FT_Outline_ConicToFunc
-  , cubic_to :: FT_Outline_CubicToFunc
-  , shift    :: CInt
-  , delta    :: FT_Pos
-  }
 
-instance Storable FT_Outline_Funcs where
-  sizeOf    _ = #size FT_Outline_Funcs
-  alignment _ = #alignment FT_Outline_Funcs
-  peek ptr = do
-    move_to'  <- (#peek FT_Outline_Funcs, move_to) ptr
-    line_to'  <- (#peek FT_Outline_Funcs, line_to) ptr
-    conic_to' <- (#peek FT_Outline_Funcs, conic_to) ptr
-    cubic_to' <- (#peek FT_Outline_Funcs, cubic_to) ptr
-    shift'    <- (#peek FT_Outline_Funcs, shift) ptr
-    delta'    <- (#peek FT_Outline_Funcs, delta) ptr
-    return $ FT_Outline_Funcs
-      { move_to  = move_to'
-      , line_to  = line_to'
-      , conic_to = conic_to'
-      , cubic_to = cubic_to'
-      , shift    = shift'
-      , delta    = delta'
-      }
-  poke ptr val = do
-    (#poke FT_Outline_Funcs, move_to) ptr (move_to val)
-    (#poke FT_Outline_Funcs, line_to) ptr (line_to val)
-    (#poke FT_Outline_Funcs, conic_to) ptr (conic_to val)
-    (#poke FT_Outline_Funcs, cubic_to) ptr (cubic_to val)
-    (#poke FT_Outline_Funcs, shift) ptr (shift val)
-    (#poke FT_Outline_Funcs, delta) ptr (delta val)
 
+move_to :: FT_Outline_Funcs -> FT_Outline_MoveToFunc
+move_to = ofMove_to
+
+line_to :: FT_Outline_Funcs -> FT_Outline_LineToFunc
+line_to = ofLine_to
+
+conic_to :: FT_Outline_Funcs -> FT_Outline_ConicToFunc
+conic_to = ofConic_to
+
+cubic_to :: FT_Outline_Funcs -> FT_Outline_CubicToFunc
+cubic_to = ofCubic_to
+
+shift :: FT_Outline_Funcs -> CInt
+shift = ofShift
+
+delta :: FT_Outline_Funcs -> FT_Pos
+delta = ofDelta

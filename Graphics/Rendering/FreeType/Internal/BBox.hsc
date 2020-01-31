@@ -1,45 +1,23 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal.BBox
-( FT_BBox(..)
-) where
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  ( FT_BBox (FT_BBox)
+  , module Graphics.Rendering.FreeType.Internal.BBox
+  ) where
 
-import Foreign
+import           Graphics.FreeType.Bindings.Core.Types (FT_BBox (..))
 
-import Graphics.Rendering.FreeType.Internal.PrimitiveTypes
+import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 
-#include <stddef.h>
-#let alignment t = "%lu", (unsigned long)offsetof(struct {char x__; t (y__); }, y__)
 
-#include "ft2build.h"
-#include FT_FREETYPE_H
 
-#include "freetype/ftimage.h"
+xMin :: FT_BBox -> FT_Pos
+xMin = bbXMin
 
-data FT_BBox = FT_BBox
-  { xMin :: FT_Pos
-  , yMin :: FT_Pos
-  , xMax :: FT_Pos
-  , yMax :: FT_Pos
-  }
-  deriving (Read, Show, Eq)
+yMin :: FT_BBox -> FT_Pos
+yMin = bbYMin
 
-instance Storable FT_BBox where
-  sizeOf    _ = #size FT_BBox
-  alignment _ = #alignment FT_BBox
-  peek ptr = do
-    xMin' <- (#peek FT_BBox, xMin) ptr
-    yMin' <- (#peek FT_BBox, yMin) ptr
-    xMax' <- (#peek FT_BBox, xMax) ptr
-    yMax' <- (#peek FT_BBox, yMax) ptr
-    return $ FT_BBox
-      { xMin = xMin'
-      , yMin = yMin'
-      , xMax = xMax'
-      , yMax = yMax'
-      }
-  poke ptr val = do
-    (#poke FT_BBox, xMin) ptr (xMin val)
-    (#poke FT_BBox, yMin) ptr (yMin val)
-    (#poke FT_BBox, xMax) ptr (xMax val)
-    (#poke FT_BBox, yMax) ptr (yMax val)
+xMax :: FT_BBox -> FT_Pos
+xMax = bbXMax
 
+yMax :: FT_BBox -> FT_Pos
+yMax = bbYMax
