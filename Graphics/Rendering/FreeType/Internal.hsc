@@ -1,14 +1,14 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   where
 
-import qualified Graphics.FreeType.Bindings.Core.Base as New
-import qualified Graphics.FreeType.Bindings.Core.Size as New
-import qualified Graphics.FreeType.Bindings.Core.Glyph as New
-import qualified Graphics.FreeType.Bindings.Core.Unicode as New
-import qualified Graphics.FreeType.Bindings.Core.Version as New
-import qualified Graphics.FreeType.Bindings.Support.Outline as New
+import qualified FreeType.Raw.Core.Base as New
+import qualified FreeType.Raw.Core.Size as New
+import qualified FreeType.Raw.Core.Glyph as New
+import qualified FreeType.Raw.Core.Unicode as New
+import qualified FreeType.Raw.Core.Version as New
+import qualified FreeType.Raw.Support.Outline as New
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import           Graphics.Rendering.FreeType.Internal.Library

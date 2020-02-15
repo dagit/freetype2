@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.SizeMetrics
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_Size_Metrics (FT_Size_Metrics)
   , module Graphics.Rendering.FreeType.Internal.SizeMetrics
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Base (FT_Size_Metrics (..))
+import           FreeType.Raw.Core.Base (FT_Size_Metrics (..))
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

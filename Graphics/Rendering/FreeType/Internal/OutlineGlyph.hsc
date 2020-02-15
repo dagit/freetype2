@@ -1,5 +1,5 @@
 module Graphics.Rendering.FreeType.Internal.OutlineGlyph
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_OutlineGlyph
   , root
   , outline

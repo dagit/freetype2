@@ -1,5 +1,5 @@
 module Graphics.Rendering.FreeType.Internal.Glyph
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_GlyphRec_
   , FT_Glyph
   , library
@@ -7,7 +7,7 @@ module Graphics.Rendering.FreeType.Internal.Glyph
   , advance
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Glyph (FT_GlyphRec, FT_Glyph)
+import           FreeType.Raw.Core.Glyph (FT_GlyphRec, FT_Glyph)
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import qualified Graphics.Rendering.FreeType.Internal.Library as L

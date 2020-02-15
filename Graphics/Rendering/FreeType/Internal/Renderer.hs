@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.Renderer
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_RendererRec_
   , FT_Renderer
   ) where
 
-import           Graphics.FreeType.Bindings.Support.Module (FT_RendererRec, FT_Renderer)
+import           FreeType.Raw.Support.Module (FT_RendererRec, FT_Renderer)
 
 
 

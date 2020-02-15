@@ -1,5 +1,5 @@
 module Graphics.Rendering.FreeType.Internal.Face
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_FaceRec_
   , FT_Face
   , num_faces
@@ -42,7 +42,7 @@ module Graphics.Rendering.FreeType.Internal.Face
   , ft_STYLE_FLAG_BOLD
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Base
+import           FreeType.Raw.Core.Base
 
 import Foreign
 import Foreign.C.String

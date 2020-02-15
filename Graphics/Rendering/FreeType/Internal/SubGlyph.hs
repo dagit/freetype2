@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.SubGlyph
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_SubGlyphRec_
   , FT_SubGlyph
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Base
+import           FreeType.Raw.Core.Base
 
 
 

@@ -1,5 +1,5 @@
 module Graphics.Rendering.FreeType.Internal.RasterParams
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_Raster_Params
   , FT_SpanFunc
   , FT_Raster_BitTest_Func
@@ -12,7 +12,7 @@ module Graphics.Rendering.FreeType.Internal.RasterParams
   , clip_box
   ) where
 
-import           Graphics.FreeType.Bindings.Support.Scanline
+import           FreeType.Raw.Support.Scanline
 
 import           Graphics.Rendering.FreeType.Internal.BBox
 import           Graphics.Rendering.FreeType.Internal.Bitmap

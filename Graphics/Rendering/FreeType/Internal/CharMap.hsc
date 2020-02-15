@@ -1,6 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
 module Graphics.Rendering.FreeType.Internal.CharMap
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_CharMapRec
   , FT_CharMap
   , face
@@ -9,7 +9,7 @@ module Graphics.Rendering.FreeType.Internal.CharMap
   , encoding_id
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Base (FT_CharMapRec, FT_CharMap)
+import           FreeType.Raw.Core.Base (FT_CharMapRec, FT_CharMap)
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import           Graphics.Rendering.FreeType.Internal.FaceType

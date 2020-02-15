@@ -1,11 +1,11 @@
 module Graphics.Rendering.FreeType.Internal.Generic
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_Generic (FT_Generic)
   , FT_Generic_Finalizer
   , module Graphics.Rendering.FreeType.Internal.Generic
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Types
+import           FreeType.Raw.Core.Types
 
 import           Foreign.Ptr
 

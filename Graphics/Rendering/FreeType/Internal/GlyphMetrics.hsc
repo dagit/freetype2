@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.GlyphMetrics
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_Glyph_Metrics (FT_Glyph_Metrics)
   , module Graphics.Rendering.FreeType.Internal.GlyphMetrics
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Base
+import           FreeType.Raw.Core.Base
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

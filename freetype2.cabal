@@ -160,49 +160,49 @@ Executable freetype-example1
 Library
   -- Modules exported by the library.
   -- Listed in the order they are presented in the API reference
-  Exposed-modules: Graphics.FreeType.Bindings.Circular
+  Exposed-modules: FreeType.Raw.Circular
                    -- New internal library
-                   Graphics.FreeType.Bindings.Core.Version
-                   Graphics.FreeType.Bindings.Core.Types
-                   Graphics.FreeType.Bindings.Core.Base
-                   Graphics.FreeType.Bindings.Core.Unicode
-                   Graphics.FreeType.Bindings.Core.Color
-                   Graphics.FreeType.Bindings.Core.Layer
-                   Graphics.FreeType.Bindings.Core.Glyph
-                   Graphics.FreeType.Bindings.Core.Mac
-                   Graphics.FreeType.Bindings.Core.Size
-                   Graphics.FreeType.Bindings.Format.Multiple
-                   Graphics.FreeType.Bindings.Format.TrueType
-                   Graphics.FreeType.Bindings.Format.Type1
-                   Graphics.FreeType.Bindings.Format.SFNT
-                   Graphics.FreeType.Bindings.Format.BDF
-                   Graphics.FreeType.Bindings.Format.CID
-                   Graphics.FreeType.Bindings.Format.PFR
-                   Graphics.FreeType.Bindings.Format.WinFNT
-                   Graphics.FreeType.Bindings.Format.Font
-                   Graphics.FreeType.Bindings.Format.Gasp
-                   Graphics.FreeType.Bindings.Control.Driver
-                   Graphics.FreeType.Bindings.Control.Parameter
-                   Graphics.FreeType.Bindings.Control.Subpixel
-                   Graphics.FreeType.Bindings.Cache
-                   Graphics.FreeType.Bindings.Support.Computations
-                   Graphics.FreeType.Bindings.Support.List
-                   Graphics.FreeType.Bindings.Support.Bitmap
-                   Graphics.FreeType.Bindings.Support.Outline
-                   Graphics.FreeType.Bindings.Support.Scanline
-                   Graphics.FreeType.Bindings.Support.Advance
-                   Graphics.FreeType.Bindings.Support.Glyph
-                   Graphics.FreeType.Bindings.Support.System
-                   Graphics.FreeType.Bindings.Support.Module
-                   Graphics.FreeType.Bindings.Support.GZIP
-                   Graphics.FreeType.Bindings.Support.LZW
-                   Graphics.FreeType.Bindings.Support.BZIP2
-                   Graphics.FreeType.Bindings.Error.Enumerations
-                   Graphics.FreeType.Bindings.Error.Values
-                   Graphics.FreeType.Bindings.Miscellaneous.OpenType
-                   Graphics.FreeType.Bindings.Miscellaneous.Incremental
-                   Graphics.FreeType.Bindings.Miscellaneous.TrueType
-                   Graphics.FreeType.Bindings.Miscellaneous.TrueTypeGX
+                   FreeType.Raw.Core.Version
+                   FreeType.Raw.Core.Types
+                   FreeType.Raw.Core.Base
+                   FreeType.Raw.Core.Unicode
+                   FreeType.Raw.Core.Color
+                   FreeType.Raw.Core.Layer
+                   FreeType.Raw.Core.Glyph
+                   FreeType.Raw.Core.Mac
+                   FreeType.Raw.Core.Size
+                   FreeType.Raw.Format.Multiple
+                   FreeType.Raw.Format.TrueType
+                   FreeType.Raw.Format.Type1
+                   FreeType.Raw.Format.SFNT
+                   FreeType.Raw.Format.BDF
+                   FreeType.Raw.Format.CID
+                   FreeType.Raw.Format.PFR
+                   FreeType.Raw.Format.WinFNT
+                   FreeType.Raw.Format.Font
+                   FreeType.Raw.Format.Gasp
+                   FreeType.Raw.Control.Driver
+                   FreeType.Raw.Control.Parameter
+                   FreeType.Raw.Control.Subpixel
+                   FreeType.Raw.Cache
+                   FreeType.Raw.Support.Computations
+                   FreeType.Raw.Support.List
+                   FreeType.Raw.Support.Bitmap
+                   FreeType.Raw.Support.Outline
+                   FreeType.Raw.Support.Scanline
+                   FreeType.Raw.Support.Advance
+                   FreeType.Raw.Support.Glyph
+                   FreeType.Raw.Support.System
+                   FreeType.Raw.Support.Module
+                   FreeType.Raw.Support.GZIP
+                   FreeType.Raw.Support.LZW
+                   FreeType.Raw.Support.BZIP2
+                   FreeType.Raw.Error.Enumerations
+                   FreeType.Raw.Error.Values
+                   FreeType.Raw.Miscellaneous.OpenType
+                   FreeType.Raw.Miscellaneous.Incremental
+                   FreeType.Raw.Miscellaneous.TrueType
+                   FreeType.Raw.Miscellaneous.TrueTypeGX
                    -- Old internal library
                    Graphics.Rendering.FreeType.Internal
                    Graphics.Rendering.FreeType.Internal.BBox

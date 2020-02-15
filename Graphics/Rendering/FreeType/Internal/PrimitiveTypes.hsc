@@ -1,15 +1,15 @@
 {-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Graphics.Rendering.FreeType.Internal.PrimitiveTypes
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   where
 
-import           Graphics.FreeType.Bindings.Core.Types hiding ( FT_Byte, FT_UShort, FT_Int, FT_Int32
-                                                              , FT_UInt, FT_UInt32, FT_Glyph_Format
-                                                              )
-import           Graphics.FreeType.Bindings.Core.Base hiding (FT_Size_Request_Type, FT_Encoding, FT_Render_Mode)
-import           Graphics.FreeType.Bindings.Core.Version
-import           Graphics.FreeType.Bindings.Support.Outline hiding (FT_Orientation)
+import           FreeType.Raw.Core.Types hiding ( FT_Byte, FT_UShort, FT_Int, FT_Int32
+                                                , FT_UInt, FT_UInt32, FT_Glyph_Format
+                                                )
+import           FreeType.Raw.Core.Base hiding (FT_Size_Request_Type, FT_Encoding, FT_Render_Mode)
+import           FreeType.Raw.Core.Version
+import           FreeType.Raw.Support.Outline hiding (FT_Orientation)
 
 import Foreign
 import Foreign.C.Types

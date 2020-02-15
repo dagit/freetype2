@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.BBox
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_BBox (FT_BBox)
   , module Graphics.Rendering.FreeType.Internal.BBox
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Types (FT_BBox (..))
+import           FreeType.Raw.Core.Types (FT_BBox (..))
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

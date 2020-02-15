@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.OpenArgs
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_Open_Args (FT_Open_Args)
   , module Graphics.Rendering.FreeType.Internal.OpenArgs
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Base (FT_Open_Args (..))
+import           FreeType.Raw.Core.Base (FT_Open_Args (..))
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import           Graphics.Rendering.FreeType.Internal.Stream

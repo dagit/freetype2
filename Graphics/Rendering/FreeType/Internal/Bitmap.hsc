@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.Bitmap
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to Graphics.FreeType.Bindings" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
   ( FT_Bitmap (FT_Bitmap)
   , module Graphics.Rendering.FreeType.Internal.Bitmap
   ) where
 
-import           Graphics.FreeType.Bindings.Core.Types (FT_Bitmap (..))
+import           FreeType.Raw.Core.Types (FT_Bitmap (..))
 
 import           Foreign.C.Types
 import           Foreign.Ptr
