@@ -1,131 +1,17 @@
-{-# LANGUAGE EmptyDataDecls #-}
-{-# LANGUAGE ForeignFunctionInterface #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module FreeType.Raw.Cache where
+module FreeType.Raw.Cache
+  ( module FreeType.Raw.Cache.Internal
+  ) where
 
-import           FreeType.Raw.Core.Base
-import           FreeType.Raw.Core.Glyph
-import           FreeType.Raw.Core.Types
+import           FreeType.Raw.Cache.Internal
+import           FreeType.Lens
 
-import           Foreign.C.Types
-import           Foreign.Ptr
 import           Foreign.Storable
+import           Lens.Micro ((^.))
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
-
-#include "freetype/ftcache.h"
-
-data FTC_ManagerRec
-type FTC_Manager = Ptr FTC_ManagerRec
-
-
-
-type FTC_FaceID = FT_Pointer
-
-
-
-type FTC_Face_Requester = FunPtr (FTC_FaceID, FT_Library -> FT_Pointer -> Ptr FT_Face -> IO FT_Error)
-
-
-
-foreign import ccall "FTC_Manager_New"
-  ftc_Manager_New :: FT_Library -> FT_UInt -> FT_UInt -> FT_ULong -> FTC_Face_Requester -> FT_Pointer -> FTC_Manager -> IO FT_Error
-
-
-
-foreign import ccall "FTC_Manager_Reset"
-  ftc_Manager_Reset :: FTC_Manager -> IO ()
-
-
-
-foreign import ccall "FTC_Manager_Done"
-  ftc_Manager_Done :: FTC_Manager -> IO ()
-
-
-
-foreign import ccall "FTC_Manager_LookupFace"
-  ftc_Manager_LookupFace :: FTC_Manager -> FTC_FaceID -> Ptr FT_Face -> IO FT_Error
-
-
-
-foreign import ccall "FTC_Manager_LookupSize"
-  ftc_Manager_LookupSize :: FTC_Manager -> FTC_Scaler -> Ptr FT_Size -> IO FT_Error
-
-
-
-foreign import ccall "FTC_Manager_RemoveFaceID"
-  ftc_Manager_RemoveFaceID :: FTC_Manager -> FTC_FaceID -> IO ()
-
-
-
-data FTC_NodeRec
-type FTC_Node = Ptr FTC_NodeRec
-
-
-
-foreign import ccall "FTC_Node_Unref"
-  ftc_Node_Unref :: FTC_Node -> FTC_Manager -> IO ()
-
-
-
-data FTC_ImageCacheRec
-type FTC_ImageCache = Ptr FTC_ImageCacheRec
-
-
-
-foreign import ccall "FTC_ImageCache_New"
-  ftc_ImageCache_New :: FTC_Manager -> Ptr FTC_ImageCache -> IO FT_Error
-
-
-
-foreign import ccall "FTC_ImageCache_Lookup"
-  ftc_ImageCache_Lookup :: FTC_ImageCache -> FTC_ImageType -> FT_UInt -> Ptr FT_Glyph -> Ptr FTC_Node -> IO FT_Error
-
-
-
-type FTC_SBit = Ptr FTC_SBitRec
-
-
-
-data FTC_SBitCacheRec
-type FTC_SBitCache = Ptr FTC_SBitCacheRec
-
-
-
-foreign import ccall "FTC_SBitCache_New"
-  ftc_SBitCache_New :: FTC_Manager -> Ptr FTC_SBitCache -> IO FT_Error
-
-
-
-foreign import ccall "FTC_SBitCache_Lookup"
-  ftc_SBitCache_Lookup :: FTC_SBitCache -> FTC_ImageType -> FT_UInt -> Ptr FTC_SBit -> Ptr FTC_Node -> IO FT_Error
-
-
-
-data FTC_CMapCacheRec
-type FTC_CMapCache = Ptr FTC_CMapCacheRec
-
-
-
-foreign import ccall "FTC_CMapCache_New"
-  ftc_CMapCache_New :: FTC_Manager -> Ptr FTC_CMapCache -> IO FT_Error
-
-
-
-foreign import ccall "FTC_CMapCache_Lookup"
-  ftc_CMapCache_Lookup :: FTC_CMapCache -> FTC_FaceID -> FT_Int -> FT_UInt32 -> IO FT_UInt
-
-
-
-data FTC_ScalerRec = FTC_ScalerRec
-                       { srFace_id :: FTC_FaceID
-                       , srWidth   :: FT_UInt
-                       , srHeight  :: FT_UInt
-                       , srPixel   :: FT_Int
-                       , srX_res   :: FT_UInt
-                       , srY_res   :: FT_UInt
-                       }
+#include FT_CACHE_H
 
 instance Storable FTC_ScalerRec where
   sizeOf _    = #size      struct FTC_ScalerRec_
@@ -141,25 +27,14 @@ instance Storable FTC_ScalerRec where
       <*> #{peek struct FTC_ScalerRec_, y_res  } ptr
 
   poke ptr val = do
-    #{poke struct FTC_ScalerRec_, face_id} ptr $ srFace_id val
-    #{poke struct FTC_ScalerRec_, width  } ptr $ srWidth   val
-    #{poke struct FTC_ScalerRec_, height } ptr $ srHeight  val
-    #{poke struct FTC_ScalerRec_, pixel  } ptr $ srPixel   val
-    #{poke struct FTC_ScalerRec_, x_res  } ptr $ srX_res   val
-    #{poke struct FTC_ScalerRec_, y_res  } ptr $ srY_res   val
+    #{poke struct FTC_ScalerRec_, face_id} ptr $ val^.face_id
+    #{poke struct FTC_ScalerRec_, width  } ptr $ val^.width
+    #{poke struct FTC_ScalerRec_, height } ptr $ val^.height
+    #{poke struct FTC_ScalerRec_, pixel  } ptr $ val^.pixel
+    #{poke struct FTC_ScalerRec_, x_res  } ptr $ val^.x_res
+    #{poke struct FTC_ScalerRec_, y_res  } ptr $ val^.y_res
 
 
-
-type FTC_Scaler = Ptr FTC_ScalerRec
-
-
-
-data FTC_ImageTypeRec = FTC_ImageTypeRec
-                           { itrFace_id :: FTC_FaceID
-                           , itrWidth   :: FT_UInt
-                           , itrHeight  :: FT_UInt
-                           , itrFlags   :: FT_Int32
-                           }
 
 instance Storable FTC_ImageTypeRec where
   sizeOf _    = #size      struct FTC_ImageTypeRec_
@@ -173,34 +48,12 @@ instance Storable FTC_ImageTypeRec where
       <*> #{peek struct FTC_ImageTypeRec_, flags  } ptr
 
   poke ptr val = do
-    #{poke struct FTC_ImageTypeRec_, face_id} ptr $ itrFace_id val
-    #{poke struct FTC_ImageTypeRec_, width  } ptr $ itrWidth   val
-    #{poke struct FTC_ImageTypeRec_, height } ptr $ itrHeight  val
-    #{poke struct FTC_ImageTypeRec_, flags  } ptr $ itrFlags   val
+    #{poke struct FTC_ImageTypeRec_, face_id} ptr $ val^.face_id
+    #{poke struct FTC_ImageTypeRec_, width  } ptr $ val^.width
+    #{poke struct FTC_ImageTypeRec_, height } ptr $ val^.height
+    #{poke struct FTC_ImageTypeRec_, flags  } ptr $ val^.flags
 
 
-
-type FTC_ImageType = Ptr FTC_ImageTypeRec
-
-
-
-foreign import ccall "FTC_ImageCache_LookupScaler"
-  ftc_ImageCache_LookupScaler :: FTC_ImageCache -> FTC_Scaler -> FT_ULong -> FT_UInt -> Ptr FT_Glyph -> Ptr FTC_Node -> IO FT_Error
-
-
-
-data FTC_SBitRec = FTC_SBitRec
-                     { sbrWidth     :: FT_Byte
-                     , sbrHeight    :: FT_Byte
-                     , sbrLeft      :: FT_Char
-                     , sbrTop       :: FT_Char
-                     , sbrFormat    :: FT_Byte
-                     , sbrMax_grays :: FT_Byte
-                     , sbrPitch     :: FT_Short
-                     , sbrXadvance  :: FT_Char
-                     , sbrYadvance  :: FT_Char
-                     , sbrBuffer    :: Ptr FT_Byte
-                     }
 
 instance Storable FTC_SBitRec where
   sizeOf _    = #size      struct FTC_SBitRec_
@@ -220,18 +73,13 @@ instance Storable FTC_SBitRec where
       <*> #{peek struct FTC_SBitRec_, buffer   } ptr
 
   poke ptr val = do
-    #{poke struct FTC_SBitRec_, width    } ptr $ sbrWidth     val
-    #{poke struct FTC_SBitRec_, height   } ptr $ sbrHeight    val
-    #{poke struct FTC_SBitRec_, left     } ptr $ sbrLeft      val
-    #{poke struct FTC_SBitRec_, top      } ptr $ sbrTop       val
-    #{poke struct FTC_SBitRec_, format   } ptr $ sbrFormat    val
-    #{poke struct FTC_SBitRec_, max_grays} ptr $ sbrMax_grays val
-    #{poke struct FTC_SBitRec_, pitch    } ptr $ sbrPitch     val
-    #{poke struct FTC_SBitRec_, xadvance } ptr $ sbrXadvance  val
-    #{poke struct FTC_SBitRec_, yadvance } ptr $ sbrYadvance  val
-    #{poke struct FTC_SBitRec_, buffer   } ptr $ sbrBuffer    val
-
-
-
-foreign import ccall "FTC_SBitCache_LookupScaler" 
-  ftc_SBitCache_LookupScaler :: FTC_SBitCache -> FTC_Scaler -> FT_ULong -> FT_UInt -> Ptr FTC_SBit -> Ptr FTC_Node -> IO FT_Error 
+    #{poke struct FTC_SBitRec_, width    } ptr $ val^.width
+    #{poke struct FTC_SBitRec_, height   } ptr $ val^.height
+    #{poke struct FTC_SBitRec_, left     } ptr $ val^.left
+    #{poke struct FTC_SBitRec_, top      } ptr $ val^.top
+    #{poke struct FTC_SBitRec_, format   } ptr $ val^.format
+    #{poke struct FTC_SBitRec_, max_grays} ptr $ val^.max_grays
+    #{poke struct FTC_SBitRec_, pitch    } ptr $ val^.pitch
+    #{poke struct FTC_SBitRec_, xadvance } ptr $ val^.xadvance
+    #{poke struct FTC_SBitRec_, yadvance } ptr $ val^.yadvance
+    #{poke struct FTC_SBitRec_, buffer   } ptr $ val^.buffer

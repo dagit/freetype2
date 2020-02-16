@@ -1,28 +1,17 @@
-{-# LANGUAGE EmptyDataDecls #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module FreeType.Raw.Miscellaneous.Incremental where
+module FreeType.Raw.Miscellaneous.Incremental
+  ( module FreeType.Raw.Miscellaneous.Incremental.Internal
+  ) where
 
-import           FreeType.Raw.Core.Types
+import           FreeType.Raw.Miscellaneous.Incremental.Internal
+import           FreeType.Lens
 
-import           Foreign.Ptr
 import           Foreign.Storable
+import           Lens.Micro ((^.))
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
-
-#include "freetype/ftincrem.h"
-
-data FT_IncrementalRec
-type FT_Incremental = Ptr FT_IncrementalRec
-
-
-
-data FT_Incremental_MetricsRec = FT_Incremental_MetricsRec
-                                   { imrBearing_x :: FT_Long
-                                   , imrBearing_y :: FT_Long
-                                   , imrAdvance   :: FT_Long
-                                   , imrAdvance_v :: FT_Long
-                                   }
+#include FT_INCREMENTAL_H
 
 instance Storable FT_Incremental_MetricsRec where
   sizeOf _    = #size      struct FT_Incremental_MetricsRec_
@@ -36,34 +25,12 @@ instance Storable FT_Incremental_MetricsRec where
       <*> #{peek struct FT_Incremental_MetricsRec_, advance_v} ptr
 
   poke ptr val = do
-    #{poke struct FT_Incremental_MetricsRec_, bearing_x} ptr $ imrBearing_x val
-    #{poke struct FT_Incremental_MetricsRec_, bearing_y} ptr $ imrBearing_y val
-    #{poke struct FT_Incremental_MetricsRec_, advance  } ptr $ imrAdvance   val
-    #{poke struct FT_Incremental_MetricsRec_, advance_v} ptr $ imrAdvance_v val
+    #{poke struct FT_Incremental_MetricsRec_, bearing_x} ptr $ val^.bearing_x
+    #{poke struct FT_Incremental_MetricsRec_, bearing_y} ptr $ val^.bearing_y
+    #{poke struct FT_Incremental_MetricsRec_, advance  } ptr $ val^.advance
+    #{poke struct FT_Incremental_MetricsRec_, advance_v} ptr $ val^.advance_v
 
 
-
-type FT_Incremental_Metrics = Ptr FT_Incremental_MetricsRec
-
-
-
-type FT_Incremental_GetGlyphDataFunc = FunPtr (FT_Incremental -> FT_UInt -> Ptr FT_Data -> IO FT_Error)
-
-
-
-type FT_Incremental_FreeGlyphDataFunc = FunPtr (FT_Incremental -> Ptr FT_Data -> IO ())
-
-
-
-type FT_Incremental_GetGlyphMetricsFunc = FunPtr (FT_Incremental -> FT_UInt -> FT_Bool -> Ptr FT_Incremental_MetricsRec -> IO FT_Error)
-
-
-
-data FT_Incremental_FuncsRec = FT_Incremental_FuncsRec
-                                 { ifrGet_glyph_data    :: FT_Incremental_GetGlyphDataFunc
-                                 , ifrFree_glyph_data   :: FT_Incremental_FreeGlyphDataFunc
-                                 , ifrGet_glyph_metrics :: FT_Incremental_GetGlyphMetricsFunc
-                                 }
 
 instance Storable FT_Incremental_FuncsRec where
   sizeOf _    = #size      struct FT_Incremental_FuncsRec_
@@ -74,18 +41,13 @@ instance Storable FT_Incremental_FuncsRec where
       <$> #{peek struct FT_Incremental_FuncsRec_, get_glyph_data    } ptr
       <*> #{peek struct FT_Incremental_FuncsRec_, free_glyph_data   } ptr
       <*> #{peek struct FT_Incremental_FuncsRec_, get_glyph_metrics } ptr
-  
+
   poke ptr val = do
-    #{poke struct FT_Incremental_FuncsRec_, get_glyph_data    } ptr $ ifrGet_glyph_data    val
-    #{poke struct FT_Incremental_FuncsRec_, free_glyph_data   } ptr $ ifrFree_glyph_data   val
-    #{poke struct FT_Incremental_FuncsRec_, get_glyph_metrics } ptr $ ifrGet_glyph_metrics val
+    #{poke struct FT_Incremental_FuncsRec_, get_glyph_data    } ptr $ val^.get_glyph_data
+    #{poke struct FT_Incremental_FuncsRec_, free_glyph_data   } ptr $ val^.free_glyph_data
+    #{poke struct FT_Incremental_FuncsRec_, get_glyph_metrics } ptr $ val^.get_glyph_metrics
 
 
-
-data FT_Incremental_InterfaceRec = FT_Incremental_InterfaceRec
-                                 { iirFuncs  :: Ptr FT_Incremental_FuncsRec
-                                 , iirObject :: FT_Incremental
-                                 }
 
 instance Storable FT_Incremental_InterfaceRec where
   sizeOf _    = #size      struct FT_Incremental_InterfaceRec_
@@ -97,9 +59,5 @@ instance Storable FT_Incremental_InterfaceRec where
       <*> #{peek struct FT_Incremental_InterfaceRec_, object} ptr
 
   poke ptr val = do
-    #{poke struct FT_Incremental_InterfaceRec_, funcs } ptr $ iirFuncs  val
-    #{poke struct FT_Incremental_InterfaceRec_, object} ptr $ iirObject val
-
-
-
-type FT_Incremental_Interface = Ptr FT_Incremental_InterfaceRec
+    #{poke struct FT_Incremental_InterfaceRec_, funcs } ptr $ val^.funcs
+    #{poke struct FT_Incremental_InterfaceRec_, object} ptr $ val^.object

@@ -18,10 +18,10 @@ module FreeType.Raw.Support.List
   ) where
 
 import           FreeType.Raw.Circular ( FT_List
-                                                     , FT_ListNode
-                                                     , FT_ListRec (..)
-                                                     , FT_ListNodeRec (..)
-                                                     )
+                                       , FT_ListNode
+                                       , FT_ListRec (..)
+                                       , FT_ListNodeRec (..)
+                                       )
 import           FreeType.Raw.Core.Types
 import           FreeType.Raw.Support.System
 

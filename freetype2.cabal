@@ -148,9 +148,13 @@ Flag examples
 
 Executable freetype-example1
   Main-is:       Main.hs
-  Build-depends: base > 3 && < 5,
-                 freetype2,
-                 array
+  Build-depends: base >= 4.5 && < 5
+               , freetype2
+               , array
+               , microlens
+               , microlens-th
+               , template-haskell
+               , vector
 
   if flag(examples)
     Buildable: True
@@ -158,6 +162,7 @@ Executable freetype-example1
     Buildable: False
 
 Library
+<<<<<<< Updated upstream
   -- Modules exported by the library.
   -- Listed in the order they are presented in the API reference
   Exposed-modules: FreeType.Raw.Circular
@@ -204,6 +209,60 @@ Library
                    FreeType.Raw.Miscellaneous.TrueType
                    FreeType.Raw.Miscellaneous.TrueTypeGX
                    -- Old internal library
+=======
+  Exposed-modules: Graphics.FreeType
+
+                   Graphics.FreeType.Bindings
+                   
+                   Graphics.FreeType.Internal.Lens
+
+                   Graphics.FreeType.Bindings.Circular
+                   Graphics.FreeType.Bindings.Circular.Internal
+                   Graphics.FreeType.Bindings.Circular.Lens
+                   
+                   Graphics.FreeType.Bindings.Core.Version
+                   Graphics.FreeType.Bindings.Core.Types
+                   Graphics.FreeType.Bindings.Core.Base
+                   Graphics.FreeType.Bindings.Core.Unicode
+                   Graphics.FreeType.Bindings.Core.Color
+                   Graphics.FreeType.Bindings.Core.Layer
+                   Graphics.FreeType.Bindings.Core.Glyph
+                   Graphics.FreeType.Bindings.Core.Mac
+                   Graphics.FreeType.Bindings.Core.Size
+                   Graphics.FreeType.Bindings.Format.Multiple
+                   Graphics.FreeType.Bindings.Format.TrueType
+                   Graphics.FreeType.Bindings.Format.Type1
+                   Graphics.FreeType.Bindings.Format.SFNT
+                   Graphics.FreeType.Bindings.Format.BDF
+                   Graphics.FreeType.Bindings.Format.CID
+                   Graphics.FreeType.Bindings.Format.PFR
+                   Graphics.FreeType.Bindings.Format.WinFNT
+                   Graphics.FreeType.Bindings.Format.Font
+                   Graphics.FreeType.Bindings.Format.Gasp
+                   Graphics.FreeType.Bindings.Control.Driver
+                   Graphics.FreeType.Bindings.Control.Parameter
+                   Graphics.FreeType.Bindings.Control.Subpixel
+                   Graphics.FreeType.Bindings.Cache
+                   Graphics.FreeType.Bindings.Support.Computations
+                   Graphics.FreeType.Bindings.Support.List
+                   Graphics.FreeType.Bindings.Support.Bitmap
+                   Graphics.FreeType.Bindings.Support.Outline
+                   Graphics.FreeType.Bindings.Support.Scanline
+                   Graphics.FreeType.Bindings.Support.Advance
+                   Graphics.FreeType.Bindings.Support.Glyph
+                   Graphics.FreeType.Bindings.Support.System
+                   Graphics.FreeType.Bindings.Support.Module
+                   Graphics.FreeType.Bindings.Support.GZIP
+                   Graphics.FreeType.Bindings.Support.LZW
+                   Graphics.FreeType.Bindings.Support.BZIP2
+                   Graphics.FreeType.Bindings.Error.Enumerations
+                   Graphics.FreeType.Bindings.Error.Values
+                   Graphics.FreeType.Bindings.Miscellaneous.OpenType
+                   Graphics.FreeType.Bindings.Miscellaneous.Incremental
+                   Graphics.FreeType.Bindings.Miscellaneous.TrueType
+                   Graphics.FreeType.Bindings.Miscellaneous.TrueTypeGX
+                   
+>>>>>>> Stashed changes
                    Graphics.Rendering.FreeType.Internal
                    Graphics.Rendering.FreeType.Internal.BBox
                    Graphics.Rendering.FreeType.Internal.Bitmap
@@ -237,7 +296,12 @@ Library
                    Graphics.Rendering.FreeType.Internal.Vector
 
   -- Packages needed in order to build this package.
-  Build-depends: base > 3 && < 5
+  Build-depends: base >= 4.5 && < 5
+               , data-default-class
+               , microlens
+               , microlens-th
+               , template-haskell
+               , vector
 
   -- Modules not exported by this package.
   -- Other-modules:       

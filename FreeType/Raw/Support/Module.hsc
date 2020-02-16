@@ -1,87 +1,21 @@
 {-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module FreeType.Raw.Support.Module
-  ( FT_ModuleRec
-  , FT_Module
-
-  , FT_Module_Constructor
-  , FT_Module_Destructor
-  , FT_Module_Requester
-
-  , FT_Module_Class (..)
-
-  , ft_Add_Module
-  , ft_Get_Module
-  , ft_Remove_Module
-  , ft_Add_Default_Modules
-  , ft_Property_Set
-  , ft_Property_Get
-  , ft_Set_Default_Properties
-  , ft_New_Library
-  , ft_Done_Library
-  , ft_Reference_Library
-
-  , FT_RendererRec
-  , FT_Renderer
-
-  , FT_Renderer_Class (..)
-
-  , ft_Get_Renderer
-  , ft_Set_Renderer
-  , ft_Set_Debug_Hook
-
-  , FT_DriverRec
-  , FT_Driver
-
-  , FT_DebugHook_Func
-
-  , pattern FT_DEBUG_HOOK_TRUETYPE
+  ( module FreeType.Raw.Support.Module.Internal
   ) where
 
-import           FreeType.Raw.Circular ( FT_ModuleRec, FT_Module
-                                                     , FT_DriverRec, FT_Driver
-                                                     )
-import           FreeType.Raw.Core.Base
-import           FreeType.Raw.Core.Types
-import           FreeType.Raw.Support.Scanline
-import           FreeType.Raw.Support.System
+import           FreeType.Raw.Support.Module.Internal
+import           FreeType.Lens
 
-import           Foreign.C.Types
-import           Foreign.Ptr
 import           Foreign.Storable
+import           Lens.Micro ((^.))
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
-
-#include "freetype/ftmodapi.h"
-#include "freetype/ftrender.h"
-
-type FT_Module_Constructor = FunPtr (FT_Module -> IO FT_Error)
-
-
-
-type FT_Module_Destructor = FunPtr (FT_Module -> IO ())
-
-
-
-type FT_Module_Interface = FT_Pointer
-type FT_Module_Requester = FunPtr (FT_Module -> Ptr CChar -> IO FT_Module_Interface)
-
-
-
-data FT_Module_Class = FT_Module_Class
-                         { mcModule_flags     :: FT_ULong
-                         , mcModule_size      :: FT_Long
-                         , mcModule_name      :: Ptr FT_String
-                         , mcModule_version   :: FT_Fixed
-                         , mcModule_requires  :: FT_Fixed
-                         , mcModule_interface :: Ptr ()
-                         , mcModule_init      :: FT_Module_Constructor
-                         , mcModule_done      :: FT_Module_Destructor
-                         , mcGet_interface    :: FT_Module_Requester
-                         }
+#include FT_MODULE_H
+#include FT_RENDER_H
 
 instance Storable FT_Module_Class where
   sizeOf _    = #size      struct FT_Module_Class_
@@ -100,90 +34,17 @@ instance Storable FT_Module_Class where
       <*> #{peek struct FT_Module_Class_, get_interface   } ptr
 
   poke ptr val = do
-    #{poke struct FT_Module_Class_, module_flags    } ptr $ mcModule_flags     val
-    #{poke struct FT_Module_Class_, module_size     } ptr $ mcModule_size      val
-    #{poke struct FT_Module_Class_, module_name     } ptr $ mcModule_name      val
-    #{poke struct FT_Module_Class_, module_version  } ptr $ mcModule_version   val
-    #{poke struct FT_Module_Class_, module_requires } ptr $ mcModule_requires  val
-    #{poke struct FT_Module_Class_, module_interface} ptr $ mcModule_interface val
-    #{poke struct FT_Module_Class_, module_init     } ptr $ mcModule_init      val
-    #{poke struct FT_Module_Class_, module_done     } ptr $ mcModule_done      val
-    #{poke struct FT_Module_Class_, get_interface   } ptr $ mcGet_interface    val
+    #{poke struct FT_Module_Class_, module_flags    } ptr $ val^.module_flags
+    #{poke struct FT_Module_Class_, module_size     } ptr $ val^.module_size
+    #{poke struct FT_Module_Class_, module_name     } ptr $ val^.module_name
+    #{poke struct FT_Module_Class_, module_version  } ptr $ val^.module_version
+    #{poke struct FT_Module_Class_, module_requires } ptr $ val^.module_requires
+    #{poke struct FT_Module_Class_, module_interface} ptr $ val^.module_interface
+    #{poke struct FT_Module_Class_, module_init     } ptr $ val^.module_init
+    #{poke struct FT_Module_Class_, module_done     } ptr $ val^.module_done
+    #{poke struct FT_Module_Class_, get_interface   } ptr $ val^.get_interface
 
 
-
-foreign import ccall "FT_Add_Module"
-  ft_Add_Module :: FT_Library -> Ptr FT_Module_Class -> IO FT_Error
-
-
-
-foreign import ccall "FT_Get_Module"
-  ft_Get_Module :: FT_Library -> Ptr CChar -> IO FT_Module
-
-
-
-foreign import ccall "FT_Remove_Module"
-  ft_Remove_Module :: FT_Library -> FT_Module -> IO FT_Error
-
-
-
-foreign import ccall "FT_Add_Default_Modules"
-  ft_Add_Default_Modules :: FT_Library -> IO ()
-
-
-
-foreign import ccall "FT_Property_Set"
-  ft_Property_Set :: FT_Library -> Ptr FT_String -> Ptr FT_String -> Ptr () -> IO FT_Error
-
-
-
-foreign import ccall "FT_Property_Get"
-  ft_Property_Get :: FT_Library -> Ptr FT_String -> Ptr FT_String -> Ptr () -> IO FT_Error
-
-
-
-foreign import ccall "FT_Set_Default_Properties"
-  ft_Set_Default_Properties :: FT_Library -> IO ()
-
-
-
-foreign import ccall "FT_New_Library"
-  ft_New_Library :: FT_Memory -> FT_Library -> IO FT_Error
-
-
-
-foreign import ccall "FT_Done_Library"
-  ft_Done_Library :: FT_Library -> IO FT_Error
-
-
-
-foreign import ccall "FT_Reference_Library"
-  ft_Reference_Library :: FT_Library -> IO FT_Error
-
-
-
-data FT_RendererRec
-type FT_Renderer = Ptr FT_RendererRec
-
-
-
-type FT_Renderer_RenderFunc = FunPtr (FT_Renderer -> FT_GlyphSlot -> FT_Render_Mode -> Ptr FT_Vector -> IO FT_Error)
-
-type FT_Renderer_TransformFunc = FunPtr (FT_Renderer -> FT_GlyphSlot -> Ptr FT_Matrix -> Ptr FT_Vector -> IO FT_Error)
-
-type FT_Renderer_GetCBoxFunc = FunPtr (FT_Renderer -> FT_GlyphSlot -> Ptr FT_BBox -> IO ())
-
-type FT_Renderer_SetModeFunc = FunPtr (FT_Renderer -> FT_ULong -> FT_Pointer -> IO FT_Error)
-
-data FT_Renderer_Class = FT_Renderer_Class
-                           { rcRoot            :: FT_Module_Class
-                           , rcGlyph_format    :: FT_Glyph_Format
-                           , rcRender_glyph    :: FT_Renderer_RenderFunc
-                           , rcTransform_glyph :: FT_Renderer_TransformFunc
-                           , rcGet_glyph_cbox  :: FT_Renderer_GetCBoxFunc
-                           , rcSet_mode        :: FT_Renderer_SetModeFunc
-                           , rcRaster_class    :: Ptr FT_Raster_Funcs
-                           }
 
 instance Storable FT_Renderer_Class where
   sizeOf _    = #size      struct FT_Renderer_Class_
@@ -200,35 +61,10 @@ instance Storable FT_Renderer_Class where
       <*> #{peek struct FT_Renderer_Class_, raster_class   } ptr
 
   poke ptr val = do
-    #{poke struct FT_Renderer_Class_, root           } ptr $ rcRoot            val
-    #{poke struct FT_Renderer_Class_, glyph_format   } ptr $ rcGlyph_format    val
-    #{poke struct FT_Renderer_Class_, render_glyph   } ptr $ rcRender_glyph    val
-    #{poke struct FT_Renderer_Class_, transform_glyph} ptr $ rcTransform_glyph val
-    #{poke struct FT_Renderer_Class_, get_glyph_cbox } ptr $ rcGet_glyph_cbox  val
-    #{poke struct FT_Renderer_Class_, set_mode       } ptr $ rcSet_mode        val
-    #{poke struct FT_Renderer_Class_, raster_class   } ptr $ rcRaster_class    val
-
-
-
-foreign import ccall "FT_Get_Renderer"
-  ft_Get_Renderer :: FT_Library -> FT_Glyph_Format -> IO FT_Renderer
-
-
-
-foreign import ccall "FT_Set_Renderer"
-  ft_Set_Renderer :: FT_Library -> FT_Renderer -> FT_UInt -> Ptr FT_Parameter -> IO FT_Error
-
-
-
-foreign import ccall "FT_Set_Debug_Hook"
-  ft_Set_Debug_Hook :: FT_Library -> FT_UInt -> FT_DebugHook_Func -> IO ()
-
-
-
-type FT_DebugHook_Func = FunPtr (Ptr () -> IO FT_Error)
-
-
-
-pattern FT_DEBUG_HOOK_TRUETYPE
-     :: FT_UInt
-pattern FT_DEBUG_HOOK_TRUETYPE = #const FT_DEBUG_HOOK_TRUETYPE
+    #{poke struct FT_Renderer_Class_, root           } ptr $ val^.root
+    #{poke struct FT_Renderer_Class_, glyph_format   } ptr $ val^.glyph_format
+    #{poke struct FT_Renderer_Class_, render_glyph   } ptr $ val^.render_glyph
+    #{poke struct FT_Renderer_Class_, transform_glyph} ptr $ val^.transform_glyph
+    #{poke struct FT_Renderer_Class_, get_glyph_cbox } ptr $ val^.get_glyph_cbox
+    #{poke struct FT_Renderer_Class_, set_mode       } ptr $ val^.set_mode
+    #{poke struct FT_Renderer_Class_, raster_class   } ptr $ val^.raster_class

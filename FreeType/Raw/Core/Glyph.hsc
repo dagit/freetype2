@@ -1,34 +1,21 @@
 {-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE PatternSynonyms #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module FreeType.Raw.Core.Glyph where
+module FreeType.Raw.Core.Glyph
+  ( module FreeType.Raw.Core.Glyph.Internal
+  ) where
 
-import           FreeType.Raw.Core.Base
-import           FreeType.Raw.Core.Types
-import           FreeType.Raw.Support.Outline
+import           FreeType.Raw.Circular ()
+import           FreeType.Raw.Core.Glyph.Internal
+import           FreeType.Lens
 
-import           Foreign.C.Types
-import           Foreign.Ptr
 import           Foreign.Storable
+import           Lens.Micro ((^.))
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
-
-#include "freetype/ftglyph.h"
-
-type FT_Glyph = Ptr FT_GlyphRec
-
-
-
-data FT_Glyph_Class
-
-data FT_GlyphRec = FT_GlyphRec
-                     { glyphRecLibrary :: FT_Library
-                     , glyphRecClazz   :: Ptr FT_Glyph_Class
-                     , glyphRecFormat  :: FT_Glyph_Format
-                     , glyphRecAdvance :: FT_Vector
-                     }
+#include FT_GLYPH_H
 
 instance Storable FT_GlyphRec where
   sizeOf _    = #size      struct FT_GlyphRec_
@@ -42,23 +29,12 @@ instance Storable FT_GlyphRec where
       <*> #{peek struct FT_GlyphRec_, advance} ptr
 
   poke ptr val = do
-    #{poke struct FT_GlyphRec_, library} ptr $ glyphRecLibrary val
-    #{poke struct FT_GlyphRec_, clazz  } ptr $ glyphRecClazz   val
-    #{poke struct FT_GlyphRec_, format } ptr $ glyphRecFormat  val
-    #{poke struct FT_GlyphRec_, advance} ptr $ glyphRecAdvance val
+    #{poke struct FT_GlyphRec_, library} ptr $ val^.library
+    #{poke struct FT_GlyphRec_, clazz  } ptr $ val^.clazz
+    #{poke struct FT_GlyphRec_, format } ptr $ val^.format
+    #{poke struct FT_GlyphRec_, advance} ptr $ val^.advance
 
 
-
-type FT_BitmapGlyph = Ptr FT_BitmapGlyphRec
-
-
-
-data FT_BitmapGlyphRec = FT_BitmapGlyphRec
-                           { bgrRoot   :: FT_GlyphRec
-                           , bgrLeft   :: FT_Int
-                           , bgrTop    :: FT_Int
-                           , bgrBitmap :: FT_Bitmap
-                           }
 
 instance Storable FT_BitmapGlyphRec where
   sizeOf _    = #size      struct FT_BitmapGlyphRec_
@@ -72,19 +48,12 @@ instance Storable FT_BitmapGlyphRec where
       <*> #{peek struct FT_BitmapGlyphRec_, bitmap} ptr
 
   poke ptr val = do
-    #{poke struct FT_BitmapGlyphRec_, root  } ptr $ bgrRoot   val
-    #{poke struct FT_BitmapGlyphRec_, left  } ptr $ bgrLeft   val
-    #{poke struct FT_BitmapGlyphRec_, top   } ptr $ bgrTop    val
-    #{poke struct FT_BitmapGlyphRec_, bitmap} ptr $ bgrBitmap val
+    #{poke struct FT_BitmapGlyphRec_, root  } ptr $ val^.root
+    #{poke struct FT_BitmapGlyphRec_, left  } ptr $ val^.left
+    #{poke struct FT_BitmapGlyphRec_, top   } ptr $ val^.top
+    #{poke struct FT_BitmapGlyphRec_, bitmap} ptr $ val^.bitmap
 
 
-
-newtype FT_OutlineGlyph = Ptr FT_OutlineGlyphRec
-
-data FT_OutlineGlyphRec = FT_OutlineGlyphRec
-                            { ogrRoot    :: FT_GlyphRec
-                            , ogrOutline :: FT_Outline
-                            }
 
 instance Storable FT_OutlineGlyphRec where
   sizeOf _    = #size      struct FT_OutlineGlyphRec_
@@ -96,53 +65,5 @@ instance Storable FT_OutlineGlyphRec where
       <*> #{peek struct FT_OutlineGlyphRec_, outline} ptr
 
   poke ptr val = do
-    #{poke struct FT_OutlineGlyphRec_, root   } ptr $ ogrRoot    val
-    #{poke struct FT_OutlineGlyphRec_, outline} ptr $ ogrOutline val
-
-
-
-foreign import ccall "FT_New_Glyph"
-  ft_New_Glyph :: FT_Library -> FT_Glyph_Format -> Ptr FT_Glyph -> IO FT_Error
-
-
-
-foreign import ccall "FT_Get_Glyph"
-  ft_Get_Glyph :: FT_GlyphSlot -> Ptr FT_Glyph -> IO FT_Error
-
-
-
-foreign import ccall "FT_Glyph_Copy"
-  ft_Glyph_Copy :: FT_Glyph -> Ptr FT_Glyph -> IO FT_Error
-
-
-
-foreign import ccall "FT_Glyph_Transform"
-  ft_Glyph_Transform :: FT_Glyph -> Ptr FT_Matrix -> Ptr FT_Vector -> IO FT_Error
-
-
-
-newtype FT_Glyph_BBox_Mode = FT_Glyph_BBox_Mode { unFT_Glyph_BBox_Mode :: CInt }
-                             deriving (Show, Eq, Storable)
-
-#{enum FT_Glyph_BBox_Mode, FT_Glyph_BBox_Mode
- , ft_GLYPH_BBOX_UNSCALED  = FT_GLYPH_BBOX_UNSCALED
- , ft_GLYPH_BBOX_SUBPIXELS = FT_GLYPH_BBOX_SUBPIXELS
- , ft_GLYPH_BBOX_GRIDFIT   = FT_GLYPH_BBOX_GRIDFIT
- , ft_GLYPH_BBOX_TRUNCATE  = FT_GLYPH_BBOX_TRUNCATE
- , ft_GLYPH_BBOX_PIXELS    = FT_GLYPH_BBOX_PIXELS
- }
-
-
-
-foreign import ccall "FT_Glyph_Get_CBox"
-  ft_Glyph_Get_CBox :: FT_Glyph -> FT_UInt -> Ptr FT_BBox -> IO ()
-
-
-
-foreign import ccall "FT_Glyph_To_Bitmap"
-  ft_Glyph_To_Bitmap :: Ptr FT_Glyph -> FT_Render_Mode -> Ptr FT_Vector -> FT_Bool -> IO FT_Error
-
-
-
-foreign import ccall "FT_Done_Glyph"
-  ft_Done_Glyph :: FT_Glyph -> IO ()
+    #{poke struct FT_OutlineGlyphRec_, root   } ptr $ val^.root
+    #{poke struct FT_OutlineGlyphRec_, outline} ptr $ val^.outline

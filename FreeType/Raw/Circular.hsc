@@ -1,58 +1,22 @@
 {-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE PatternSynonyms #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 {-# OPTIONS_HADDOCK hide #-}
 
-module FreeType.Raw.Circular where
+module FreeType.Raw.Circular
+  ( module FreeType.Raw.Circular.Internal
+  ) where
 
-import          FreeType.Raw.Core.Types
+import          FreeType.Raw.Circular.Internal
+import          FreeType.Raw.Core.Types ()
+import          FreeType.Lens
 
-import          Foreign.C.Types
-import          Foreign.Ptr
 import          Foreign.Storable
+import          Prelude (($), (<$>), (<*>))
+import          Lens.Micro
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
-
-data FT_LibraryRec
-type FT_Library = Ptr FT_LibraryRec
-
-
-
-type FT_Face = Ptr FT_FaceRec
-
-data FT_FaceRec = FT_FaceRec
-                    { frNum_faces           :: FT_Long
-                    , frFace_index          :: FT_Long
-                    , frFace_flags          :: FT_Long
-                    , frStyle_flags         :: FT_Long
-                    , frNum_glyphs          :: FT_Long
-                    , frFamily_name         :: Ptr FT_String
-                    , frStyle_name          :: Ptr FT_String
-                    , frNum_fixed_sizes     :: FT_Int
-                    , frAvailable_sizes     :: Ptr FT_Bitmap_Size
-                    , frNum_charmaps        :: FT_Int
-                    , frCharmaps            :: Ptr FT_CharMap
-                    , frGeneric             :: FT_Generic
-                    , frBbox                :: FT_BBox
-                    , frUnits_per_EM        :: FT_UShort
-                    , frAscender            :: FT_Short
-                    , frDescender           :: FT_Short
-                    , frHeight              :: FT_Short
-                    , frMax_advance_width   :: FT_Short
-                    , frMax_advance_height  :: FT_Short
-                    , frUnderline_position  :: FT_Short
-                    , frUnderline_thickness :: FT_Short
-                    , frGlyph               :: FT_GlyphSlot
-                    , frSize                :: FT_Size
-                    , frCharmap             :: FT_CharMap
-                    , frDriver              :: FT_Driver
-                    , frMemory              :: FT_Memory
-                    , frStream              :: FT_Stream
-                    , frSizes_list          :: FT_ListRec
-                    , frAutohint            :: FT_Generic
-                    , frExtensions          :: Ptr ()
-                    , frInternal            :: FT_Face_Internal
-                    }
 
 instance Storable FT_FaceRec where
   sizeOf _    = #size      struct FT_FaceRec_
@@ -93,47 +57,39 @@ instance Storable FT_FaceRec where
       <*> #{peek struct FT_FaceRec_, internal           } ptr
 
   poke ptr val = do
-    #{poke struct FT_FaceRec_, num_faces          } ptr $ frNum_faces           val
-    #{poke struct FT_FaceRec_, face_index         } ptr $ frFace_index          val
-    #{poke struct FT_FaceRec_, face_flags         } ptr $ frFace_flags          val
-    #{poke struct FT_FaceRec_, style_flags        } ptr $ frStyle_flags         val
-    #{poke struct FT_FaceRec_, num_glyphs         } ptr $ frNum_glyphs          val
-    #{poke struct FT_FaceRec_, family_name        } ptr $ frFamily_name         val
-    #{poke struct FT_FaceRec_, style_name         } ptr $ frStyle_name          val
-    #{poke struct FT_FaceRec_, num_fixed_sizes    } ptr $ frNum_fixed_sizes     val
-    #{poke struct FT_FaceRec_, available_sizes    } ptr $ frAvailable_sizes     val
-    #{poke struct FT_FaceRec_, num_charmaps       } ptr $ frNum_charmaps        val
-    #{poke struct FT_FaceRec_, charmaps           } ptr $ frCharmaps            val
-    #{poke struct FT_FaceRec_, generic            } ptr $ frGeneric             val
-    #{poke struct FT_FaceRec_, bbox               } ptr $ frBbox                val
-    #{poke struct FT_FaceRec_, units_per_EM       } ptr $ frUnits_per_EM        val
-    #{poke struct FT_FaceRec_, ascender           } ptr $ frAscender            val
-    #{poke struct FT_FaceRec_, descender          } ptr $ frDescender           val
-    #{poke struct FT_FaceRec_, height             } ptr $ frHeight              val
-    #{poke struct FT_FaceRec_, max_advance_width  } ptr $ frMax_advance_width   val
-    #{poke struct FT_FaceRec_, max_advance_height } ptr $ frMax_advance_height  val
-    #{poke struct FT_FaceRec_, underline_position } ptr $ frUnderline_position  val
-    #{poke struct FT_FaceRec_, underline_thickness} ptr $ frUnderline_thickness val
-    #{poke struct FT_FaceRec_, glyph              } ptr $ frGlyph               val
-    #{poke struct FT_FaceRec_, size               } ptr $ frSize                val
-    #{poke struct FT_FaceRec_, charmap            } ptr $ frCharmap             val
-    #{poke struct FT_FaceRec_, driver             } ptr $ frDriver              val
-    #{poke struct FT_FaceRec_, memory             } ptr $ frMemory              val
-    #{poke struct FT_FaceRec_, stream             } ptr $ frStream              val
-    #{poke struct FT_FaceRec_, sizes_list         } ptr $ frSizes_list          val
-    #{poke struct FT_FaceRec_, autohint           } ptr $ frAutohint            val
-    #{poke struct FT_FaceRec_, extensions         } ptr $ frExtensions          val
-    #{poke struct FT_FaceRec_, internal           } ptr $ frInternal            val
+    #{poke struct FT_FaceRec_, num_faces          } ptr $ val^.num_faces
+    #{poke struct FT_FaceRec_, face_index         } ptr $ val^.face_index
+    #{poke struct FT_FaceRec_, face_flags         } ptr $ val^.face_flags
+    #{poke struct FT_FaceRec_, style_flags        } ptr $ val^.style_flags
+    #{poke struct FT_FaceRec_, num_glyphs         } ptr $ val^.num_glyphs
+    #{poke struct FT_FaceRec_, family_name        } ptr $ val^.family_name
+    #{poke struct FT_FaceRec_, style_name         } ptr $ val^.style_name
+    #{poke struct FT_FaceRec_, num_fixed_sizes    } ptr $ val^.num_fixed_sizes
+    #{poke struct FT_FaceRec_, available_sizes    } ptr $ val^.available_sizes
+    #{poke struct FT_FaceRec_, num_charmaps       } ptr $ val^.num_charmaps
+    #{poke struct FT_FaceRec_, charmaps           } ptr $ val^.charmaps
+    #{poke struct FT_FaceRec_, generic            } ptr $ val^.generic
+    #{poke struct FT_FaceRec_, bbox               } ptr $ val^.bbox
+    #{poke struct FT_FaceRec_, units_per_EM       } ptr $ val^.units_per_EM
+    #{poke struct FT_FaceRec_, ascender           } ptr $ val^.ascender
+    #{poke struct FT_FaceRec_, descender          } ptr $ val^.descender
+    #{poke struct FT_FaceRec_, height             } ptr $ val^.height
+    #{poke struct FT_FaceRec_, max_advance_width  } ptr $ val^.max_advance_width
+    #{poke struct FT_FaceRec_, max_advance_height } ptr $ val^.max_advance_height
+    #{poke struct FT_FaceRec_, underline_position } ptr $ val^.underline_position
+    #{poke struct FT_FaceRec_, underline_thickness} ptr $ val^.underline_thickness
+    #{poke struct FT_FaceRec_, glyph              } ptr $ val^.glyph
+    #{poke struct FT_FaceRec_, size               } ptr $ val^.size
+    #{poke struct FT_FaceRec_, charmap            } ptr $ val^.charmap
+    #{poke struct FT_FaceRec_, driver             } ptr $ val^.driver
+    #{poke struct FT_FaceRec_, memory             } ptr $ val^.memory
+    #{poke struct FT_FaceRec_, stream             } ptr $ val^.stream
+    #{poke struct FT_FaceRec_, sizes_list         } ptr $ val^.sizes_list
+    #{poke struct FT_FaceRec_, autohint           } ptr $ val^.autohint
+    #{poke struct FT_FaceRec_, extensions         } ptr $ val^.extensions
+    #{poke struct FT_FaceRec_, internal           } ptr $ val^.internal
 
 
-
-data FT_Bitmap_Size = FT_Bitmap_Size
-                        { bsHeight :: FT_Short
-                        , bsWidth  :: FT_Short
-                        , bsSize   :: FT_Pos
-                        , bsX_ppem :: FT_Pos
-                        , bsY_ppem :: FT_Pos
-                        }
 
 instance Storable FT_Bitmap_Size where
   sizeOf _    = #size      struct FT_Bitmap_Size_
@@ -148,22 +104,13 @@ instance Storable FT_Bitmap_Size where
       <*> #{peek struct FT_Bitmap_Size_, y_ppem} ptr
 
   poke ptr val = do
-    #{poke struct FT_Bitmap_Size_, height} ptr $ bsHeight val
-    #{poke struct FT_Bitmap_Size_, width } ptr $ bsWidth  val
-    #{poke struct FT_Bitmap_Size_, size  } ptr $ bsSize   val
-    #{poke struct FT_Bitmap_Size_, x_ppem} ptr $ bsX_ppem val
-    #{poke struct FT_Bitmap_Size_, y_ppem} ptr $ bsY_ppem val
+    #{poke struct FT_Bitmap_Size_, height} ptr $ val^.height
+    #{poke struct FT_Bitmap_Size_, width } ptr $ val^.width
+    #{poke struct FT_Bitmap_Size_, size  } ptr $ val^.size
+    #{poke struct FT_Bitmap_Size_, x_ppem} ptr $ val^.x_ppem
+    #{poke struct FT_Bitmap_Size_, y_ppem} ptr $ val^.y_ppem
 
 
-
-type FT_CharMap = Ptr FT_CharMapRec
-
-data FT_CharMapRec = FT_CharMapRec
-                       { cmrFace        :: FT_Face
-                       , cmrEncoding    :: FT_Encoding
-                       , cmrPlatform_id :: FT_UShort
-                       , cmrEncoding_id :: FT_UShort
-                       }
 
 instance Storable FT_CharMapRec where
   sizeOf _    = #size      struct FT_CharMapRec_
@@ -177,85 +124,12 @@ instance Storable FT_CharMapRec where
       <*> #{peek struct FT_CharMapRec_, encoding_id} ptr
 
   poke ptr val = do
-    #{poke struct FT_CharMapRec_, face       } ptr $ cmrFace        val
-    #{poke struct FT_CharMapRec_, encoding   } ptr $ cmrEncoding    val
-    #{poke struct FT_CharMapRec_, platform_id} ptr $ cmrPlatform_id val
-    #{poke struct FT_CharMapRec_, encoding_id} ptr $ cmrEncoding_id val
+    #{poke struct FT_CharMapRec_, face       } ptr $ val^.face
+    #{poke struct FT_CharMapRec_, encoding   } ptr $ val^.encoding
+    #{poke struct FT_CharMapRec_, platform_id} ptr $ val^.platform_id
+    #{poke struct FT_CharMapRec_, encoding_id} ptr $ val^.encoding_id
 
 
-
-type FT_Encoding = FT_UInt
-
-pattern FT_ENCODING_NONE
-      , FT_ENCODING_MS_SYMBOL
-      , FT_ENCODING_UNICODE
-      , FT_ENCODING_SJIS
-      , FT_ENCODING_PRC
-      , FT_ENCODING_BIG5
-      , FT_ENCODING_WANSUNG
-      , FT_ENCODING_JOHAB
-      , FT_ENCODING_GB2312
-      , FT_ENCODING_MS_SJIS
-      , FT_ENCODING_MS_GB2312
-      , FT_ENCODING_MS_BIG5
-      , FT_ENCODING_MS_WANSUNG
-      , FT_ENCODING_MS_JOHAB
-      , FT_ENCODING_ADOBE_STANDARD
-      , FT_ENCODING_ADOBE_EXPERT
-      , FT_ENCODING_ADOBE_CUSTOM
-      , FT_ENCODING_ADOBE_LATIN_1
-      , FT_ENCODING_OLD_LATIN_2
-      , FT_ENCODING_APPLE_ROMAN
-     :: FT_Encoding
-pattern FT_ENCODING_NONE           = #const FT_ENCODING_NONE
-pattern FT_ENCODING_MS_SYMBOL      = #const FT_ENCODING_MS_SYMBOL
-pattern FT_ENCODING_UNICODE        = #const FT_ENCODING_UNICODE
-pattern FT_ENCODING_SJIS           = #const FT_ENCODING_SJIS
-pattern FT_ENCODING_PRC            = #const FT_ENCODING_PRC
-pattern FT_ENCODING_BIG5           = #const FT_ENCODING_BIG5
-pattern FT_ENCODING_WANSUNG        = #const FT_ENCODING_WANSUNG
-pattern FT_ENCODING_JOHAB          = #const FT_ENCODING_JOHAB
-pattern FT_ENCODING_GB2312         = #const FT_ENCODING_GB2312
-pattern FT_ENCODING_MS_SJIS        = #const FT_ENCODING_MS_SJIS
-pattern FT_ENCODING_MS_GB2312      = #const FT_ENCODING_MS_GB2312
-pattern FT_ENCODING_MS_BIG5        = #const FT_ENCODING_MS_BIG5
-pattern FT_ENCODING_MS_WANSUNG     = #const FT_ENCODING_MS_WANSUNG
-pattern FT_ENCODING_MS_JOHAB       = #const FT_ENCODING_MS_JOHAB
-pattern FT_ENCODING_ADOBE_STANDARD = #const FT_ENCODING_ADOBE_STANDARD
-pattern FT_ENCODING_ADOBE_EXPERT   = #const FT_ENCODING_ADOBE_EXPERT
-pattern FT_ENCODING_ADOBE_CUSTOM   = #const FT_ENCODING_ADOBE_CUSTOM
-pattern FT_ENCODING_ADOBE_LATIN_1  = #const FT_ENCODING_ADOBE_LATIN_1
-pattern FT_ENCODING_OLD_LATIN_2    = #const FT_ENCODING_OLD_LATIN_2
-pattern FT_ENCODING_APPLE_ROMAN    = #const FT_ENCODING_APPLE_ROMAN
-
-
-
-type FT_GlyphSlot = Ptr FT_GlyphSlotRec
-
-data FT_GlyphSlotRec = FT_GlyphSlotRec
-                         { gsrLibrary           :: FT_Library
-                         , gsrFace              :: FT_Face
-                         , gsrNext              :: FT_GlyphSlot
-                         , gsrGlyph_index       :: FT_UInt
-                         , gsrGeneric           :: FT_Generic
-                         , gsrMetrics           :: FT_Glyph_Metrics
-                         , gsrLinearHoriAdvance :: FT_Fixed
-                         , gsrLinearVertAdvance :: FT_Fixed
-                         , gsrAdvance           :: FT_Vector
-                         , gsrFormat            :: FT_Glyph_Format
-                         , gsrBitmap            :: FT_Bitmap
-                         , gsrBitmap_left       :: FT_Int
-                         , gsrBitmap_top        :: FT_Int
-                         , gsrOutline           :: FT_Outline
-                         , gsrNum_subglyphs     :: FT_UInt
-                         , gsrSubglyphs         :: FT_SubGlyph
-                         , gsrControl_data      :: Ptr ()
-                         , gsrControl_len       :: CLong
-                         , gsrLsb_delta         :: FT_Pos
-                         , gsrRsb_delta         :: FT_Pos
-                         , gsrOther             :: Ptr ()
-                         , gsrInternal          :: FT_Slot_Internal
-                         }
 
 instance Storable FT_GlyphSlotRec where
   sizeOf _    = #size      struct FT_GlyphSlotRec_
@@ -287,39 +161,30 @@ instance Storable FT_GlyphSlotRec where
       <*> #{peek struct FT_GlyphSlotRec_, internal         } ptr
 
   poke ptr val = do
-    #{poke struct FT_GlyphSlotRec_, library          } ptr $ gsrLibrary           val
-    #{poke struct FT_GlyphSlotRec_, face             } ptr $ gsrFace              val
-    #{poke struct FT_GlyphSlotRec_, next             } ptr $ gsrNext              val
-    #{poke struct FT_GlyphSlotRec_, glyph_index      } ptr $ gsrGlyph_index       val
-    #{poke struct FT_GlyphSlotRec_, generic          } ptr $ gsrGeneric           val
-    #{poke struct FT_GlyphSlotRec_, metrics          } ptr $ gsrMetrics           val
-    #{poke struct FT_GlyphSlotRec_, linearHoriAdvance} ptr $ gsrLinearHoriAdvance val
-    #{poke struct FT_GlyphSlotRec_, linearVertAdvance} ptr $ gsrLinearVertAdvance val
-    #{poke struct FT_GlyphSlotRec_, advance          } ptr $ gsrAdvance           val
-    #{poke struct FT_GlyphSlotRec_, format           } ptr $ gsrFormat            val
-    #{poke struct FT_GlyphSlotRec_, bitmap           } ptr $ gsrBitmap            val
-    #{poke struct FT_GlyphSlotRec_, bitmap_left      } ptr $ gsrBitmap_left       val
-    #{poke struct FT_GlyphSlotRec_, bitmap_top       } ptr $ gsrBitmap_top        val
-    #{poke struct FT_GlyphSlotRec_, outline          } ptr $ gsrOutline           val
-    #{poke struct FT_GlyphSlotRec_, num_subglyphs    } ptr $ gsrNum_subglyphs     val
-    #{poke struct FT_GlyphSlotRec_, subglyphs        } ptr $ gsrSubglyphs         val
-    #{poke struct FT_GlyphSlotRec_, control_data     } ptr $ gsrControl_data      val
-    #{poke struct FT_GlyphSlotRec_, control_len      } ptr $ gsrControl_len       val
-    #{poke struct FT_GlyphSlotRec_, lsb_delta        } ptr $ gsrLsb_delta         val
-    #{poke struct FT_GlyphSlotRec_, rsb_delta        } ptr $ gsrRsb_delta         val
-    #{poke struct FT_GlyphSlotRec_, other            } ptr $ gsrOther             val
-    #{poke struct FT_GlyphSlotRec_, internal         } ptr $ gsrInternal          val
+    #{poke struct FT_GlyphSlotRec_, library          } ptr $ val^.library
+    #{poke struct FT_GlyphSlotRec_, face             } ptr $ val^.face
+    #{poke struct FT_GlyphSlotRec_, next             } ptr $ val^.next
+    #{poke struct FT_GlyphSlotRec_, glyph_index      } ptr $ val^.glyph_index
+    #{poke struct FT_GlyphSlotRec_, generic          } ptr $ val^.generic
+    #{poke struct FT_GlyphSlotRec_, metrics          } ptr $ val^.metrics
+    #{poke struct FT_GlyphSlotRec_, linearHoriAdvance} ptr $ val^.linearHoriAdvance
+    #{poke struct FT_GlyphSlotRec_, linearVertAdvance} ptr $ val^.linearVertAdvance
+    #{poke struct FT_GlyphSlotRec_, advance          } ptr $ val^.advance
+    #{poke struct FT_GlyphSlotRec_, format           } ptr $ val^.format
+    #{poke struct FT_GlyphSlotRec_, bitmap           } ptr $ val^.bitmap
+    #{poke struct FT_GlyphSlotRec_, bitmap_left      } ptr $ val^.bitmap_left
+    #{poke struct FT_GlyphSlotRec_, bitmap_top       } ptr $ val^.bitmap_top
+    #{poke struct FT_GlyphSlotRec_, outline          } ptr $ val^.outline
+    #{poke struct FT_GlyphSlotRec_, num_subglyphs    } ptr $ val^.num_subglyphs
+    #{poke struct FT_GlyphSlotRec_, subglyphs        } ptr $ val^.subglyphs
+    #{poke struct FT_GlyphSlotRec_, control_data     } ptr $ val^.control_data
+    #{poke struct FT_GlyphSlotRec_, control_len      } ptr $ val^.control_len
+    #{poke struct FT_GlyphSlotRec_, lsb_delta        } ptr $ val^.lsb_delta
+    #{poke struct FT_GlyphSlotRec_, rsb_delta        } ptr $ val^.rsb_delta
+    #{poke struct FT_GlyphSlotRec_, other            } ptr $ val^.other
+    #{poke struct FT_GlyphSlotRec_, internal         } ptr $ val^.internal
 
 
-
-type FT_Size = Ptr FT_SizeRec
-
-data FT_SizeRec = FT_SizeRec
-                    { srFace     :: FT_Face
-                    , srGeneric  :: FT_Generic
-                    , srMetrics  :: FT_Size_Metrics
-                    , srInternal :: FT_Size_Internal
-                    }
 
 instance Storable FT_SizeRec where
   sizeOf _    = #size      struct FT_SizeRec_
@@ -333,38 +198,12 @@ instance Storable FT_SizeRec where
       <*> #{peek struct FT_SizeRec_, internal} ptr
 
   poke ptr val = do
-    #{poke struct FT_SizeRec_, face    } ptr $ srFace     val
-    #{poke struct FT_SizeRec_, generic } ptr $ srGeneric  val
-    #{poke struct FT_SizeRec_, metrics } ptr $ srMetrics  val
-    #{poke struct FT_SizeRec_, internal} ptr $ srInternal val
+    #{poke struct FT_SizeRec_, face    } ptr $ val^.face
+    #{poke struct FT_SizeRec_, generic } ptr $ val^.generic
+    #{poke struct FT_SizeRec_, metrics } ptr $ val^.metrics
+    #{poke struct FT_SizeRec_, internal} ptr $ val^.internal
 
 
-
-data FT_Face_InternalRec
-type FT_Face_Internal = Ptr FT_Face_InternalRec
-
-
-
-data FT_Size_InternalRec
-type FT_Size_Internal = Ptr FT_Size_InternalRec
-
-
-
-data FT_Slot_InternalRec
-type FT_Slot_Internal = Ptr FT_Slot_InternalRec
-
-
-
-data FT_Glyph_Metrics = FT_Glyph_Metrics
-                          { gmWidth        :: FT_Pos
-                          , gmHeight       :: FT_Pos
-                          , gmHoriBearingX :: FT_Pos
-                          , gmHoriBearingY :: FT_Pos
-                          , gmHoriAdvance  :: FT_Pos
-                          , gmVertBearingX :: FT_Pos
-                          , gmVertBearingY :: FT_Pos
-                          , gmVertAdvance  :: FT_Pos
-                          }
 
 instance Storable FT_Glyph_Metrics where
   sizeOf _    = #size      struct FT_Glyph_Metrics_
@@ -382,32 +221,16 @@ instance Storable FT_Glyph_Metrics where
       <*> #{peek struct FT_Glyph_Metrics_, vertAdvance } ptr
 
   poke ptr val = do
-    #{poke struct FT_Glyph_Metrics_, width       } ptr $ gmWidth        val
-    #{poke struct FT_Glyph_Metrics_, height      } ptr $ gmHeight       val
-    #{poke struct FT_Glyph_Metrics_, horiBearingX} ptr $ gmHoriBearingX val
-    #{poke struct FT_Glyph_Metrics_, horiBearingY} ptr $ gmHoriBearingY val
-    #{poke struct FT_Glyph_Metrics_, horiAdvance } ptr $ gmHoriAdvance  val
-    #{poke struct FT_Glyph_Metrics_, vertBearingX} ptr $ gmVertBearingX val
-    #{poke struct FT_Glyph_Metrics_, vertBearingY} ptr $ gmVertBearingY val
-    #{poke struct FT_Glyph_Metrics_, vertAdvance } ptr $ gmVertAdvance  val
+    #{poke struct FT_Glyph_Metrics_, width       } ptr $ val^.width
+    #{poke struct FT_Glyph_Metrics_, height      } ptr $ val^.height
+    #{poke struct FT_Glyph_Metrics_, horiBearingX} ptr $ val^.horiBearingX
+    #{poke struct FT_Glyph_Metrics_, horiBearingY} ptr $ val^.horiBearingY
+    #{poke struct FT_Glyph_Metrics_, horiAdvance } ptr $ val^.horiAdvance
+    #{poke struct FT_Glyph_Metrics_, vertBearingX} ptr $ val^.vertBearingX
+    #{poke struct FT_Glyph_Metrics_, vertBearingY} ptr $ val^.vertBearingY
+    #{poke struct FT_Glyph_Metrics_, vertAdvance } ptr $ val^.vertAdvance
 
 
-
-data FT_SubGlyphRec
-type FT_SubGlyph = Ptr FT_SubGlyphRec
-
-
-
-data FT_Size_Metrics = FT_Size_Metrics
-                         { smX_ppem      :: FT_UShort
-                         , smY_ppem      :: FT_UShort
-                         , smX_scale     :: FT_Fixed
-                         , smY_scale     :: FT_Fixed
-                         , smAscender    :: FT_Pos
-                         , smDescender   :: FT_Pos
-                         , smHeight      :: FT_Pos
-                         , smMax_advance :: FT_Pos
-                         }
 
 instance Storable FT_Size_Metrics where
   sizeOf _    = #size      struct FT_Size_Metrics_
@@ -425,35 +248,16 @@ instance Storable FT_Size_Metrics where
       <*> #{peek struct FT_Size_Metrics_, max_advance} ptr
 
   poke ptr val = do
-    #{poke struct FT_Size_Metrics_, x_ppem     } ptr $ smX_ppem      val
-    #{poke struct FT_Size_Metrics_, y_ppem     } ptr $ smY_ppem      val
-    #{poke struct FT_Size_Metrics_, x_scale    } ptr $ smX_scale     val
-    #{poke struct FT_Size_Metrics_, y_scale    } ptr $ smY_scale     val
-    #{poke struct FT_Size_Metrics_, ascender   } ptr $ smAscender    val
-    #{poke struct FT_Size_Metrics_, descender  } ptr $ smDescender   val
-    #{poke struct FT_Size_Metrics_, height     } ptr $ smHeight      val
-    #{poke struct FT_Size_Metrics_, max_advance} ptr $ smMax_advance val
+    #{poke struct FT_Size_Metrics_, x_ppem     } ptr $ val^.x_ppem
+    #{poke struct FT_Size_Metrics_, y_ppem     } ptr $ val^.y_ppem
+    #{poke struct FT_Size_Metrics_, x_scale    } ptr $ val^.x_scale
+    #{poke struct FT_Size_Metrics_, y_scale    } ptr $ val^.y_scale
+    #{poke struct FT_Size_Metrics_, ascender   } ptr $ val^.ascender
+    #{poke struct FT_Size_Metrics_, descender  } ptr $ val^.descender
+    #{poke struct FT_Size_Metrics_, height     } ptr $ val^.height
+    #{poke struct FT_Size_Metrics_, max_advance} ptr $ val^.max_advance
 
 
-
-data FT_ModuleRec
-type FT_Module = Ptr FT_ModuleRec
-
-
-
-data FT_DriverRec
-type FT_Driver = Ptr FT_DriverRec
-
-
-
-type FT_Memory = Ptr FT_MemoryRec
-
-data FT_MemoryRec = FT_MemoryRec
-                      { mrUser    :: Ptr ()
-                      , mrAlloc   :: FT_Alloc_Func
-                      , mrFree    :: FT_Free_Func
-                      , mrRealloc :: FT_Realloc_Func
-                      }
 
 instance Storable FT_MemoryRec where
   sizeOf _    = #size      struct FT_MemoryRec_
@@ -467,33 +271,12 @@ instance Storable FT_MemoryRec where
       <*> #{peek struct FT_MemoryRec_, realloc} ptr
 
   poke ptr val = do
-    #{poke struct FT_MemoryRec_, user   } ptr $ mrUser    val
-    #{poke struct FT_MemoryRec_, alloc  } ptr $ mrAlloc   val
-    #{poke struct FT_MemoryRec_, free   } ptr $ mrFree    val
-    #{poke struct FT_MemoryRec_, realloc} ptr $ mrRealloc val
-
-type FT_Alloc_Func = FunPtr (FT_Memory -> CLong -> IO (Ptr ()))
-
-type FT_Free_Func = FunPtr (FT_Memory -> Ptr () -> IO ())
-
-type FT_Realloc_Func = FunPtr (FT_Memory -> CLong -> CLong -> Ptr () -> IO (Ptr ()))
+    #{poke struct FT_MemoryRec_, user   } ptr $ val^.user
+    #{poke struct FT_MemoryRec_, alloc  } ptr $ val^.alloc
+    #{poke struct FT_MemoryRec_, free   } ptr $ val^.free
+    #{poke struct FT_MemoryRec_, realloc} ptr $ val^.realloc
 
 
-
-type FT_Stream = Ptr FT_StreamRec
-
-data FT_StreamRec = FT_StreamRec
-                      { srBase       :: Ptr CUChar
-                      , srSize       :: CULong
-                      , srPos        :: CULong
-                      , srDescriptor :: FT_StreamDesc
-                      , srPathname   :: FT_StreamDesc
-                      , srRead       :: FT_Stream_IoFunc
-                      , srClose      :: FT_Stream_CloseFunc
-                      , srMemory     :: FT_Memory
-                      , srCursor     :: Ptr CUChar
-                      , srLimit      :: Ptr CUChar
-                      }
 
 instance Storable FT_StreamRec where
   sizeOf _    = #size struct FT_StreamRec_
@@ -513,27 +296,18 @@ instance Storable FT_StreamRec where
       <*> #{peek struct FT_StreamRec_, limit     } ptr
 
   poke ptr val = do
-    #{poke struct FT_StreamRec_, base      } ptr $ srBase       val
-    #{poke struct FT_StreamRec_, size      } ptr $ srSize       val
-    #{poke struct FT_StreamRec_, pos       } ptr $ srPos        val
-    #{poke struct FT_StreamRec_, descriptor} ptr $ srDescriptor val
-    #{poke struct FT_StreamRec_, pathname  } ptr $ srPathname   val
-    #{poke struct FT_StreamRec_, read      } ptr $ srRead       val
-    #{poke struct FT_StreamRec_, close     } ptr $ srClose      val
-    #{poke struct FT_StreamRec_, memory    } ptr $ srMemory     val
-    #{poke struct FT_StreamRec_, cursor    } ptr $ srCursor     val
-    #{poke struct FT_StreamRec_, limit     } ptr $ srLimit      val
-
-type FT_Stream_IoFunc = FunPtr (FT_Stream -> CULong -> Ptr CUChar -> CULong -> IO CULong)
-
-type FT_Stream_CloseFunc = FunPtr (FT_Stream -> IO ())
+    #{poke struct FT_StreamRec_, base      } ptr $ val^.base
+    #{poke struct FT_StreamRec_, size      } ptr $ val^.size
+    #{poke struct FT_StreamRec_, pos       } ptr $ val^.pos
+    #{poke struct FT_StreamRec_, descriptor} ptr $ val^.descriptor
+    #{poke struct FT_StreamRec_, pathname  } ptr $ val^.pathname
+    #{poke struct FT_StreamRec_, read      } ptr $ val^.read
+    #{poke struct FT_StreamRec_, close     } ptr $ val^.close
+    #{poke struct FT_StreamRec_, memory    } ptr $ val^.memory
+    #{poke struct FT_StreamRec_, cursor    } ptr $ val^.cursor
+    #{poke struct FT_StreamRec_, limit     } ptr $ val^.limit
 
 
-
-data FT_StreamDesc = FT_StreamDesc
-                       { sdValue   :: CLong
-                       , sdPointer :: Ptr ()
-                       }
 
 instance Storable FT_StreamDesc where
   sizeOf _    = #size      union FT_StreamDesc_
@@ -550,15 +324,6 @@ instance Storable FT_StreamDesc where
 
 
 
-data FT_Outline = FT_Outline
-                    { oN_contours :: CShort
-                    , oN_points   :: CShort
-                    , oPoints     :: Ptr FT_Vector
-                    , oTags       :: Ptr CChar
-                    , oContours   :: Ptr CShort
-                    , oFlags      :: CInt
-                    }
-
 instance Storable FT_Outline where
   sizeOf _    = #size      struct FT_Outline_
   alignment _ = #alignment struct FT_Outline_
@@ -573,22 +338,14 @@ instance Storable FT_Outline where
       <*> #{peek struct FT_Outline_, flags     } ptr
 
   poke ptr val = do
-    #{poke struct FT_Outline_, n_contours} ptr $ oN_contours val
-    #{poke struct FT_Outline_, n_points  } ptr $ oN_points   val
-    #{poke struct FT_Outline_, points    } ptr $ oPoints     val
-    #{poke struct FT_Outline_, tags      } ptr $ oTags       val
-    #{poke struct FT_Outline_, contours  } ptr $ oContours   val
-    #{poke struct FT_Outline_, flags     } ptr $ oFlags      val
+    #{poke struct FT_Outline_, n_contours} ptr $ val^.n_contours
+    #{poke struct FT_Outline_, n_points  } ptr $ val^.n_points
+    #{poke struct FT_Outline_, points    } ptr $ val^.points
+    #{poke struct FT_Outline_, tags      } ptr $ val^.tags
+    #{poke struct FT_Outline_, contours  } ptr $ val^.contours
+    #{poke struct FT_Outline_, flags     } ptr $ val^.flags
 
 
-
-type FT_List = Ptr FT_ListRec
-
-data FT_ListRec = FT_ListRec
-                    { lrHead :: FT_ListNode
-                    , lrTail :: FT_ListNode
-                    }
-                  deriving (Show, Eq)
 
 instance Storable FT_ListRec where
   sizeOf _    = #size      struct FT_ListRec_
@@ -600,19 +357,10 @@ instance Storable FT_ListRec where
       <*> #{peek struct FT_ListRec_, tail} ptr
 
   poke ptr val = do
-    #{poke struct FT_ListRec_, head} ptr $ lrHead val
-    #{poke struct FT_ListRec_, tail} ptr $ lrTail val
+    #{poke struct FT_ListRec_, head} ptr $ val^.head
+    #{poke struct FT_ListRec_, tail} ptr $ val^.tail
 
 
-
-type FT_ListNode = Ptr FT_ListNodeRec
-
-data FT_ListNodeRec = FT_ListNodeRec
-                        { lnrPrev :: FT_ListNode
-                        , lnrNext :: FT_ListNode
-                        , lnrData :: Ptr ()
-                        }
-                      deriving (Show, Eq)
 
 instance Storable FT_ListNodeRec where
   sizeOf _    = #size      struct FT_ListNodeRec_
@@ -625,6 +373,6 @@ instance Storable FT_ListNodeRec where
       <*> #{peek struct FT_ListNodeRec_, data} ptr
 
   poke ptr val = do
-    #{poke struct FT_ListNodeRec_, prev} ptr $ lnrPrev val
-    #{poke struct FT_ListNodeRec_, next} ptr $ lnrNext val
-    #{poke struct FT_ListNodeRec_, data} ptr $ lnrData val
+    #{poke struct FT_ListNodeRec_, prev} ptr $ val^.prev
+    #{poke struct FT_ListNodeRec_, next} ptr $ val^.next
+    #{poke struct FT_ListNodeRec_, data} ptr $ val^.data_

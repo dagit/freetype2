@@ -11,4 +11,4 @@ module FreeType.Raw.Support.System
   , FT_StreamRec (..)
   ) where
 
-import           FreeType.Raw.Circular
+import           FreeType.Raw.Circular.Internal
