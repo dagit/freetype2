@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.Vector
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   ( FT_Vector (FT_Vector)
   , module Graphics.Rendering.FreeType.Internal.Vector
   ) where
 
-import           FreeType.Raw.Core.Types (FT_Vector (..))
+import           FreeType.Core.Types (FT_Vector (..))
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

@@ -1,11 +1,11 @@
 module Graphics.Rendering.FreeType.Internal.Memory
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   ( FT_MemoryRec (FT_MemoryRec)
   , FT_Memory
   , module Graphics.Rendering.FreeType.Internal.Memory
   ) where
 
-import           FreeType.Raw.Support.System
+import           FreeType.Support.System
 
 import           Foreign.Ptr
 

@@ -1,5 +1,5 @@
 module Graphics.Rendering.FreeType.Internal.Outline
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   ( FT_Outline(FT_Outline)
   , FT_Outline_MoveToFunc
   , FT_Outline_LineToFunc
@@ -9,7 +9,7 @@ module Graphics.Rendering.FreeType.Internal.Outline
   , module Graphics.Rendering.FreeType.Internal.Outline
   ) where
 
-import           FreeType.Raw.Support.Outline
+import           FreeType.Support.Outline
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import           Graphics.Rendering.FreeType.Internal.Vector

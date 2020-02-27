@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.Parameter
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   ( FT_Parameter (FT_Parameter)
   , module Graphics.Rendering.FreeType.Internal.Parameter
   ) where
 
-import           FreeType.Raw.Core.Base (FT_Parameter (..))
+import           FreeType.Core.Base (FT_Parameter (..))
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

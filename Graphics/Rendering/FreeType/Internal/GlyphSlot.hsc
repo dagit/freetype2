@@ -1,5 +1,5 @@
 module Graphics.Rendering.FreeType.Internal.GlyphSlot
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   ( FT_GlyphSlotRec_
   , FT_GlyphSlot
   , library
@@ -23,7 +23,7 @@ module Graphics.Rendering.FreeType.Internal.GlyphSlot
   , rsb_delta
   ) where
 
-import           FreeType.Raw.Core.Base (FT_GlyphSlotRec, FT_GlyphSlot)
+import           FreeType.Core.Base (FT_GlyphSlotRec, FT_GlyphSlot)
 
 import Foreign
 import Foreign.C.Types

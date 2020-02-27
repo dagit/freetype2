@@ -142,127 +142,53 @@ Extra-source-files:  freetype2/include/*.h
 
 Cabal-version:       >=1.8
 
-Flag examples
-  Description: Build example programs
-  Default: False
-
-Executable freetype-example1
-  Main-is:       Main.hs
-  Build-depends: base >= 4.5 && < 5
-               , freetype2
-               , array
-               , microlens
-               , microlens-th
-               , template-haskell
-               , vector
-
-  if flag(examples)
-    Buildable: True
-  else
-    Buildable: False
-
 Library
-<<<<<<< Updated upstream
-  -- Modules exported by the library.
-  -- Listed in the order they are presented in the API reference
-  Exposed-modules: FreeType.Raw.Circular
-                   -- New internal library
-                   FreeType.Raw.Core.Version
-                   FreeType.Raw.Core.Types
-                   FreeType.Raw.Core.Base
-                   FreeType.Raw.Core.Unicode
-                   FreeType.Raw.Core.Color
-                   FreeType.Raw.Core.Layer
-                   FreeType.Raw.Core.Glyph
-                   FreeType.Raw.Core.Mac
-                   FreeType.Raw.Core.Size
-                   FreeType.Raw.Format.Multiple
-                   FreeType.Raw.Format.TrueType
-                   FreeType.Raw.Format.Type1
-                   FreeType.Raw.Format.SFNT
-                   FreeType.Raw.Format.BDF
-                   FreeType.Raw.Format.CID
-                   FreeType.Raw.Format.PFR
-                   FreeType.Raw.Format.WinFNT
-                   FreeType.Raw.Format.Font
-                   FreeType.Raw.Format.Gasp
-                   FreeType.Raw.Control.Driver
-                   FreeType.Raw.Control.Parameter
-                   FreeType.Raw.Control.Subpixel
-                   FreeType.Raw.Cache
-                   FreeType.Raw.Support.Computations
-                   FreeType.Raw.Support.List
-                   FreeType.Raw.Support.Bitmap
-                   FreeType.Raw.Support.Outline
-                   FreeType.Raw.Support.Scanline
-                   FreeType.Raw.Support.Advance
-                   FreeType.Raw.Support.Glyph
-                   FreeType.Raw.Support.System
-                   FreeType.Raw.Support.Module
-                   FreeType.Raw.Support.GZIP
-                   FreeType.Raw.Support.LZW
-                   FreeType.Raw.Support.BZIP2
-                   FreeType.Raw.Error.Enumerations
-                   FreeType.Raw.Error.Values
-                   FreeType.Raw.Miscellaneous.OpenType
-                   FreeType.Raw.Miscellaneous.Incremental
-                   FreeType.Raw.Miscellaneous.TrueType
-                   FreeType.Raw.Miscellaneous.TrueTypeGX
-                   -- Old internal library
-=======
-  Exposed-modules: Graphics.FreeType
+  Exposed-modules: FreeType
 
-                   Graphics.FreeType.Bindings
-                   
-                   Graphics.FreeType.Internal.Lens
+                   FreeType.Lens
 
-                   Graphics.FreeType.Bindings.Circular
-                   Graphics.FreeType.Bindings.Circular.Internal
-                   Graphics.FreeType.Bindings.Circular.Lens
+                   FreeType.Core.Version
+                   FreeType.Core.Types
+                   FreeType.Core.Base
+                   FreeType.Core.Unicode
+                   FreeType.Core.Color
+                   FreeType.Core.Layer
+                   FreeType.Core.Glyph
+                   FreeType.Core.Mac
+                   FreeType.Core.Size
+                   FreeType.Format.Multiple
+                   FreeType.Format.TrueType
+                   FreeType.Format.Type1
+                   FreeType.Format.SFNT
+                   FreeType.Format.BDF
+                   FreeType.Format.CID
+                   FreeType.Format.PFR
+                   FreeType.Format.WinFNT
+                   FreeType.Format.Font
+                   FreeType.Format.Gasp
+                   FreeType.Control.Driver
+                   FreeType.Control.Parameter
+                   FreeType.Control.Subpixel
+                   FreeType.Cache
+                   FreeType.Support.Computations
+                   FreeType.Support.List
+                   FreeType.Support.Bitmap
+                   FreeType.Support.Outline
+                   FreeType.Support.Scanline
+                   FreeType.Support.Advance
+                   FreeType.Support.Glyph
+                   FreeType.Support.System
+                   FreeType.Support.Module
+                   FreeType.Support.GZIP
+                   FreeType.Support.LZW
+                   FreeType.Support.BZIP2
+                   FreeType.Error.Enumerations
+                   FreeType.Error.Values
+                   FreeType.Miscellaneous.OpenType
+                   FreeType.Miscellaneous.Incremental
+                   FreeType.Miscellaneous.TrueType
+                   FreeType.Miscellaneous.TrueTypeGX
                    
-                   Graphics.FreeType.Bindings.Core.Version
-                   Graphics.FreeType.Bindings.Core.Types
-                   Graphics.FreeType.Bindings.Core.Base
-                   Graphics.FreeType.Bindings.Core.Unicode
-                   Graphics.FreeType.Bindings.Core.Color
-                   Graphics.FreeType.Bindings.Core.Layer
-                   Graphics.FreeType.Bindings.Core.Glyph
-                   Graphics.FreeType.Bindings.Core.Mac
-                   Graphics.FreeType.Bindings.Core.Size
-                   Graphics.FreeType.Bindings.Format.Multiple
-                   Graphics.FreeType.Bindings.Format.TrueType
-                   Graphics.FreeType.Bindings.Format.Type1
-                   Graphics.FreeType.Bindings.Format.SFNT
-                   Graphics.FreeType.Bindings.Format.BDF
-                   Graphics.FreeType.Bindings.Format.CID
-                   Graphics.FreeType.Bindings.Format.PFR
-                   Graphics.FreeType.Bindings.Format.WinFNT
-                   Graphics.FreeType.Bindings.Format.Font
-                   Graphics.FreeType.Bindings.Format.Gasp
-                   Graphics.FreeType.Bindings.Control.Driver
-                   Graphics.FreeType.Bindings.Control.Parameter
-                   Graphics.FreeType.Bindings.Control.Subpixel
-                   Graphics.FreeType.Bindings.Cache
-                   Graphics.FreeType.Bindings.Support.Computations
-                   Graphics.FreeType.Bindings.Support.List
-                   Graphics.FreeType.Bindings.Support.Bitmap
-                   Graphics.FreeType.Bindings.Support.Outline
-                   Graphics.FreeType.Bindings.Support.Scanline
-                   Graphics.FreeType.Bindings.Support.Advance
-                   Graphics.FreeType.Bindings.Support.Glyph
-                   Graphics.FreeType.Bindings.Support.System
-                   Graphics.FreeType.Bindings.Support.Module
-                   Graphics.FreeType.Bindings.Support.GZIP
-                   Graphics.FreeType.Bindings.Support.LZW
-                   Graphics.FreeType.Bindings.Support.BZIP2
-                   Graphics.FreeType.Bindings.Error.Enumerations
-                   Graphics.FreeType.Bindings.Error.Values
-                   Graphics.FreeType.Bindings.Miscellaneous.OpenType
-                   Graphics.FreeType.Bindings.Miscellaneous.Incremental
-                   Graphics.FreeType.Bindings.Miscellaneous.TrueType
-                   Graphics.FreeType.Bindings.Miscellaneous.TrueTypeGX
-                   
->>>>>>> Stashed changes
                    Graphics.Rendering.FreeType.Internal
                    Graphics.Rendering.FreeType.Internal.BBox
                    Graphics.Rendering.FreeType.Internal.Bitmap
@@ -295,18 +221,36 @@ Library
                    Graphics.Rendering.FreeType.Internal.SubGlyph
                    Graphics.Rendering.FreeType.Internal.Vector
 
-  -- Packages needed in order to build this package.
+  Other-modules: FreeType.Internal.Error
+                 FreeType.Internal.Lens
+
+                 FreeType.Core.Types.Internal
+                 
+                 FreeType.Circular
+                 FreeType.Circular.Internal
+                 FreeType.Core.Types.Internal
+                 FreeType.Core.Base.Internal
+                 FreeType.Core.Color.Internal
+                 FreeType.Core.Glyph.Internal
+                 FreeType.Core.Layer.Internal
+                 FreeType.Format.BDF.Internal
+                 FreeType.Format.Multiple.Internal
+                 FreeType.Format.SFNT.Internal
+                 FreeType.Format.TrueType.Internal
+                 FreeType.Format.Type1.Internal
+                 FreeType.Format.WinFNT.Internal
+                 FreeType.Cache.Internal
+                 FreeType.Support.Module.Internal
+                 FreeType.Support.Outline.Internal
+                 FreeType.Support.Scanline.Internal
+                 FreeType.Miscellaneous.Incremental.Internal
+
   Build-depends: base >= 4.5 && < 5
-               , data-default-class
                , microlens
                , microlens-th
                , template-haskell
                , vector
 
-  -- Modules not exported by this package.
-  -- Other-modules:       
-
-  -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
   Build-tools: hsc2hs
   ghc-options: -Wall
                -Wno-deprecations
@@ -360,6 +304,154 @@ Library
              freetype2/src/base/ftsystem.c
              freetype2/src/base/fttype1.c
              freetype2/src/base/ftwinfnt.c
+             freetype2/src/bzip2/ftbzip2.c
+             freetype2/src/truetype/truetype.c
+             freetype2/src/type1/type1.c
+             freetype2/src/cff/cff.c
+             freetype2/src/cid/type1cid.c
+             freetype2/src/pfr/pfr.c
+             freetype2/src/type42/type42.c
+             freetype2/src/winfonts/winfnt.c
+             freetype2/src/pcf/pcf.c
+             freetype2/src/bdf/bdf.c
+             freetype2/src/sfnt/sfnt.c
+             freetype2/src/autofit/autofit.c
+             freetype2/src/pshinter/pshinter.c
+             freetype2/src/raster/raster.c
+             freetype2/src/smooth/smooth.c
+             freetype2/src/cache/ftcache.c
+             freetype2/src/gzip/ftgzip.c
+             freetype2/src/lzw/ftlzw.c
+             freetype2/src/psaux/psaux.c
+             freetype2/src/psnames/psmodule.c
+
+test-suite dynamic-function-check
+  type: exitcode-stdio-1.0
+  main-is: Test.hs
+  build-depends: base >= 4.5 && < 5
+               , microlens
+               , microlens-th
+               , template-haskell
+
+  other-modules: Test.Report
+                 
+                 FreeType.Internal.Lens
+
+                 FreeType
+                 FreeType.Lens
+              
+                 FreeType.Core.Version
+                 FreeType.Core.Types
+                 FreeType.Core.Base
+                 FreeType.Core.Unicode
+                 FreeType.Core.Color
+                 FreeType.Core.Layer
+                 FreeType.Core.Glyph
+                 FreeType.Core.Mac
+                 FreeType.Core.Size
+                 FreeType.Format.Multiple
+                 FreeType.Format.TrueType
+                 FreeType.Format.Type1
+                 FreeType.Format.SFNT
+                 FreeType.Format.BDF
+                 FreeType.Format.CID
+                 FreeType.Format.PFR
+                 FreeType.Format.WinFNT
+                 FreeType.Format.Font
+                 FreeType.Format.Gasp
+                 FreeType.Control.Driver
+                 FreeType.Control.Parameter
+                 FreeType.Control.Subpixel
+                 FreeType.Cache
+                 FreeType.Support.Computations
+                 FreeType.Support.List
+                 FreeType.Support.Bitmap
+                 FreeType.Support.Outline
+                 FreeType.Support.Scanline
+                 FreeType.Support.Advance
+                 FreeType.Support.Glyph
+                 FreeType.Support.System
+                 FreeType.Support.Module
+                 FreeType.Support.GZIP
+                 FreeType.Support.LZW
+                 FreeType.Support.BZIP2
+                 FreeType.Error.Enumerations
+                 FreeType.Error.Values
+                 FreeType.Miscellaneous.OpenType
+                 FreeType.Miscellaneous.Incremental
+                 FreeType.Miscellaneous.TrueType
+                 FreeType.Miscellaneous.TrueTypeGX
+
+                 FreeType.Circular     
+                 FreeType.Circular.Internal
+                 FreeType.Core.Types.Internal
+                 FreeType.Core.Base.Internal
+                 FreeType.Core.Color.Internal
+                 FreeType.Core.Glyph.Internal
+                 FreeType.Core.Layer.Internal
+                 FreeType.Format.BDF.Internal
+                 FreeType.Format.Multiple.Internal
+                 FreeType.Format.SFNT.Internal
+                 FreeType.Format.TrueType.Internal
+                 FreeType.Format.Type1.Internal
+                 FreeType.Format.WinFNT.Internal
+                 FreeType.Cache.Internal  
+                 FreeType.Support.Module.Internal
+                 FreeType.Support.Outline.Internal
+                 FreeType.Support.Scanline.Internal
+                 FreeType.Miscellaneous.Incremental.Internal
+
+  include-dirs: freetype2/include
+                freetype2/include/freetype
+                freetype2/include/freetype/config
+                freetype2/src/base
+                freetype2/src/truetype
+                freetype2/src/type1
+                freetype2/src/cff
+                freetype2/src/cid
+                freetype2/src/pfr
+                freetype2/src/type42
+                freetype2/src/winfonts
+                freetype2/src/pcf
+                freetype2/src/bdf
+                freetype2/src/sfnt
+                freetype2/src/autofit
+                freetype2/src/pshinter
+                freetype2/src/raster
+                freetype2/src/smooth
+                freetype2/src/cache
+                freetype2/src/gzip
+                freetype2/src/lzw
+                freetype2/src/psaux
+                freetype2/src/psnames
+
+  cc-options: -DFT_CONFIG_CONFIG_H=<ftconfig.h>
+              -DFT2_BUILD_LIBRARY
+              -DFT_CONFIG_MODULES_H=<ftmodule.h>
+              -DDARWIN_NO_CARBON
+
+  c-sources: freetype2/src/base/ftsystem.c
+             freetype2/src/base/ftdebug.c
+             freetype2/src/base/ftinit.c
+             freetype2/src/base/ftbase.c
+             freetype2/src/base/ftbbox.c
+             freetype2/src/base/ftbdf.c
+             freetype2/src/base/ftbitmap.c
+             freetype2/src/base/ftcid.c
+             freetype2/src/base/ftfstype.c
+             freetype2/src/base/ftgasp.c
+             freetype2/src/base/ftglyph.c
+             freetype2/src/base/ftgxval.c
+             freetype2/src/base/ftmm.c
+             freetype2/src/base/ftotval.c
+             freetype2/src/base/ftpatent.c
+             freetype2/src/base/ftpfr.c
+             freetype2/src/base/ftstroke.c
+             freetype2/src/base/ftsynth.c
+             freetype2/src/base/ftsystem.c
+             freetype2/src/base/fttype1.c
+             freetype2/src/base/ftwinfnt.c
+             freetype2/src/bzip2/ftbzip2.c
              freetype2/src/truetype/truetype.c
              freetype2/src/type1/type1.c
              freetype2/src/cff/cff.c
@@ -383,4 +475,3 @@ Library
 source-repository head
   type: git
   location: git://github.com/dagit/freetype2.git
-

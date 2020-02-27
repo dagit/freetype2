@@ -21,6 +21,7 @@ makeFieldsFT' name f =
 
 
 
+
 synthesize :: (String -> String) -> String -> String -> [DefName]
 synthesize modify dt this =
   let prefixSize = length $ strip dt

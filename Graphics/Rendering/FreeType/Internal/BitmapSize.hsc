@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.BitmapSize
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   ( FT_Bitmap_Size (FT_Bitmap_Size)
   , module Graphics.Rendering.FreeType.Internal.BitmapSize
   ) where
 
-import           FreeType.Raw.Core.Base
+import           FreeType.Core.Base
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 

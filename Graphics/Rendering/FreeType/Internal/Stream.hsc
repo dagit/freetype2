@@ -1,5 +1,5 @@
 module Graphics.Rendering.FreeType.Internal.Stream
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   ( FT_StreamRec_
   , FT_Stream
   , FT_StreamDesc
@@ -16,7 +16,7 @@ module Graphics.Rendering.FreeType.Internal.Stream
   , limit
   ) where
 
-import           FreeType.Raw.Support.System hiding (FT_StreamDesc)
+import           FreeType.Support.System hiding (FT_StreamDesc)
 
 import           Foreign.C.Types
 import           Foreign.Ptr

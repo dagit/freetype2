@@ -5,23 +5,23 @@
 module FreeType.Lens where
 
 import           FreeType.Internal.Lens
-import           FreeType.Raw.Cache.Internal
-import           FreeType.Raw.Circular.Internal
-import           FreeType.Raw.Core.Base.Internal
-import           FreeType.Raw.Core.Color.Internal
-import           FreeType.Raw.Core.Glyph.Internal
-import           FreeType.Raw.Core.Layer.Internal
-import           FreeType.Raw.Core.Types.Internal
-import           FreeType.Raw.Format.BDF.Internal
-import           FreeType.Raw.Format.Multiple.Internal
-import           FreeType.Raw.Format.SFNT.Internal
-import           FreeType.Raw.Format.TrueType.Internal
-import           FreeType.Raw.Format.Type1.Internal
-import           FreeType.Raw.Format.WinFNT.Internal
-import           FreeType.Raw.Miscellaneous.Incremental.Internal
-import           FreeType.Raw.Support.Module.Internal
-import           FreeType.Raw.Support.Outline.Internal
-import           FreeType.Raw.Support.Scanline.Internal
+import           FreeType.Cache.Internal
+import           FreeType.Circular.Internal
+import           FreeType.Core.Base.Internal
+import           FreeType.Core.Color.Internal
+import           FreeType.Core.Glyph.Internal
+import           FreeType.Core.Layer.Internal
+import           FreeType.Core.Types.Internal
+import           FreeType.Format.BDF.Internal
+import           FreeType.Format.Multiple.Internal
+import           FreeType.Format.SFNT.Internal
+import           FreeType.Format.TrueType.Internal
+import           FreeType.Format.Type1.Internal
+import           FreeType.Format.WinFNT.Internal
+import           FreeType.Miscellaneous.Incremental.Internal
+import           FreeType.Support.Module.Internal
+import           FreeType.Support.Outline.Internal
+import           FreeType.Support.Scanline.Internal
 
 
 

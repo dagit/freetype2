@@ -1,15 +1,15 @@
 {-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Graphics.Rendering.FreeType.Internal.PrimitiveTypes
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   where
 
-import           FreeType.Raw.Core.Types hiding ( FT_Byte, FT_UShort, FT_Int, FT_Int32
+import           FreeType.Core.Types hiding ( FT_Byte, FT_UShort, FT_Int, FT_Int32
                                                 , FT_UInt, FT_UInt32, FT_Glyph_Format
                                                 )
-import           FreeType.Raw.Core.Base hiding (FT_Size_Request_Type, FT_Encoding, FT_Render_Mode)
-import           FreeType.Raw.Core.Version
-import           FreeType.Raw.Support.Outline hiding (FT_Orientation)
+import           FreeType.Core.Base hiding (FT_Size_Request_Type, FT_Encoding, FT_Render_Mode)
+import           FreeType.Core.Version
+import           FreeType.Support.Outline hiding (FT_Orientation)
 
 import Foreign
 import Foreign.C.Types
@@ -33,21 +33,21 @@ ft_LOAD_DEFAULT
   , ft_LOAD_LINEAR_DESIGN
   , ft_LOAD_NO_AUTOHINT
  :: FT_Int32
-ft_LOAD_DEFAULT                     = FT_LOAD_DEFAULT
-ft_LOAD_NO_SCALE                    = FT_LOAD_NO_SCALE
-ft_LOAD_NO_HINTING                  = FT_LOAD_NO_HINTING
-ft_LOAD_RENDER                      = FT_LOAD_RENDER
-ft_LOAD_NO_BITMAP                   = FT_LOAD_NO_BITMAP
-ft_LOAD_VERTICAL_LAYOUT             = FT_LOAD_VERTICAL_LAYOUT
-ft_LOAD_FORCE_AUTOHINT              = FT_LOAD_FORCE_AUTOHINT
-ft_LOAD_CROP_BITMAP                 = FT_LOAD_CROP_BITMAP
-ft_LOAD_PEDANTIC                    = FT_LOAD_PEDANTIC
-ft_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH = FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH
-ft_LOAD_NO_RECURSE                  = FT_LOAD_NO_RECURSE
-ft_LOAD_IGNORE_TRANSFORM            = FT_LOAD_IGNORE_TRANSFORM
-ft_LOAD_MONOCHROME                  = FT_LOAD_MONOCHROME
-ft_LOAD_LINEAR_DESIGN               = FT_LOAD_LINEAR_DESIGN
-ft_LOAD_NO_AUTOHINT                 = FT_LOAD_NO_AUTOHINT
+ft_LOAD_DEFAULT                     = fromIntegral FT_LOAD_DEFAULT
+ft_LOAD_NO_SCALE                    = fromIntegral FT_LOAD_NO_SCALE
+ft_LOAD_NO_HINTING                  = fromIntegral FT_LOAD_NO_HINTING
+ft_LOAD_RENDER                      = fromIntegral FT_LOAD_RENDER
+ft_LOAD_NO_BITMAP                   = fromIntegral FT_LOAD_NO_BITMAP
+ft_LOAD_VERTICAL_LAYOUT             = fromIntegral FT_LOAD_VERTICAL_LAYOUT
+ft_LOAD_FORCE_AUTOHINT              = fromIntegral FT_LOAD_FORCE_AUTOHINT
+ft_LOAD_CROP_BITMAP                 = fromIntegral FT_LOAD_CROP_BITMAP
+ft_LOAD_PEDANTIC                    = fromIntegral FT_LOAD_PEDANTIC
+ft_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH = fromIntegral FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH
+ft_LOAD_NO_RECURSE                  = fromIntegral FT_LOAD_NO_RECURSE
+ft_LOAD_IGNORE_TRANSFORM            = fromIntegral FT_LOAD_IGNORE_TRANSFORM
+ft_LOAD_MONOCHROME                  = fromIntegral FT_LOAD_MONOCHROME
+ft_LOAD_LINEAR_DESIGN               = fromIntegral FT_LOAD_LINEAR_DESIGN
+ft_LOAD_NO_AUTOHINT                 = fromIntegral FT_LOAD_NO_AUTOHINT
 
 
 

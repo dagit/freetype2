@@ -1,14 +1,14 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Graphics.Rendering.FreeType.Internal
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   where
 
-import qualified FreeType.Raw.Core.Base as New
-import qualified FreeType.Raw.Core.Size as New
-import qualified FreeType.Raw.Core.Glyph as New
-import qualified FreeType.Raw.Core.Unicode as New
-import qualified FreeType.Raw.Core.Version as New
-import qualified FreeType.Raw.Support.Outline as New
+import qualified FreeType.Core.Base as New
+import qualified FreeType.Core.Size as New
+import qualified FreeType.Core.Glyph as New
+import qualified FreeType.Core.Unicode as New
+import qualified FreeType.Core.Version as New
+import qualified FreeType.Support.Outline as New
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 import           Graphics.Rendering.FreeType.Internal.Library
@@ -50,7 +50,7 @@ ft_Set_Transform :: FT_Face -> Ptr FT_Matrix -> Ptr FT_Vector -> IO ()
 ft_Set_Transform = New.ft_Set_Transform
 
 ft_Load_Char :: FT_Face -> FT_ULong -> FT_Int32 -> IO FT_Error
-ft_Load_Char = New.ft_Load_Char
+ft_Load_Char a b = New.ft_Load_Char a b . fromIntegral
 
 ft_Done_Face :: FT_Face -> IO FT_Error
 ft_Done_Face = New.ft_Done_Face
@@ -59,7 +59,7 @@ ft_Done_FreeType :: FT_Library -> IO FT_Error
 ft_Done_FreeType = New.ft_Done_FreeType
 
 ft_Load_Glyph :: FT_Face -> FT_UInt -> FT_Int32 -> IO FT_Error
-ft_Load_Glyph = New.ft_Load_Glyph
+ft_Load_Glyph a b = New.ft_Load_Glyph a b . fromIntegral
 
 ft_Get_Glyph :: FT_GlyphSlot -> Ptr FT_Glyph -> IO FT_Error
 ft_Get_Glyph = New.ft_Get_Glyph
@@ -150,13 +150,16 @@ ft_Face_GetCharVariantIsDefault :: FT_Face -> FT_ULong -> FT_ULong -> IO FT_Int
 ft_Face_GetCharVariantIsDefault = New.ft_Face_GetCharVariantIsDefault
 
 ft_Face_GetVariantSelectors :: FT_Face -> IO (Ptr FT_UInt32)
-ft_Face_GetVariantSelectors = New.ft_Face_GetVariantSelectors
+ft_Face_GetVariantSelectors a =
+  castPtr <$> New.ft_Face_GetVariantSelectors a
 
 ft_Face_GetVariantsOfChar :: FT_Face -> FT_ULong -> IO (Ptr FT_UInt32)
-ft_Face_GetVariantsOfChar = New.ft_Face_GetVariantsOfChar
+ft_Face_GetVariantsOfChar a b =
+  castPtr <$> New.ft_Face_GetVariantsOfChar a (fromIntegral b)
 
 ft_Face_GetCharsOfVariant :: FT_Face -> FT_ULong -> IO (Ptr FT_UInt32)
-ft_Face_GetCharsOfVariant = New.ft_Face_GetCharsOfVariant
+ft_Face_GetCharsOfVariant a b =
+  castPtr <$> New.ft_Face_GetCharsOfVariant a (fromIntegral b)
 
 ft_Outline_New :: FT_Library -> FT_UInt -> FT_Int -> Ptr FT_Outline -> IO FT_Error
 ft_Outline_New = New.ft_Outline_New

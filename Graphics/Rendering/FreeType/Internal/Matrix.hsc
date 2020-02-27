@@ -1,10 +1,10 @@
 module Graphics.Rendering.FreeType.Internal.Matrix
-  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType.Raw" #-}
+  {-# DEPRECATED "freetype2 bindings were rewritten from scratch. Please switch to FreeType" #-}
   ( FT_Matrix (FT_Matrix)
   , module Graphics.Rendering.FreeType.Internal.Matrix
   ) where
 
-import           FreeType.Raw.Core.Types (FT_Matrix (..))
+import           FreeType.Core.Types (FT_Matrix (..))
 
 import           Graphics.Rendering.FreeType.Internal.PrimitiveTypes
 
