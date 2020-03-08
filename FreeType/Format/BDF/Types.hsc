@@ -3,7 +3,6 @@
 
 module FreeType.Format.BDF.Types where
 
-import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 
 import           Data.Int

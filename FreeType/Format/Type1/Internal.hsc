@@ -11,8 +11,6 @@ import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Format.Type1.Types
 
-import           Foreign.Ptr
-
 #include "ft2build.h"
 #include FT_TYPE1_TABLES_H
 

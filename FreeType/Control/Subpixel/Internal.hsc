@@ -15,7 +15,6 @@ import           FreeType.Core.Types.Types
 
 import           Data.Word
 import           Foreign.Ptr
-import           Foreign.Storable
 
 #include "ft2build.h"
 #include FT_LCD_FILTER_H

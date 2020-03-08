@@ -9,9 +9,9 @@ module Test.Report where
 
 import           Language.Haskell.TH
 
-import           Data.Int (Int32)
+import           Data.Int
 import           Data.Proxy
-import           Data.Word (Word32)
+import           Data.Word
 import           Foreign.C.Types
 import           Foreign.Ptr
 
@@ -28,40 +28,28 @@ report' name action = do
 class Def a where
   def :: a
 
-instance Def CUChar where
+instance Def Word8 where
   def = 0
 
-instance Def CChar where
-  def = 0
-
-instance Def CInt where
-  def = 0
-
-instance Def CUInt where
-  def = 0
-
-instance Def CShort where
-  def = 0
-
-instance Def CUShort where
-  def = 0
-
-instance Def Int32 where
+instance Def Word16 where
   def = 0
 
 instance Def Word32 where
   def = 0
 
-instance Def CLong where
+instance Def Word64 where
   def = 0
 
-instance Def CULong where
+instance Def Int8 where
   def = 0
 
-instance Def CSize where
+instance Def Int16 where
   def = 0
 
-instance Def CPtrdiff where
+instance Def Int32 where
+  def = 0
+
+instance Def Int64 where
   def = 0
 
 instance Def (Ptr a) where
