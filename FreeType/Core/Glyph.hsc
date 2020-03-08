@@ -1,69 +1,114 @@
-{-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module FreeType.Core.Glyph
-  ( module FreeType.Core.Glyph.Internal
+  ( -- ** FT_Glyph
+    FT_Glyph
+    -- ** FT_GlyphRec
+  , FT_GlyphRec (..)
+    -- ** FT_BitmapGlyph
+  , FT_BitmapGlyph
+    -- ** FT_BitmapGlyphRec
+  , FT_BitmapGlyphRec (..)
+    -- ** FT_OutlineGlyph
+  , FT_OutlineGlyph
+    -- ** FT_OutlineGlyphRec
+  , FT_OutlineGlyphRec (..)
+    -- ** FT_New_Glyph
+  , ft_New_Glyph
+    -- ** FT_Get_Glyph
+  , ft_Get_Glyph
+    -- ** FT_Glyph_Copy
+  , ft_Glyph_Copy
+    -- ** FT_Glyph_Transform
+  , ft_Glyph_Transform
+    -- ** FT_Glyph_BBox_Mode
+  , pattern FT_GLYPH_BBOX_UNSCALED
+  , pattern FT_GLYPH_BBOX_SUBPIXELS
+  , pattern FT_GLYPH_BBOX_GRIDFIT
+  , pattern FT_GLYPH_BBOX_TRUNCATE
+  , pattern FT_GLYPH_BBOX_PIXELS
+    -- ** FT_Glyph_Get_CBox
+  , ft_Glyph_Get_CBox
+    -- ** FT_Glyph_To_Bitmap
+  , ft_Glyph_To_Bitmap
+    -- ** FT_Done_Glyph
+  , ft_Done_Glyph
   ) where
 
-import           FreeType.Circular ()
+import           FreeType.Core.Base.Types
 import           FreeType.Core.Glyph.Internal
-import           FreeType.Lens
+import           FreeType.Core.Glyph.Types
+import           FreeType.Core.Types.Types
+import           FreeType.Exception.Internal
 
+import           Foreign.Marshal.Alloc
+import           Foreign.Marshal.Utils
+import           Foreign.Ptr
 import           Foreign.Storable
-import           Lens.Micro ((^.))
 
 #include "ft2build.h"
 #include FT_GLYPH_H
 
-instance Storable FT_GlyphRec where
-  sizeOf _    = #size      struct FT_GlyphRec_
-  alignment _ = #alignment struct FT_GlyphRec_
-
-  peek ptr =
-    FT_GlyphRec
-      <$> #{peek struct FT_GlyphRec_, library} ptr
-      <*> #{peek struct FT_GlyphRec_, clazz  } ptr
-      <*> #{peek struct FT_GlyphRec_, format } ptr
-      <*> #{peek struct FT_GlyphRec_, advance} ptr
-
-  poke ptr val = do
-    #{poke struct FT_GlyphRec_, library} ptr $ val^.library
-    #{poke struct FT_GlyphRec_, clazz  } ptr $ val^.clazz
-    #{poke struct FT_GlyphRec_, format } ptr $ val^.format
-    #{poke struct FT_GlyphRec_, advance} ptr $ val^.advance
+ft_New_Glyph :: FT_Library -> FT_Glyph_Format -> IO FT_Glyph
+ft_New_Glyph =
+  autoAllocaError 'ft_New_Glyph ft_New_Glyph'
 
 
 
-instance Storable FT_BitmapGlyphRec where
-  sizeOf _    = #size      struct FT_BitmapGlyphRec_
-  alignment _ = #alignment struct FT_BitmapGlyphRec_
-
-  peek ptr =
-    FT_BitmapGlyphRec
-      <$> #{peek struct FT_BitmapGlyphRec_, root  } ptr
-      <*> #{peek struct FT_BitmapGlyphRec_, left  } ptr
-      <*> #{peek struct FT_BitmapGlyphRec_, top   } ptr
-      <*> #{peek struct FT_BitmapGlyphRec_, bitmap} ptr
-
-  poke ptr val = do
-    #{poke struct FT_BitmapGlyphRec_, root  } ptr $ val^.root
-    #{poke struct FT_BitmapGlyphRec_, left  } ptr $ val^.left
-    #{poke struct FT_BitmapGlyphRec_, top   } ptr $ val^.top
-    #{poke struct FT_BitmapGlyphRec_, bitmap} ptr $ val^.bitmap
+ft_Get_Glyph :: FT_GlyphSlot -> IO FT_Glyph
+ft_Get_Glyph =
+  autoAllocaError 'ft_Get_Glyph ft_Get_Glyph'
 
 
 
-instance Storable FT_OutlineGlyphRec where
-  sizeOf _    = #size      struct FT_OutlineGlyphRec_
-  alignment _ = #alignment struct FT_OutlineGlyphRec_
+ft_Glyph_Copy :: FT_Glyph -> Ptr FT_Glyph -> IO ()
+ft_Glyph_Copy glyph =
+  ftError 'ft_Glyph_Copy . ft_Glyph_Copy' glyph
 
-  peek ptr =
-    FT_OutlineGlyphRec
-      <$> #{peek struct FT_OutlineGlyphRec_, root   } ptr
-      <*> #{peek struct FT_OutlineGlyphRec_, outline} ptr
 
-  poke ptr val = do
-    #{poke struct FT_OutlineGlyphRec_, root   } ptr $ val^.root
-    #{poke struct FT_OutlineGlyphRec_, outline} ptr $ val^.outline
+
+ft_Glyph_Transform :: FT_Glyph -> FT_Matrix -> FT_Vector -> IO ()
+ft_Glyph_Transform glyph mat vec =
+  with mat $ \matPtr ->
+    with vec $ \vecPtr ->
+      ftError 'ft_Glyph_Transform $ ft_Glyph_Transform' glyph matPtr vecPtr
+
+
+
+pattern FT_GLYPH_BBOX_UNSCALED
+      , FT_GLYPH_BBOX_SUBPIXELS
+      , FT_GLYPH_BBOX_GRIDFIT
+      , FT_GLYPH_BBOX_TRUNCATE
+      , FT_GLYPH_BBOX_PIXELS
+ :: FT_UInt
+pattern FT_GLYPH_BBOX_UNSCALED  = #const FT_GLYPH_BBOX_UNSCALED
+pattern FT_GLYPH_BBOX_SUBPIXELS = #const FT_GLYPH_BBOX_SUBPIXELS
+pattern FT_GLYPH_BBOX_GRIDFIT   = #const FT_GLYPH_BBOX_GRIDFIT
+pattern FT_GLYPH_BBOX_TRUNCATE  = #const FT_GLYPH_BBOX_TRUNCATE
+pattern FT_GLYPH_BBOX_PIXELS    = #const FT_GLYPH_BBOX_PIXELS
+
+
+
+ft_Glyph_Get_CBox :: FT_Glyph -> FT_UInt -> IO FT_BBox
+ft_Glyph_Get_CBox glyph bbox_mode =
+  alloca $ \ptr -> do
+    ft_Glyph_Get_CBox' glyph bbox_mode ptr
+    peek ptr
+
+
+
+ft_Glyph_To_Bitmap
+  :: Ptr FT_Glyph   -- ^ the_glyph
+  -> FT_Render_Mode -- ^ render_mode
+  -> Ptr FT_Vector  -- ^ origin
+  -> FT_Bool        -- ^ destroy
+  -> IO ()
+ft_Glyph_To_Bitmap =
+  autoError 'ft_Glyph_To_Bitmap ft_Glyph_To_Bitmap'
+
+
+
+foreign import ccall "FT_Done_Glyph"
+  ft_Done_Glyph :: FT_Glyph -> IO ()

@@ -4,28 +4,31 @@
 
 module FreeType.Lens where
 
-import           FreeType.Internal.Lens
-import           FreeType.Cache.Internal
-import           FreeType.Circular.Internal
-import           FreeType.Core.Base.Internal
-import           FreeType.Core.Color.Internal
-import           FreeType.Core.Glyph.Internal
-import           FreeType.Core.Layer.Internal
-import           FreeType.Core.Types.Internal
-import           FreeType.Format.BDF.Internal
-import           FreeType.Format.Multiple.Internal
-import           FreeType.Format.SFNT.Internal
-import           FreeType.Format.TrueType.Internal
-import           FreeType.Format.Type1.Internal
-import           FreeType.Format.WinFNT.Internal
-import           FreeType.Miscellaneous.Incremental.Internal
-import           FreeType.Support.Module.Internal
-import           FreeType.Support.Outline.Internal
-import           FreeType.Support.Scanline.Internal
+import           FreeType.Lens.Internal
+
+import           FreeType.Cache.Types
+import           FreeType.Control.Driver.Types
+import           FreeType.Core.Base.Types
+import           FreeType.Core.Color.Types
+import           FreeType.Core.Glyph.Types
+import           FreeType.Core.Layer.Types
+import           FreeType.Core.Types.Types
+import           FreeType.Format.BDF.Types
+import           FreeType.Format.Multiple.Types
+import           FreeType.Format.SFNT.Types
+import           FreeType.Format.TrueType.Types
+import           FreeType.Format.Type1.Types
+import           FreeType.Format.WinFNT.Types
+import           FreeType.Miscellaneous.Incremental.Types
+import           FreeType.Support.List.Types
+import           FreeType.Support.Module.Types
+import           FreeType.Support.Outline.Types
+import           FreeType.Support.Scanline.Types
+import           FreeType.Support.System.Types
 
 
 
--- FreeType.Raw.Cache
+-- FreeType.Cache
 
 makeFieldsFT ''FTC_ScalerRec
 
@@ -35,7 +38,15 @@ makeFieldsFT ''FTC_SBitRec
 
 
 
--- FreeType.Raw.Circular
+-- FreeType.Control.Driver.Types
+
+makeFieldsFT ''FT_Prop_GlyphToScriptMap
+
+makeFieldsFT ''FT_Prop_IncreaseXHeight
+
+
+
+-- FreeType.Circular
 
 makeFieldsFT ''FT_FaceRec
 
@@ -68,7 +79,7 @@ makeFieldsFT' ''FT_ListNodeRec
 
 
 
--- FreeType.Raw.Core.Base
+-- FreeType.Core.Base
 
 makeFieldsFT ''FT_Open_Args
 
@@ -84,7 +95,7 @@ makeFieldsFT' ''FT_Size_RequestRec
 
 
 
--- FreeType.Raw.Core.Color
+-- FreeType.Core.Color
 
 makeFieldsFT ''FT_Color
 
@@ -92,7 +103,7 @@ makeFieldsFT ''FT_Palette_Data
 
 
 
--- FreeType.Raw.Core.Glyph
+-- FreeType.Core.Glyph
 
 makeFieldsFT ''FT_GlyphRec
 
@@ -102,13 +113,13 @@ makeFieldsFT ''FT_OutlineGlyphRec
 
 
 
--- FreeType.Raw.Core.Layer
+-- FreeType.Core.Layer
 
 makeFieldsFT ''FT_LayerIterator
 
 
 
--- FreeType.Raw.Core.Types
+-- FreeType.Core.Types
 
 makeFieldsFT ''FT_Vector
 
@@ -132,7 +143,7 @@ makeFieldsFT ''FT_Bitmap
 
 
 
--- FreeType.Raw.Format.BDF
+-- FreeType.Format.BDF
 
 makeFieldsFT' ''BDF_PropertyRec
   $ \val -> case val of
@@ -141,7 +152,7 @@ makeFieldsFT' ''BDF_PropertyRec
 
 
 
--- FreeType.Raw.Format.Multiple
+-- FreeType.Format.Multiple
 
 makeFieldsFT' ''FT_MM_Axis
   $ \val -> case val of
@@ -163,7 +174,7 @@ makeFieldsFT ''FT_MM_Var
 
 
 
--- FreeType.Raw.Format.SFNT
+-- FreeType.Format.SFNT
 
 makeFieldsFT ''FT_SfntName
 
@@ -171,7 +182,7 @@ makeFieldsFT ''FT_SfntLangTag
 
 
 
--- FreeType.Raw.Format.TrueType
+-- FreeType.Format.TrueType
 
 makeFieldsFT ''TT_Header
 
@@ -189,7 +200,7 @@ makeFieldsFT ''TT_MaxProfile
 
 
 
--- FreeType.Raw.Format.Type1
+-- FreeType.Format.Type1
 
 makeFieldsFT ''PS_FontInfoRec
 
@@ -201,13 +212,13 @@ makeFieldsFT ''CID_FaceInfoRec
 
 
 
--- FreeType.Raw.Format.WinFNT
+-- FreeType.Format.WinFNT
 
 makeFieldsFT ''FT_WinFNT_HeaderRec
 
 
 
--- FreeType.Raw.Miscellaneous.Incremental
+-- FreeType.Miscellaneous.Incremental
 
 makeFieldsFT ''FT_Incremental_MetricsRec
 
@@ -217,7 +228,7 @@ makeFieldsFT ''FT_Incremental_InterfaceRec
 
 
 
--- FreeType.Raw.Support.Module
+-- FreeType.Support.Module
 
 makeFieldsFT ''FT_Module_Class
 
@@ -225,13 +236,15 @@ makeFieldsFT ''FT_Renderer_Class
 
 
 
--- FreeType.Raw.Support.Outline
+-- FreeType.Support.Outline
+
+makeFieldsFT ''FT_Outline_Funcs'
 
 makeFieldsFT ''FT_Outline_Funcs
 
 
 
--- FreeType.Raw.Support.Scanline
+-- FreeType.Support.Scanline
 
 makeFieldsFT ''FT_Span
 

@@ -1,50 +1,45 @@
-{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module FreeType.Format.SFNT
-  ( module FreeType.Format.SFNT.Internal
+  ( -- ** FT_SfntName
+    FT_SfntName (..)
+    -- ** FT_Get_Sfnt_Name_Count
+  , ft_Get_Sfnt_Name_Count
+    -- ** FT_Get_Sfnt_Name
+  , ft_Get_Sfnt_Name
+    -- ** FT_SfntLangTag
+  , FT_SfntLangTag (..)
+    -- ** FT_Get_Sfnt_LangTag
+  , ft_Get_Sfnt_LangTag
   ) where
 
+import           FreeType.Core.Base.Types
+import           FreeType.Core.Types.Types
+import           FreeType.Exception.Internal
 import           FreeType.Format.SFNT.Internal
-import           FreeType.Lens
-
-import           Foreign.Storable
-import           Lens.Micro ((^.))
+import           FreeType.Format.SFNT.Types
 
 #include "ft2build.h"
 #include FT_SFNT_NAMES_H
 
-instance Storable FT_SfntName where
-  sizeOf _    = #size      struct FT_SfntName_
-  alignment _ = #alignment struct FT_SfntName_
-
-  peek ptr =
-    FT_SfntName
-      <$> #{peek struct FT_SfntName_, platform_id} ptr
-      <*> #{peek struct FT_SfntName_, encoding_id} ptr
-      <*> #{peek struct FT_SfntName_, language_id} ptr
-      <*> #{peek struct FT_SfntName_, name_id    } ptr
-      <*> #{peek struct FT_SfntName_, string     } ptr
-      <*> #{peek struct FT_SfntName_, string_len } ptr
-
-  poke ptr val = do
-    #{poke struct FT_SfntName_, platform_id} ptr $ val^.platform_id
-    #{poke struct FT_SfntName_, encoding_id} ptr $ val^.encoding_id
-    #{poke struct FT_SfntName_, language_id} ptr $ val^.language_id
-    #{poke struct FT_SfntName_, name_id    } ptr $ val^.name_id
-    #{poke struct FT_SfntName_, string     } ptr $ val^.string
-    #{poke struct FT_SfntName_, string_len } ptr $ val^.string_len
+foreign import ccall "FT_Get_Sfnt_Name_Count"
+  ft_Get_Sfnt_Name_Count :: FT_Face -> IO FT_UInt
 
 
 
-instance Storable FT_SfntLangTag where
-  sizeOf _    = #size      struct FT_SfntLangTag_
-  alignment _ = #alignment struct FT_SfntLangTag_
+ft_Get_Sfnt_Name
+  :: FT_Face        -- ^ face
+  -> FT_UInt        -- ^ idx
+  -> IO FT_SfntName -- ^ name
+ft_Get_Sfnt_Name =
+  autoAllocaError 'ft_Get_Sfnt_Name ft_Get_Sfnt_Name'
 
-  peek ptr =
-    FT_SfntLangTag
-      <$> #{peek struct FT_SfntLangTag_, string     } ptr
-      <*> #{peek struct FT_SfntLangTag_, string_len } ptr
 
-  poke ptr val = do
-    #{poke struct FT_SfntLangTag_, string     } ptr $ val^.string
-    #{poke struct FT_SfntLangTag_, string_len } ptr $ val^.string_len
+
+ft_Get_Sfnt_LangTag
+  :: FT_Face           -- ^ face
+  -> FT_UInt           -- ^ langID
+  -> IO FT_SfntLangTag -- ^ langTag
+ft_Get_Sfnt_LangTag =
+  autoAllocaError 'ft_Get_Sfnt_LangTag ft_Get_Sfnt_LangTag'

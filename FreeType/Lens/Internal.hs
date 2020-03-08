@@ -1,4 +1,4 @@
-module FreeType.Internal.Lens
+module FreeType.Lens.Internal
   ( makeFieldsFT
   , makeFieldsFT'
   ) where
@@ -10,9 +10,23 @@ import           Language.Haskell.TH
 
 
 
+-- | Analogous to 'makeFields', but removes the prefix and aggressively checks for
+--   whether the field prefix matches the name of the datatype.
+--
+--   E.g. in 'FTC_SBitRec' every field __has__ to be prefixed with @sbr@.
 makeFieldsFT :: Name -> DecsQ
 makeFieldsFT = flip makeFieldsFT' id
 
+-- | Same as 'makeFieldsFT' with an additional function passed that overrides lens names.
+--  
+--   Used like this:
+--
+-- @
+--   makeFieldsFT' ''FT_Some_Datatype
+--     $ \val -> case val of
+--                 "data" -> "data_"
+--                 _      -> val
+-- @
 makeFieldsFT' :: Name -> (String -> String) -> DecsQ
 makeFieldsFT' name f =
   flip makeLensesWith name

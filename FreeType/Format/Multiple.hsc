@@ -1,107 +1,211 @@
-{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module FreeType.Format.Multiple
-  ( module FreeType.Format.Multiple.Internal
+  ( -- ** FT_MM_Axis
+    FT_MM_Axis (..)
+    -- ** FT_Multi_Master
+  , FT_Multi_Master (..)
+    -- ** FT_Var_Axis
+  , FT_Var_Axis (..)
+    -- ** FT_Var_Named_Style
+  , FT_Var_Named_Style (..)
+    -- ** FT_MM_Var
+  , FT_MM_Var (..)
+    -- ** FT_Get_Multi_Master
+  , ft_Get_Multi_Master
+    -- ** FT_Get_MM_Var
+  , ft_Get_MM_Var
+    -- ** FT_Done_MM_Var
+  , ft_Done_MM_Var
+    -- ** FT_Set_MM_Design_Coordinates
+  , ft_Set_MM_Design_Coordinates
+    -- ** FT_Set_Var_Design_Coordinates
+  , ft_Set_Var_Design_Coordinates
+    -- ** FT_Get_Var_Design_Coordinates
+  , ft_Get_Var_Design_Coordinates
+    -- ** FT_Set_MM_Blend_Coordinates
+  , ft_Set_MM_Blend_Coordinates
+    -- ** FT_Get_MM_Blend_Coordinates
+  , ft_Get_MM_Blend_Coordinates
+    -- ** FT_Set_Var_Blend_Coordinates
+  , ft_Set_Var_Blend_Coordinates
+    -- ** FT_Get_Var_Blend_Coordinates
+  , ft_Get_Var_Blend_Coordinates
+    -- ** FT_Set_MM_WeightVector
+  , ft_Set_MM_WeightVector
+    -- ** FT_Get_MM_WeightVector
+  , ft_Get_MM_WeightVector
+    -- ** FT_VAR_AXIS_FLAG_XXX
+  , pattern FT_VAR_AXIS_FLAG_HIDDEN
+    -- ** FT_Get_Var_Axis_Flags
+  , ft_Get_Var_Axis_Flags
+    -- ** FT_Set_Named_Instance
+  , ft_Set_Named_Instance
   ) where
 
+import           FreeType.Core.Base.Types
+import           FreeType.Core.Types.Types
+import           FreeType.Error.Values
+import           FreeType.Exception.Internal
 import           FreeType.Format.Multiple.Internal
-import           FreeType.Lens
+import           FreeType.Format.Multiple.Types
 
+import           Foreign.Marshal.Array
+import           Foreign.Marshal.Utils
+import           Foreign.Ptr
 import           Foreign.Storable
-import           Lens.Micro ((^.))
+import           Language.Haskell.TH.Syntax (Name)
 
 #include "ft2build.h"
 #include FT_MULTIPLE_MASTERS_H
 
-instance Storable FT_MM_Axis where
-  sizeOf _    = #size      struct FT_MM_Axis_
-  alignment _ = #alignment struct FT_MM_Axis_
+ft_Get_Multi_Master :: FT_Face -> IO FT_Multi_Master
+ft_Get_Multi_Master =
+  autoAllocaError 'ft_Get_Multi_Master ft_Get_Multi_Master'
 
-  peek ptr =
-    FT_MM_Axis
-      <$> #{peek struct FT_MM_Axis_, name   } ptr
-      <*> #{peek struct FT_MM_Axis_, minimum} ptr
-      <*> #{peek struct FT_MM_Axis_, maximum} ptr
 
-  poke ptr val = do
-    #{poke struct FT_MM_Axis_, name   } ptr $ val^.name
-    #{poke struct FT_MM_Axis_, minimum} ptr $ val^.minimum_
-    #{poke struct FT_MM_Axis_, maximum} ptr $ val^.maximum_
+ft_Get_MM_Var :: FT_Face -> IO (Ptr FT_MM_Var)
+ft_Get_MM_Var =
+  autoAllocaError 'ft_Get_MM_Var ft_Get_MM_Var'
 
 
 
-instance Storable FT_Multi_Master where
-  sizeOf _    = #size      struct FT_Multi_Master_
-  alignment _ = #alignment struct FT_Multi_Master_
-
-  peek ptr =
-    FT_Multi_Master
-      <$> #{peek struct FT_Multi_Master_, num_axis   } ptr
-      <*> #{peek struct FT_Multi_Master_, num_designs} ptr
-      <*> #{peek struct FT_Multi_Master_, axis       } ptr
-
-  poke ptr val = do
-    #{poke struct FT_Multi_Master_, num_axis   } ptr $ val^.num_axis
-    #{poke struct FT_Multi_Master_, num_designs} ptr $ val^.num_designs
-    #{poke struct FT_Multi_Master_, axis       } ptr $ val^.axis
+ft_Done_MM_Var :: FT_Library -> Ptr FT_MM_Var -> IO ()
+ft_Done_MM_Var =
+  autoError 'ft_Done_MM_Var ft_Done_MM_Var'
 
 
 
-instance Storable FT_Var_Axis where
-  sizeOf _    = #size      struct FT_Var_Axis_
-  alignment _ = #alignment struct FT_Var_Axis_
+setCoords
+  :: Storable a
+  => Name
+  -> (FT_Face -> FT_UInt -> Ptr a -> IO FT_Error)
+  -> (FT_Face -> [a] -> IO ())
+setCoords name f face []     =
+  ftError name $ f face 0 nullPtr
 
-  peek ptr =
-    FT_Var_Axis
-      <$> #{peek struct FT_Var_Axis_, name   } ptr
-      <*> #{peek struct FT_Var_Axis_, minimum} ptr
-      <*> #{peek struct FT_Var_Axis_, def    } ptr
-      <*> #{peek struct FT_Var_Axis_, maximum} ptr
-      <*> #{peek struct FT_Var_Axis_, tag    } ptr
-      <*> #{peek struct FT_Var_Axis_, strid  } ptr
-
-  poke ptr val = do
-    #{poke struct FT_Var_Axis_, name   } ptr $ val^.name
-    #{poke struct FT_Var_Axis_, minimum} ptr $ val^.minimum_
-    #{poke struct FT_Var_Axis_, def    } ptr $ val^.def
-    #{poke struct FT_Var_Axis_, maximum} ptr $ val^.maximum_
-    #{poke struct FT_Var_Axis_, tag    } ptr $ val^.tag
-    #{poke struct FT_Var_Axis_, strid  } ptr $ val^.strid
+setCoords name f face coords =
+  withArray coords $ ftError name . f face (fromIntegral $ length coords)
 
 
 
-instance Storable FT_Var_Named_Style where
-  sizeOf _    = #size      struct FT_Var_Named_Style_
-  alignment _ = #alignment struct FT_Var_Named_Style_
-
-  peek ptr =
-    FT_Var_Named_Style
-      <$> #{peek struct FT_Var_Named_Style_, coords} ptr
-      <*> #{peek struct FT_Var_Named_Style_, strid } ptr
-      <*> #{peek struct FT_Var_Named_Style_, psid  } ptr
-
-  poke ptr val = do
-    #{poke struct FT_Var_Named_Style_, coords} ptr $ val^.coords
-    #{poke struct FT_Var_Named_Style_, strid } ptr $ val^.strid
-    #{poke struct FT_Var_Named_Style_, psid  } ptr $ val^.psid
+getCoords
+  :: Storable a
+  => Name
+  -> (FT_Face -> FT_UInt -> Ptr a -> IO FT_Error)
+  -> (FT_Face -> FT_UInt -> IO [a])
+getCoords name f = \face num ->
+  allocaArray (fromIntegral num) $ \coordsPtr -> do
+    ftError name $ f face num coordsPtr
+    peekArray (fromIntegral num) coordsPtr
 
 
 
-instance Storable FT_MM_Var where
-  sizeOf _    = #size      struct FT_MM_Var_
-  alignment _ = #alignment struct FT_MM_Var_
+ft_Set_MM_Design_Coordinates
+  :: FT_Face   -- ^ face
+  -> [FT_Long] -- ^ coords
+  -> IO ()
+ft_Set_MM_Design_Coordinates =
+  setCoords 'ft_Set_MM_Design_Coordinates ft_Set_MM_Design_Coordinates'
 
-  peek ptr =
-    FT_MM_Var
-      <$> #{peek struct FT_MM_Var_, num_axis       } ptr
-      <*> #{peek struct FT_MM_Var_, num_designs    } ptr
-      <*> #{peek struct FT_MM_Var_, num_namedstyles} ptr
-      <*> #{peek struct FT_MM_Var_, axis           } ptr
-      <*> #{peek struct FT_MM_Var_, namedstyle     } ptr
 
-  poke ptr val = do
-    #{poke struct FT_MM_Var_, num_axis       } ptr $ val^.num_axis
-    #{poke struct FT_MM_Var_, num_designs    } ptr $ val^.num_designs
-    #{poke struct FT_MM_Var_, num_namedstyles} ptr $ val^.num_namedstyles
-    #{poke struct FT_MM_Var_, axis           } ptr $ val^.axis
-    #{poke struct FT_MM_Var_, namedstyle     } ptr $ val^.namedstyle
+
+ft_Set_Var_Design_Coordinates                                                                     :: FT_Face   -- ^ face
+  -> [FT_Fixed] -- ^ coords
+  -> IO ()
+ft_Set_Var_Design_Coordinates =
+  setCoords 'ft_Set_Var_Design_Coordinates ft_Set_Var_Design_Coordinates'
+
+
+
+ft_Get_Var_Design_Coordinates
+  :: FT_Face       -- ^ face
+  -> FT_UInt       -- ^ num_coords
+  -> IO [FT_Fixed] -- ^ coords
+ft_Get_Var_Design_Coordinates =
+  getCoords 'ft_Get_Var_Design_Coordinates ft_Get_Var_Design_Coordinates'
+
+
+
+ft_Set_MM_Blend_Coordinates
+  :: FT_Face    -- ^ face,
+  -> [FT_Fixed] -- ^ coords 
+  -> IO ()
+ft_Set_MM_Blend_Coordinates =
+  setCoords 'ft_Set_MM_Blend_Coordinates ft_Set_MM_Blend_Coordinates'
+
+
+
+ft_Get_MM_Blend_Coordinates
+  :: FT_Face       -- ^ face
+  -> FT_UInt       -- ^ num_coords
+  -> IO [FT_Fixed] -- ^ coords
+ft_Get_MM_Blend_Coordinates =
+  getCoords 'ft_Get_MM_Blend_Coordinates ft_Get_MM_Blend_Coordinates'
+
+
+
+ft_Set_Var_Blend_Coordinates
+  :: FT_Face    -- ^ face,
+  -> [FT_Fixed] -- ^ coords 
+  -> IO ()
+ft_Set_Var_Blend_Coordinates = ft_Set_MM_Blend_Coordinates
+
+
+
+ft_Get_Var_Blend_Coordinates  
+  :: FT_Face       -- ^ face
+  -> FT_UInt       -- ^ num_coords
+  -> IO [FT_Fixed] -- ^ coords
+ft_Get_Var_Blend_Coordinates = ft_Get_MM_Blend_Coordinates
+
+
+
+ft_Set_MM_WeightVector
+  :: FT_Face    -- ^ face
+  -> [FT_Fixed] -- ^ weightvector
+  -> IO ()
+ft_Set_MM_WeightVector =
+  setCoords 'ft_Set_MM_WeightVector ft_Set_MM_WeightVector'
+
+
+
+ft_Get_MM_WeightVector
+  :: FT_Face       -- ^ face
+  -> FT_UInt       -- ^ len
+  -> IO [FT_Fixed] -- ^ weightvector
+ft_Get_MM_WeightVector face len =
+  with len $ \lenPtr ->
+    allocaArray (fromIntegral len) $ \coordsPtr -> do
+      ftError 'ft_Get_MM_WeightVector $ do
+        err <- ft_Get_MM_WeightVector' face lenPtr coordsPtr
+        case err of
+          FT_Err_Invalid_Argument -> ft_Get_MM_WeightVector' face lenPtr coordsPtr
+          _                       -> return err
+      peekArray (fromIntegral len) coordsPtr
+  
+
+
+pattern FT_VAR_AXIS_FLAG_HIDDEN
+     :: FT_UInt
+pattern FT_VAR_AXIS_FLAG_HIDDEN = #const FT_VAR_AXIS_FLAG_HIDDEN
+
+
+
+ft_Get_Var_Axis_Flags
+  :: Ptr FT_MM_Var -- ^ master
+  -> FT_UInt       -- ^ axis_index
+  -> IO FT_UInt    -- ^ flags
+ft_Get_Var_Axis_Flags =
+  autoAllocaError 'ft_Get_Var_Axis_Flags ft_Get_Var_Axis_Flags'
+
+
+
+ft_Set_Named_Instance
+  :: FT_Face -- ^ face
+  -> FT_UInt -- ^ instance_index
+  -> IO ()
+ft_Set_Named_Instance =
+  autoError 'ft_Set_Named_Instance ft_Set_Named_Instance'

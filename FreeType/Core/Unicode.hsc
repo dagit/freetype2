@@ -1,11 +1,21 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module FreeType.Core.Unicode where
+module FreeType.Core.Unicode
+  ( -- ** FT_Face_GetCharVariantIndex
+    ft_Face_GetCharVariantIndex
+    -- ** FT_Face_GetCharVariantIsDefault
+  , ft_Face_GetCharVariantIsDefault
+    -- ** FT_Face_GetVariantSelectors
+  , ft_Face_GetVariantSelectors
+    -- ** FT_Face_GetVariantsOfChar
+  , ft_Face_GetVariantsOfChar
+    -- ** FT_Face_GetCharsOfVariant
+  , ft_Face_GetCharsOfVariant
+  ) where
 
-import           FreeType.Circular
-import           FreeType.Core.Types
+import           FreeType.Circular.Types
+import           FreeType.Core.Types.Types
 
-import           Foreign.C.Types
 import           Foreign.Ptr
 
 #include "ft2build.h"

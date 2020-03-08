@@ -3,17 +3,11 @@
 
 module FreeType.Miscellaneous.TrueType where
 
-import           FreeType.Core.Base
-import           FreeType.Core.Types
-
-import           Foreign.C.Types
+import           FreeType.Core.Base.Types
+import           FreeType.Miscellaneous.TrueType.Types
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
-
-#include "freetype/ftmodapi.h"
-
-type FT_TrueTypeEngineType = FT_UInt
+#include FT_MODULE_H
 
 pattern FT_TRUETYPE_ENGINE_TYPE_NONE
       , FT_TRUETYPE_ENGINE_TYPE_UNPATENTED

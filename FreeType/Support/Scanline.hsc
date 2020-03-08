@@ -1,82 +1,53 @@
-{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE PatternSynonyms #-}
 
 module FreeType.Support.Scanline
-  ( module FreeType.Support.Scanline.Internal
+  ( -- ** FT_Raster
+    FT_Raster
+  , FT_RasterRec
+    -- ** FT_Span
+  , FT_Span (..)
+    -- ** FT_SpanFunc
+  , FT_SpanFunc
+    -- ** FT_Raster_Params
+  , FT_Raster_Params (..)
+    -- ** FT_RASTER_FLAG_XXX
+  , pattern FT_RASTER_FLAG_DEFAULT
+  , pattern FT_RASTER_FLAG_AA
+  , pattern FT_RASTER_FLAG_DIRECT
+  , pattern FT_RASTER_FLAG_CLIP
+    -- ** FT_Raster_NewFunc
+  , FT_Raster_NewFunc
+    -- ** FT_Raster_DoneFunc
+  , FT_Raster_DoneFunc
+    -- ** FT_Raster_ResetFunc
+  , FT_Raster_ResetFunc
+    -- ** FT_Raster_SetModeFunc
+  , FT_Raster_SetModeFunc
+    -- ** FT_Raster_RenderFunc
+  , FT_Raster_RenderFunc
+    -- ** FT_Raster_Funcs
+  , FT_Raster_Funcs (..)
+    -- ** FT_Raster_BitTest_Func
+  , FT_Raster_BitTest_Func
+    -- ** FT_Raster_BitSet_Func
+  , FT_Raster_BitSet_Func
   ) where
 
-import           FreeType.Circular ()
-import           FreeType.Support.Scanline.Internal
-import           FreeType.Lens
+import           FreeType.Support.Scanline.Types
 
-import           Foreign.Storable
-import           Lens.Micro ((^.))
+import           Data.Int
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
-instance Storable FT_Span where
-  sizeOf    _ = #size      struct FT_Span_
-  alignment _ = #alignment struct FT_Span_
-
-  peek ptr =
-    FT_Span
-      <$> #{peek struct FT_Span_, x       } ptr
-      <*> #{peek struct FT_Span_, len     } ptr
-      <*> #{peek struct FT_Span_, coverage} ptr
-
-  poke ptr val = do
-    #{poke struct FT_Span_, x       } ptr $ val^.x
-    #{poke struct FT_Span_, len     } ptr $ val^.len
-    #{poke struct FT_Span_, coverage} ptr $ val^.coverage
 
 
-
-instance Storable FT_Raster_Params where
-  sizeOf    _ = #size      struct FT_Raster_Params_
-  alignment _ = #alignment struct FT_Raster_Params_
-
-  peek ptr =
-    FT_Raster_Params
-      <$> #{peek struct FT_Raster_Params_, target     } ptr
-      <*> #{peek struct FT_Raster_Params_, source     } ptr
-      <*> #{peek struct FT_Raster_Params_, flags      } ptr
-      <*> #{peek struct FT_Raster_Params_, gray_spans } ptr
-      <*> #{peek struct FT_Raster_Params_, black_spans} ptr
-      <*> #{peek struct FT_Raster_Params_, bit_test   } ptr
-      <*> #{peek struct FT_Raster_Params_, bit_set    } ptr
-      <*> #{peek struct FT_Raster_Params_, user       } ptr
-      <*> #{peek struct FT_Raster_Params_, clip_box   } ptr
-
-  poke ptr val = do
-    #{poke struct FT_Raster_Params_, target     } ptr $ val^.target
-    #{poke struct FT_Raster_Params_, source     } ptr $ val^.source
-    #{poke struct FT_Raster_Params_, flags      } ptr $ val^.flags
-    #{poke struct FT_Raster_Params_, gray_spans } ptr $ val^.gray_spans
-    #{poke struct FT_Raster_Params_, black_spans} ptr $ val^.black_spans
-    #{poke struct FT_Raster_Params_, bit_test   } ptr $ val^.bit_test
-    #{poke struct FT_Raster_Params_, bit_set    } ptr $ val^.bit_set
-    #{poke struct FT_Raster_Params_, user       } ptr $ val^.user
-    #{poke struct FT_Raster_Params_, clip_box   } ptr $ val^.clip_box
-
-
-
-instance Storable FT_Raster_Funcs where
-  sizeOf    _ = #size      struct FT_Raster_Funcs_
-  alignment _ = #alignment struct FT_Raster_Funcs_
-
-  peek ptr =
-    FT_Raster_Funcs
-      <$> #{peek struct FT_Raster_Funcs_, glyph_format   } ptr
-      <*> #{peek struct FT_Raster_Funcs_, raster_new     } ptr
-      <*> #{peek struct FT_Raster_Funcs_, raster_reset   } ptr
-      <*> #{peek struct FT_Raster_Funcs_, raster_set_mode} ptr
-      <*> #{peek struct FT_Raster_Funcs_, raster_render  } ptr
-      <*> #{peek struct FT_Raster_Funcs_, raster_done    } ptr
-
-  poke ptr val = do
-    #{poke struct FT_Raster_Funcs_, glyph_format   } ptr $ val^.glyph_format
-    #{poke struct FT_Raster_Funcs_, raster_new     } ptr $ val^.raster_new
-    #{poke struct FT_Raster_Funcs_, raster_reset   } ptr $ val^.raster_reset
-    #{poke struct FT_Raster_Funcs_, raster_set_mode} ptr $ val^.raster_set_mode
-    #{poke struct FT_Raster_Funcs_, raster_render  } ptr $ val^.raster_render
-    #{poke struct FT_Raster_Funcs_, raster_done    } ptr $ val^.raster_done
+pattern FT_RASTER_FLAG_DEFAULT
+      , FT_RASTER_FLAG_AA
+      , FT_RASTER_FLAG_DIRECT
+      , FT_RASTER_FLAG_CLIP
+     :: #type int
+pattern FT_RASTER_FLAG_DEFAULT = #const FT_RASTER_FLAG_DEFAULT
+pattern FT_RASTER_FLAG_AA      = #const FT_RASTER_FLAG_AA
+pattern FT_RASTER_FLAG_DIRECT  = #const FT_RASTER_FLAG_DIRECT
+pattern FT_RASTER_FLAG_CLIP    = #const FT_RASTER_FLAG_CLIP

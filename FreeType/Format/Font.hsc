@@ -1,19 +1,22 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE TemplateHaskell #-}
 
-module FreeType.Format.Font where
+module FreeType.Format.Font
+  ( -- ** ft_Get_Font_Format
+    ft_Get_Font_Format
+  ) where
 
-import           FreeType.Core.Base
+import           FreeType.Core.Base.Types
+import           FreeType.Format.Font.Internal
 
-import           Foreign.C.Types
+import           Foreign.C.String
 import           Foreign.Ptr
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
-foreign import ccall "FT_Get_Font_Format"
-  ft_Get_Font_Format :: FT_Face -> IO (Ptr CChar)
-
-
-
-foreign import ccall "FT_Get_X11_Font_Format"
-  ft_Get_X11_Font_Format :: FT_Face -> IO (Ptr CChar)
+ft_Get_Font_Format
+  :: FT_Face        -- ^ face
+  -> IO String
+ft_Get_Font_Format face =
+  peekCString . castPtr =<< ft_Get_Font_Format' face

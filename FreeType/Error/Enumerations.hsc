@@ -1,14 +1,21 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
+module FreeType.Error.Enumerations
+  ( -- ** FT_Error_String
+    ft_Error_String
+  ) where
 
-module FreeType.Error.Enumerations where
+import           FreeType.Core.Types.Types
+import           FreeType.Error.Enumerations.Internal
 
-import           FreeType.Core.Types
-
-import           Foreign.C.Types
 import           Foreign.C.String
+import           Foreign.Ptr
+import           System.IO.Unsafe
 
-#include "ft2build.h"
-#include FT_FREETYPE_H
 
-foreign import ccall "FT_Error_String"
-  ft_Error_String :: FT_Error -> CString
+
+ft_Error_String :: FT_Error -> Maybe String
+ft_Error_String err =
+  unsafePerformIO $ do
+    ptr <- ft_Error_String' err
+    if ptr == nullPtr
+      then return Nothing
+      else Just <$> peekCString (castPtr ptr)

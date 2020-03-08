@@ -1,14 +1,16 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module FreeType.Support.BZIP2 where
 
-import           FreeType.Core.Types
-import           FreeType.Support.System
+import           FreeType.Exception.Internal
+import           FreeType.Support.BZIP2.Internal
+import           FreeType.Support.System.Types
 
-import           Foreign.C.Types
 
-#include "ft2build.h"
-#include FT_BZIP2_H
 
-foreign import ccall "FT_Stream_OpenBzip2"
-  ft_Stream_OpenBzip2 :: FT_Stream -> FT_Stream -> IO FT_Error
+ft_Stream_OpenBzip2
+  :: FT_Stream -- ^ stream
+  -> FT_Stream -- ^ source
+  -> IO ()
+ft_Stream_OpenBzip2 =
+  autoError 'ft_Stream_OpenBzip2 ft_Stream_OpenBzip2'

@@ -1,29 +1,20 @@
-{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
 
 module FreeType.Core.Layer
-  ( module FreeType.Core.Layer.Internal
+  ( -- ** FT_LayerIterator
+    FT_LayerIterator (..)
+    -- ** FT_Get_Color_Glyph_Layer
+  , ft_Get_Color_Glyph_Layer
   ) where
 
-import           FreeType.Core.Layer.Internal
-import           FreeType.Lens
+import           FreeType.Core.Base.Types
+import           FreeType.Core.Layer.Types
+import           FreeType.Core.Types.Types
 
-import           Foreign.Storable
-import           Lens.Micro ((^.))
+import           Foreign.Ptr
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
-instance Storable FT_LayerIterator where
-  sizeOf _    = #size      struct FT_LayerIterator_
-  alignment _ = #alignment struct FT_LayerIterator_
-
-  peek ptr =
-    FT_LayerIterator
-      <$> #{peek struct FT_LayerIterator_, num_layers} ptr
-      <*> #{peek struct FT_LayerIterator_, layer     } ptr
-      <*> #{peek struct FT_LayerIterator_, p         } ptr
-
-  poke ptr val = do
-    #{poke struct FT_LayerIterator_, num_layers} ptr $ val^.num_layers
-    #{poke struct FT_LayerIterator_, layer     } ptr $ val^.layer
-    #{poke struct FT_LayerIterator_, p         } ptr $ val^.p
+foreign import ccall "FT_Get_Color_Glyph_Layer"
+  ft_Get_Color_Glyph_Layer :: FT_Face -> FT_UInt -> Ptr FT_UInt -> Ptr FT_UInt -> Ptr FT_LayerIterator -> IO FT_Bool

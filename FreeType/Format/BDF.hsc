@@ -1,37 +1,58 @@
-{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module FreeType.Format.BDF
-  ( module FreeType.Format.BDF.Internal
+  ( -- ** BDF_PropertyType
+    BDF_PropertyType
+  , pattern BDF_PROPERTY_TYPE_NONE
+  , pattern BDF_PROPERTY_TYPE_ATOM
+  , pattern BDF_PROPERTY_TYPE_INTEGER
+  , pattern BDF_PROPERTY_TYPE_CARDINAL
+    -- ** BDF_Property
+  , BDF_Property
+    -- ** BDF_PropertyRec
+  , BDF_PropertyRec (..)
+    -- ** FT_Get_BDF_Charset_ID
+  , ft_Get_BDF_Charset_ID
+    -- ** FT_Get_BDF_Property
+  , ft_Get_BDF_Property
   ) where
 
+import           FreeType.Core.Base.Types
+import           FreeType.Exception.Internal
 import           FreeType.Format.BDF.Internal
-import           FreeType.Lens
+import           FreeType.Format.BDF.Types
 
+import           Foreign.C.String
+import           Foreign.Marshal.Alloc
+import           Foreign.Ptr
 import           Foreign.Storable
-import           Lens.Micro ((^.))
 
 #include "ft2build.h"
 #include FT_BDF_H
 
-instance Storable BDF_PropertyRec where
-  sizeOf _    = #size struct BDF_PropertyRec_
-  alignment _ = #size struct BDF_PropertyRec_
+ft_Get_BDF_Charset_ID
+  :: FT_Face             -- ^ face
+  -> IO (String, String) -- ^ (charset_encoding, charset_registry)
+ft_Get_BDF_Charset_ID face =
+  alloca $ \encodingPtr ->
+    alloca $ \registryPtr -> do
+      ftError 'ft_Get_BDF_Charset_ID
+        $ ft_Get_BDF_Charset_ID' face encodingPtr registryPtr
+      (,)
+        <$> (peekCString . castPtr =<< peek encodingPtr)
+        <*> (peekCString . castPtr =<< peek registryPtr)
 
-  peek ptr =
-    BDF_PropertyRec
-      <$> #{peek struct BDF_PropertyRec_, type      } ptr
-      <*> #{peek struct BDF_PropertyRec_, u.atom    } ptr
-      <*> #{peek struct BDF_PropertyRec_, u.integer } ptr
-      <*> #{peek struct BDF_PropertyRec_, u.cardinal} ptr
 
-  poke ptr val = do
-    #{poke struct BDF_PropertyRec_, type} ptr $ val^.type_
-    case () of
-      () | val^.type_ == BDF_PROPERTY_TYPE_ATOM     ->
-             #{poke struct BDF_PropertyRec_, u.atom    } ptr $ val^.atom
-         | val^.type_ == BDF_PROPERTY_TYPE_INTEGER  ->
-             #{poke struct BDF_PropertyRec_, u.integer } ptr $ val^.integer
-         | val^.type_ == BDF_PROPERTY_TYPE_CARDINAL ->
-             #{poke struct BDF_PropertyRec_, u.cardinal} ptr $ val^.cardinal
-         | otherwise                                ->
-             return ()
+
+ft_Get_BDF_Property
+  :: FT_Face            -- ^ face
+  -> String             -- ^ prop_name
+  -> IO BDF_PropertyRec -- ^ property
+ft_Get_BDF_Property face name =
+  withCString name $ \namePtr ->
+    alloca $ \propPtr -> do
+      ftError 'ft_Get_BDF_Property
+        $ ft_Get_BDF_Property' face (castPtr namePtr) propPtr
+      peek propPtr

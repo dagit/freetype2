@@ -1,21 +1,43 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE TemplateHaskell #-}
 
-module FreeType.Miscellaneous.OpenType where
+module FreeType.Miscellaneous.OpenType
+  ( -- ** FT_OpenType_Validate
+    ft_OpenType_Validate
+    -- ** FT_OpenType_Free
+  , ft_OpenType_Free
+    -- ** FT_VALIDATE_OTXXX
+  , pattern FT_VALIDATE_BASE
+  , pattern FT_VALIDATE_GDEF
+  , pattern FT_VALIDATE_GPOS
+  , pattern FT_VALIDATE_GSUB
+  , pattern FT_VALIDATE_JSTF
+  , pattern FT_VALIDATE_MATH
+  , pattern FT_VALIDATE_OT
+  ) where
 
 import           FreeType.Core.Base
-import           FreeType.Core.Types
+import           FreeType.Core.Types.Types
+import           FreeType.Exception.Internal
+import           FreeType.Miscellaneous.OpenType.Internal
 
-import           Foreign.C.Types
 import           Foreign.Ptr
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
+#include FT_OPENTYPE_VALIDATE_H
 
-#include "freetype/ftotval.h"
-
-foreign import ccall "FT_OpenType_Validate"
-  ft_OpenType_Validate :: FT_Face -> FT_UInt -> Ptr FT_Bytes -> Ptr FT_Bytes -> Ptr FT_Bytes -> Ptr FT_Bytes -> Ptr FT_Bytes -> IO FT_Error
+ft_OpenType_Validate
+  :: FT_Face      -- ^ face
+  -> FT_UInt      -- ^ validation_flags
+  -> Ptr FT_Bytes -- ^ BASE_table
+  -> Ptr FT_Bytes -- ^ GDEF_table
+  -> Ptr FT_Bytes -- ^ GPOS_table
+  -> Ptr FT_Bytes -- ^ GSUB_table
+  -> Ptr FT_Bytes -- ^ JSTF_table
+  -> IO ()
+ft_OpenType_Validate =
+  autoError 'ft_OpenType_Validate ft_OpenType_Validate'
 
 
 

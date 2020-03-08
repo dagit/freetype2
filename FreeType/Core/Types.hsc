@@ -1,137 +1,143 @@
-{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE PatternSynonyms #-}
+
+{- | Please refer to the
+     [Core API > Basic Data Types](https://www.freetype.org/freetype2/docs/reference/ft2-basic_types.html)
+     chapter of the reference.
+
+ -}
 
 module FreeType.Core.Types
-  ( module FreeType.Core.Types.Internal
+  ( -- ** FT_Byte
+    FT_Byte
+    -- ** FT_Bytes
+  , FT_Bytes
+    -- ** FT_Char
+  , FT_Char
+    -- ** FT_Int
+  , FT_Int
+    -- ** FT_UInt
+  , FT_UInt
+    -- ** FT_Int16
+  , FT_Int16
+    -- ** FT_UInt16
+  , FT_UInt16
+    -- ** FT_Int32
+  , FT_Int32
+    -- ** FT_UInt32
+  , FT_UInt32
+    -- ** FT_Int64
+  , FT_Int64
+    -- ** FT_UInt64
+  , FT_UInt64
+    -- ** FT_Short
+  , FT_Short
+    -- ** FT_UShort
+  , FT_UShort
+    -- ** FT_Long
+  , FT_Long
+    -- ** FT_ULong
+  , FT_ULong
+    -- ** FT_Bool
+  , FT_Bool
+    -- ** FT_Offset
+  , FT_Offset
+    -- ** FT_PtrDist
+  , FT_PtrDist
+    -- ** FT_String
+  , FT_String
+    -- ** FT_Tag
+  , FT_Tag
+    -- ** FT_Error
+  , FT_Error
+    -- ** FT_Fixed
+  , FT_Fixed
+    -- ** FT_Pointer
+  , FT_Pointer
+    -- ** FT_Pos
+  , FT_Pos
+    -- ** FT_Vector
+  , FT_Vector (..)
+    -- ** FT_BBox
+  , FT_BBox (..)
+    -- ** FT_Matrix
+  , FT_Matrix (..)
+    -- ** FT_FWord
+  , FT_FWord
+    -- ** FT_UFWord
+  , FT_UFWord
+    -- ** FT_F2Dot14
+  , FT_F2Dot14
+    -- ** FT_UnitVector
+  , FT_UnitVector (..)
+    -- ** FT_F26Dot6
+  , FT_F26Dot6
+    -- ** FT_Data
+  , FT_Data (..)
+    -- ** FT_MAKE_TAG
+  , pattern FT_MAKE_TAG
+    -- ** FT_Generic
+  , FT_Generic (..)
+    -- ** FT_Generic_Finalizer
+  , FT_Generic_Finalizer
+    -- ** FT_Bitmap
+  , FT_Bitmap (..)
+    -- ** FT_Pixel_Mode
+  , pattern FT_PIXEL_MODE_NONE
+  , pattern FT_PIXEL_MODE_MONO
+  , pattern FT_PIXEL_MODE_GRAY
+  , pattern FT_PIXEL_MODE_GRAY2
+  , pattern FT_PIXEL_MODE_GRAY4
+  , pattern FT_PIXEL_MODE_LCD
+  , pattern FT_PIXEL_MODE_LCD_V
+  , pattern FT_PIXEL_MODE_BGRA
+    -- ** FT_Glyph_Format
+  , FT_Glyph_Format
+  , pattern FT_GLYPH_FORMAT_NONE
+  , pattern FT_GLYPH_FORMAT_COMPOSITE
+  , pattern FT_GLYPH_FORMAT_BITMAP
+  , pattern FT_GLYPH_FORMAT_OUTLINE
+  , pattern FT_GLYPH_FORMAT_PLOTTER
+    -- ** FT_IMAGE_TAG
+    -- | [FT_IMAGE_TAG](https://www.freetype.org/freetype2/docs/reference/ft2-basic_types.html#ft_image_tag)
+    --   is simply 'FT_MAKE_TAG' combined with a variable assignment.
   ) where
 
-import           FreeType.Core.Types.Internal
-import           FreeType.Lens
+import           FreeType.Core.Types.Types
 
-import           Foreign.Storable
-import           Lens.Micro ((^.))
+import           Data.Word
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
-
-instance Storable FT_Vector where
-  sizeOf _    = #size      struct FT_Vector_
-  alignment _ = #alignment struct FT_Vector_
-
-  peek ptr =
-    FT_Vector
-      <$> #{peek struct FT_Vector_, x} ptr
-      <*> #{peek struct FT_Vector_, y} ptr
-
-  poke ptr val = do
-    #{poke struct FT_Vector_, x} ptr $ val^.x
-    #{poke struct FT_Vector_, y} ptr $ val^.y
+#include FT_IMAGE_H
 
 
-
-instance Storable FT_BBox where
-  sizeOf    _ = #size      struct FT_BBox_
-  alignment _ = #alignment struct FT_BBox_
-
-  peek ptr =
-    FT_BBox
-      <$> #{peek struct FT_BBox_, xMin} ptr
-      <*> #{peek struct FT_BBox_, yMin} ptr
-      <*> #{peek struct FT_BBox_, xMax} ptr
-      <*> #{peek struct FT_BBox_, yMax} ptr
-
-  poke ptr val = do
-    #{poke struct FT_BBox_, xMin} ptr $ val^.xMin
-    #{poke struct FT_BBox_, yMin} ptr $ val^.yMin
-    #{poke struct FT_BBox_, xMax} ptr $ val^.xMax
-    #{poke struct FT_BBox_, yMax} ptr $ val^.yMax
+pattern FT_PIXEL_MODE_NONE
+      , FT_PIXEL_MODE_MONO
+      , FT_PIXEL_MODE_GRAY
+      , FT_PIXEL_MODE_GRAY2
+      , FT_PIXEL_MODE_GRAY4
+      , FT_PIXEL_MODE_LCD
+      , FT_PIXEL_MODE_LCD_V
+      , FT_PIXEL_MODE_BGRA
+     :: #type enum FT_Pixel_Mode_
+pattern FT_PIXEL_MODE_NONE  = #const FT_PIXEL_MODE_NONE
+pattern FT_PIXEL_MODE_MONO  = #const FT_PIXEL_MODE_MONO
+pattern FT_PIXEL_MODE_GRAY  = #const FT_PIXEL_MODE_GRAY
+pattern FT_PIXEL_MODE_GRAY2 = #const FT_PIXEL_MODE_GRAY2
+pattern FT_PIXEL_MODE_GRAY4 = #const FT_PIXEL_MODE_GRAY4
+pattern FT_PIXEL_MODE_LCD   = #const FT_PIXEL_MODE_LCD
+pattern FT_PIXEL_MODE_LCD_V = #const FT_PIXEL_MODE_LCD_V
+pattern FT_PIXEL_MODE_BGRA  = #const FT_PIXEL_MODE_BGRA
 
 
 
-instance Storable FT_Matrix where
-  sizeOf _    = #size      struct FT_Matrix_
-  alignment _ = #alignment struct FT_Matrix_
-
-  peek ptr =
-    FT_Matrix
-      <$> #{peek struct FT_Matrix_, xx} ptr
-      <*> #{peek struct FT_Matrix_, xy} ptr
-      <*> #{peek struct FT_Matrix_, yx} ptr
-      <*> #{peek struct FT_Matrix_, yy} ptr
-
-  poke ptr val = do
-    #{poke struct FT_Matrix_, xx} ptr $ val^.xx
-    #{poke struct FT_Matrix_, xy} ptr $ val^.xy
-    #{poke struct FT_Matrix_, yx} ptr $ val^.yx
-    #{poke struct FT_Matrix_, yy} ptr $ val^.yy
-
-
-
-instance Storable FT_UnitVector where
-  sizeOf _    = #size      struct FT_UnitVector_
-  alignment _ = #alignment struct FT_UnitVector_
-
-  peek ptr =
-    FT_UnitVector
-      <$> #{peek struct FT_UnitVector_, x} ptr
-      <*> #{peek struct FT_UnitVector_, y} ptr
-
-  poke ptr val = do
-    #{poke struct FT_UnitVector_, x} ptr $ val^.x
-    #{poke struct FT_UnitVector_, y} ptr $ val^.y
-
-
-
-instance Storable FT_Data where
-  sizeOf _    = #size      struct FT_Data_
-  alignment _ = #alignment struct FT_Data_
-
-  peek ptr =
-    FT_Data
-      <$> #{peek struct FT_Data_, pointer} ptr
-      <*> #{peek struct FT_Data_, length } ptr
-
-  poke ptr val = do
-    #{poke struct FT_Data_, pointer} ptr $ val^.pointer
-    #{poke struct FT_Data_, length } ptr $ val^.length_
-
-
-
-instance Storable FT_Generic where
-  sizeOf    _ = #size      struct FT_Generic_
-  alignment _ = #alignment struct FT_Generic_
-
-  peek ptr = do
-    FT_Generic
-      <$> #{peek struct FT_Generic_, data     } ptr
-      <*> #{peek struct FT_Generic_, finalizer} ptr
-
-  poke ptr val = do
-    #{poke struct FT_Generic_, data     } ptr $ val^.data_
-    #{poke struct FT_Generic_, finalizer} ptr $ val^.finalizer
-
-
-
-instance Storable FT_Bitmap where
-  sizeOf _    = #size      struct FT_Bitmap_
-  alignment _ = #alignment struct FT_Bitmap_
-
-  peek ptr =
-    FT_Bitmap
-      <$> #{peek struct FT_Bitmap_, rows        } ptr
-      <*> #{peek struct FT_Bitmap_, width       } ptr
-      <*> #{peek struct FT_Bitmap_, pitch       } ptr
-      <*> #{peek struct FT_Bitmap_, buffer      } ptr
-      <*> #{peek struct FT_Bitmap_, num_grays   } ptr
-      <*> #{peek struct FT_Bitmap_, pixel_mode  } ptr
-      <*> #{peek struct FT_Bitmap_, palette_mode} ptr
-      <*> #{peek struct FT_Bitmap_, palette     } ptr
-
-  poke ptr val = do
-    #{poke struct FT_Bitmap_, rows        } ptr $ val^.rows
-    #{poke struct FT_Bitmap_, width       } ptr $ val^.width
-    #{poke struct FT_Bitmap_, pitch       } ptr $ val^.pitch
-    #{poke struct FT_Bitmap_, buffer      } ptr $ val^.buffer
-    #{poke struct FT_Bitmap_, num_grays   } ptr $ val^.num_grays
-    #{poke struct FT_Bitmap_, pixel_mode  } ptr $ val^.pixel_mode
-    #{poke struct FT_Bitmap_, palette_mode} ptr $ val^.palette_mode
-    #{poke struct FT_Bitmap_, palette     } ptr $ val^.palette
+pattern FT_GLYPH_FORMAT_NONE
+      , FT_GLYPH_FORMAT_COMPOSITE
+      , FT_GLYPH_FORMAT_BITMAP
+      , FT_GLYPH_FORMAT_OUTLINE
+      , FT_GLYPH_FORMAT_PLOTTER
+     :: FT_Glyph_Format
+pattern FT_GLYPH_FORMAT_NONE      = #const FT_GLYPH_FORMAT_NONE
+pattern FT_GLYPH_FORMAT_COMPOSITE = #const FT_GLYPH_FORMAT_COMPOSITE
+pattern FT_GLYPH_FORMAT_BITMAP    = #const FT_GLYPH_FORMAT_BITMAP
+pattern FT_GLYPH_FORMAT_OUTLINE   = #const FT_GLYPH_FORMAT_OUTLINE
+pattern FT_GLYPH_FORMAT_PLOTTER   = #const FT_GLYPH_FORMAT_PLOTTER

@@ -4,9 +4,7 @@
 module FreeType.Format.Gasp where
 
 import           FreeType.Core.Base
-import           FreeType.Core.Types
-
-import           Foreign.C.Types
+import           FreeType.Core.Types.Types
 
 #include "ft2build.h"
 #include FT_FREETYPE_H

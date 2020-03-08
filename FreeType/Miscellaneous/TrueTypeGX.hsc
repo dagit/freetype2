@@ -1,21 +1,54 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE TemplateHaskell #-}
 
-module FreeType.Miscellaneous.TrueTypeGX where
+module FreeType.Miscellaneous.TrueTypeGX
+  ( -- ** FT_TrueTypeGX_Validate
+    ft_TrueTypeGX_Validate
+    -- ** FT_TrueTypeGX_Free
+  , ft_TrueTypeGX_Free
+    -- ** FT_ClassicKern_Validate
+  , ft_ClassicKern_Validate
+    -- ** FT_ClassicKern_Free
+  , ft_ClassicKern_Free
+    -- ** FT_VALIDATE_GX_LENGTH
+  , pattern FT_VALIDATE_GX_LENGTH
+    -- ** FT_VALIDATE_GXXXX
+  , pattern FT_VALIDATE_feat
+  , pattern FT_VALIDATE_mort
+  , pattern FT_VALIDATE_morx
+  , pattern FT_VALIDATE_bsln
+  , pattern FT_VALIDATE_just
+  , pattern FT_VALIDATE_kern
+  , pattern FT_VALIDATE_opbd
+  , pattern FT_VALIDATE_trak
+  , pattern FT_VALIDATE_prop
+  , pattern FT_VALIDATE_lcar
+  , pattern FT_VALIDATE_GX
+    -- ** FT_VALIDATE_CKERNXXX
+  , pattern FT_VALIDATE_MS
+  , pattern FT_VALIDATE_APPLE
+  , pattern FT_VALIDATE_CKERN
+  ) where
 
-import           FreeType.Core.Base
-import           FreeType.Core.Types
+import           FreeType.Core.Base.Types
+import           FreeType.Core.Types.Types
+import           FreeType.Exception.Internal
+import           FreeType.Miscellaneous.TrueTypeGX.Internal
 
-import           Foreign.C.Types
 import           Foreign.Ptr
 
 #include "ft2build.h"
-#include FT_FREETYPE_H
+#include FT_GX_VALIDATE_H
 
-#include "freetype/ftgxval.h"
-
-foreign import ccall "FT_TrueTypeGX_Validate"
-  ft_TrueTypeGX_Validate :: FT_Face -> FT_UInt -> Ptr FT_Bytes -> FT_UInt -> IO FT_Error
+ft_TrueTypeGX_Validate
+  :: FT_Face      -- ^ face
+  -> FT_UInt      -- ^ validation_flags
+  -> Ptr FT_Bytes -- ^ tables
+  -> FT_UInt      -- ^ table_length
+  -> IO ()
+ft_TrueTypeGX_Validate =
+  autoError 'ft_TrueTypeGX_Validate ft_TrueTypeGX_Validate'
 
 
 
@@ -24,8 +57,13 @@ foreign import ccall "FT_TrueTypeGX_Free"
 
 
 
-foreign import ccall "FT_ClassicKern_Validate"
-  ft_ClassicKern_Validate :: FT_Face -> FT_UInt -> Ptr FT_Bytes -> IO FT_Error
+ft_ClassicKern_Validate
+  :: FT_Face      -- ^ face
+  -> FT_UInt      -- ^ validation_flags
+  -> Ptr FT_Bytes -- ^ ckern_table
+  -> IO ()
+ft_ClassicKern_Validate =
+  autoError 'ft_ClassicKern_Validate ft_ClassicKern_Validate'
 
 
 
@@ -66,10 +104,10 @@ pattern FT_VALIDATE_GX   = #const FT_VALIDATE_GX
 
 
 
-pattern VALIDATE_MS
-      , VALIDATE_APPLE
-      , VALIDATE_CKERN
+pattern FT_VALIDATE_MS
+      , FT_VALIDATE_APPLE
+      , FT_VALIDATE_CKERN
      :: FT_UInt
-pattern VALIDATE_MS    = #const FT_VALIDATE_MS
-pattern VALIDATE_APPLE = #const FT_VALIDATE_APPLE
-pattern VALIDATE_CKERN = #const FT_VALIDATE_CKERN
+pattern FT_VALIDATE_MS    = #const FT_VALIDATE_MS
+pattern FT_VALIDATE_APPLE = #const FT_VALIDATE_APPLE
+pattern FT_VALIDATE_CKERN = #const FT_VALIDATE_CKERN
