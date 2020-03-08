@@ -86,45 +86,63 @@ ftc_Manager_New
   -> FT_ULong           -- ^ max_bytes
   -> FTC_Face_Requester -- ^ requester
   -> FT_Pointer         -- ^ req_data
-  -> IO FTC_Manager
+  -> IO FTC_Manager     -- ^ manager
 ftc_Manager_New =
   autoAllocaError 'ftc_Manager_New ftc_Manager_New'
 
 
 
 foreign import ccall "FTC_Manager_Reset"
-  ftc_Manager_Reset :: FTC_Manager -> IO ()
+  ftc_Manager_Reset
+    :: FTC_Manager -- ^ manager
+    -> IO ()
 
 
 
 foreign import ccall "FTC_Manager_Done"
-  ftc_Manager_Done :: FTC_Manager -> IO ()
+  ftc_Manager_Done
+    :: FTC_Manager -- ^ manager
+    -> IO ()
 
 
 
-ftc_Manager_LookupFace :: FTC_Manager -> FTC_FaceID -> IO FT_Face
+ftc_Manager_LookupFace
+  :: FTC_Manager -- ^ manager
+  -> FTC_FaceID  -- ^ face_id
+  -> IO FT_Face  -- ^ face
 ftc_Manager_LookupFace =
   autoAllocaError 'ftc_Manager_LookupFace ftc_Manager_LookupFace'
 
 
 
-ftc_Manager_LookupSize :: FTC_Manager -> FTC_Scaler -> IO FT_Size
+ftc_Manager_LookupSize
+  :: FTC_Manager -- ^ manager
+  -> FTC_Scaler  -- ^ scaler
+  -> IO FT_Size  -- ^ size
 ftc_Manager_LookupSize =
   autoAllocaError 'ftc_Manager_LookupSize ftc_Manager_LookupSize'
 
 
 
 foreign import ccall "FTC_Manager_RemoveFaceID"    
-  ftc_Manager_RemoveFaceID :: FTC_Manager -> FTC_FaceID -> IO ()    
+  ftc_Manager_RemoveFaceID
+    :: FTC_Manager -- ^ manager
+    -> FTC_FaceID  -- ^ face_id
+    -> IO ()    
 
 
 
 foreign import ccall "FTC_Node_Unref"    
-  ftc_Node_Unref :: FTC_Node -> FTC_Manager -> IO ()    
+  ftc_Node_Unref
+    :: FTC_Node    -- ^ node
+    -> FTC_Manager -- ^ manager
+    -> IO ()    
 
 
 
-ftc_ImageCache_New :: FTC_Manager -> IO FTC_ImageCache
+ftc_ImageCache_New
+  :: FTC_Manager       -- ^ manager
+  -> IO FTC_ImageCache -- ^ cache
 ftc_ImageCache_New =
   autoAllocaError 'ftc_ImageCache_New ftc_ImageCache_New'
 
@@ -154,7 +172,9 @@ ftc_ImageCache_Lookup cache type_ gindex =
 
 
 
-ftc_SBitCache_New :: FTC_Manager -> IO FTC_SBitCache
+ftc_SBitCache_New
+  :: FTC_Manager      -- ^ manager
+  -> IO FTC_SBitCache -- ^ acache
 ftc_SBitCache_New =
   autoAllocaError 'ftc_SBitCache_New ftc_SBitCache_New'
 
@@ -170,14 +190,21 @@ ftc_SBitCache_Lookup cache type_ gindex =
 
 
 
-ftc_CMapCache_New :: FTC_Manager -> IO FTC_CMapCache
+ftc_CMapCache_New
+  :: FTC_Manager      -- ^ manager
+  -> IO FTC_CMapCache -- ^ acache
 ftc_CMapCache_New =
   autoAllocaError 'ftc_CMapCache_New ftc_CMapCache_New'
 
 
 
 foreign import ccall "FTC_CMapCache_Lookup"
-  ftc_CMapCache_Lookup :: FTC_CMapCache -> FTC_FaceID -> FT_Int -> FT_UInt32 -> IO FT_UInt
+  ftc_CMapCache_Lookup
+    :: FTC_CMapCache -- ^ cache
+    -> FTC_FaceID    -- ^ face_id
+    -> FT_Int        -- ^ cmap_index
+    -> FT_UInt32     -- ^ char_code
+    -> IO FT_UInt
 
 
 

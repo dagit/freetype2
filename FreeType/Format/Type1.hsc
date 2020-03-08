@@ -123,11 +123,16 @@ import           Foreign.Ptr
 #include FT_TYPE1_TABLES_H
 
 foreign import ccall "FT_Has_PS_Glyph_Names"
-  ft_Has_PS_Glyph_Names :: FT_Face -> IO FT_Int
+  ft_Has_PS_Glyph_Names
+    :: FT_Face   -- ^ face
+    -> IO FT_Int
 
 
 
-ft_Get_PS_Font_Info :: FT_Face -> IO PS_FontInfo
+-- | The returned 'PS_FontInfo' is allocated with 'malloc' and thus must be 'free'd manually
+ft_Get_PS_Font_Info
+  :: FT_Face        -- ^ face
+  -> IO PS_FontInfo -- ^ font_info
 ft_Get_PS_Font_Info face = do
   infoPtr <- malloc
   ftError 'ft_Get_PS_Font_Info $ ft_Get_PS_Font_Info' face infoPtr
@@ -135,7 +140,10 @@ ft_Get_PS_Font_Info face = do
 
 
 
-ft_Get_PS_Font_Private :: FT_Face -> IO PS_Private
+-- | The returned 'PS_Private' is allocate with 'malloc' and thus must be 'free'd manually
+ft_Get_PS_Font_Private
+  :: FT_Face       -- ^ face
+  -> IO PS_Private -- ^ font_private
 ft_Get_PS_Font_Private face = do
   privPtr <- malloc
   ftError 'ft_Get_PS_Font_Private $ ft_Get_PS_Font_Private' face privPtr
@@ -144,7 +152,13 @@ ft_Get_PS_Font_Private face = do
 
 
 foreign import ccall "FT_Get_PS_Font_Value"
-  ft_Get_PS_Font_Value :: FT_Face -> PS_Dict_Keys -> FT_UInt -> Ptr () -> FT_Long -> IO FT_Long
+  ft_Get_PS_Font_Value
+    :: FT_Face      -- ^ face
+    -> PS_Dict_Keys -- ^ key
+    -> FT_UInt      -- ^ idx
+    -> Ptr ()       -- ^ value
+    -> FT_Long      -- ^ value_len
+    -> IO FT_Long
 
 
 

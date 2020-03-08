@@ -20,14 +20,23 @@ import           Foreign.Ptr
 
 
 foreign import ccall "FT_Palette_Data_Get"
-  ft_Palette_Data_Get' :: FT_Face -> Ptr FT_Palette_Data -> IO FT_Error
+  ft_Palette_Data_Get'
+    :: FT_Face             -- ^ face
+    -> Ptr FT_Palette_Data -- ^ apalette
+    -> IO FT_Error
 
 
 
 {-# WARNING ft_Palette_Set_Foreground_Color' "Not implemented, requires a function rewrite on the other side" #-}
-ft_Palette_Set_Foreground_Color' :: FT_Face -> Ptr FT_Color -> IO FT_Error
+ft_Palette_Set_Foreground_Color'
+    :: FT_Face      -- ^ face
+    -> Ptr FT_Color -- ^ foreground_color
+    -> IO FT_Error
 ft_Palette_Set_Foreground_Color' _ _ = return FT_Err_Unimplemented_Feature
 {-
 foreign import ccall "FT_Palette_Set_Foreground_Color"
-  ft_Palette_Set_Foreground_Color' :: FT_Face -> Ptr FT_Color -> IO FT_Error
+  ft_Palette_Set_Foreground_Color'
+    :: FT_Face
+    -> Ptr FT_Color
+    -> IO FT_Error
 -}

@@ -26,4 +26,7 @@ pattern FT_GASP_SYMMETRIC_SMOOTHING = #const FT_GASP_SYMMETRIC_SMOOTHING
 
 
 foreign import ccall "FT_Get_Gasp"
-  ft_Get_Gasp :: FT_Face -> FT_UInt -> IO FT_Int
+  ft_Get_Gasp
+    :: FT_Face   -- ^ face
+    -> FT_UInt   -- ^ ppem
+    -> IO FT_Int

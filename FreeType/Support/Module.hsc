@@ -69,13 +69,19 @@ import           Foreign.Ptr
 #include FT_MODULE_H
 #include FT_RENDER_H
 
-ft_Add_Module :: FT_Library -> Ptr FT_Module_Class -> IO ()
+ft_Add_Module
+  :: FT_Library          -- ^ library
+  -> Ptr FT_Module_Class -- ^ clazz
+  -> IO ()
 ft_Add_Module =
   autoError 'ft_Add_Module ft_Add_Module'
 
 
 
-ft_Get_Module :: FT_Library -> String -> IO (Maybe FT_Module)
+ft_Get_Module
+  :: FT_Library           -- ^ library
+  -> String               -- ^ module_name
+  -> IO (Maybe FT_Module)
 ft_Get_Module lib name =
   withCString name $ \namePtr -> do
     modul <- ft_Get_Module' lib $ castPtr namePtr
@@ -85,14 +91,19 @@ ft_Get_Module lib name =
 
 
 
-ft_Remove_Module :: FT_Library -> FT_Module -> IO ()
+ft_Remove_Module
+  :: FT_Library -- ^ library
+  -> FT_Module  -- ^ module
+  -> IO ()
 ft_Remove_Module =
   autoError 'ft_Remove_Module ft_Remove_Module'
 
 
 
 foreign import ccall "FT_Add_Default_Modules"
-  ft_Add_Default_Modules :: FT_Library -> IO ()
+  ft_Add_Default_Modules
+    :: FT_Library -- ^ library
+    -> IO ()
 
 
 
@@ -125,29 +136,40 @@ ft_Property_Get lib modul prop valPtr =
 
 
 foreign import ccall "FT_Set_Default_Properties"    
-  ft_Set_Default_Properties :: FT_Library -> IO ()    
+  ft_Set_Default_Properties
+    :: FT_Library -- ^ library
+    -> IO ()    
 
 
 
-ft_New_Library :: FT_Memory -> IO FT_Library
+ft_New_Library
+  :: FT_Memory     -- ^ memory
+  -> IO FT_Library -- ^ library
 ft_New_Library =
   autoAllocaError 'ft_New_Library ft_New_Library'
 
 
 
-ft_Done_Library :: FT_Library -> IO ()
+ft_Done_Library
+  :: FT_Library -- ^ library
+  -> IO ()
 ft_Done_Library =
   autoError 'ft_Done_Library ft_Done_Library'
 
 
 
-ft_Reference_Library :: FT_Library -> IO ()
+ft_Reference_Library
+  :: FT_Library -- ^ library
+  -> IO ()
 ft_Reference_Library =
   autoError 'ft_Reference_Library ft_Reference_Library'
 
 
 
-ft_Get_Renderer :: FT_Library -> FT_Glyph_Format -> IO (Maybe FT_Renderer)
+ft_Get_Renderer
+  :: FT_Library             -- ^ library
+  -> FT_Glyph_Format        -- ^ format
+  -> IO (Maybe FT_Renderer)
 ft_Get_Renderer lib format = do
   renderer <- ft_Get_Renderer' lib format
   return $ if renderer == nullPtr

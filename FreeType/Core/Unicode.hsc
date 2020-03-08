@@ -22,24 +22,40 @@ import           Foreign.Ptr
 #include FT_FREETYPE_H
 
 foreign import ccall "FT_Face_GetCharVariantIndex"
-  ft_Face_GetCharVariantIndex :: FT_Face -> FT_ULong -> FT_ULong -> IO FT_UInt
+  ft_Face_GetCharVariantIndex
+    :: FT_Face    -- ^ face
+    -> FT_ULong   -- ^ charcode
+    -> FT_ULong   -- ^ variantSelector
+    -> IO FT_UInt
 
 
 
 foreign import ccall "FT_Face_GetCharVariantIsDefault"
-  ft_Face_GetCharVariantIsDefault :: FT_Face -> FT_ULong -> FT_ULong -> IO FT_Int
+  ft_Face_GetCharVariantIsDefault
+    :: FT_Face   -- ^ face
+    -> FT_ULong  -- ^ charcode
+    -> FT_ULong  -- ^ variantSelector
+    -> IO FT_Int
 
 
 
 foreign import ccall "FT_Face_GetVariantSelectors"
-  ft_Face_GetVariantSelectors :: FT_Face -> IO (Ptr FT_UInt32)
+  ft_Face_GetVariantSelectors
+    :: FT_Face            -- ^ face
+    -> IO (Ptr FT_UInt32)
 
 
 
 foreign import ccall "FT_Face_GetVariantsOfChar"
-  ft_Face_GetVariantsOfChar :: FT_Face -> FT_ULong -> IO (Ptr FT_UInt32)
+  ft_Face_GetVariantsOfChar
+    :: FT_Face            -- ^ face
+    -> FT_ULong           -- ^ charcode
+    -> IO (Ptr FT_UInt32)
 
 
 
 foreign import ccall "FT_Face_GetCharsOfVariant"
-  ft_Face_GetCharsOfVariant :: FT_Face -> FT_ULong -> IO (Ptr FT_UInt32)
+  ft_Face_GetCharsOfVariant
+    :: FT_Face            -- ^ face
+    -> FT_ULong           -- ^ variantSelector
+    -> IO (Ptr FT_UInt32)

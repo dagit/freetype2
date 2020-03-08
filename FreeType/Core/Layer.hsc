@@ -17,4 +17,10 @@ import           Foreign.Ptr
 #include FT_FREETYPE_H
 
 foreign import ccall "FT_Get_Color_Glyph_Layer"
-  ft_Get_Color_Glyph_Layer :: FT_Face -> FT_UInt -> Ptr FT_UInt -> Ptr FT_UInt -> Ptr FT_LayerIterator -> IO FT_Bool
+  ft_Get_Color_Glyph_Layer
+    :: FT_Face              -- ^ face
+    -> FT_UInt              -- ^ base_glyph
+    -> Ptr FT_UInt          -- ^ aglyph_index
+    -> Ptr FT_UInt          -- ^ acolor_index
+    -> Ptr FT_LayerIterator -- ^ iterator
+    -> IO FT_Bool

@@ -66,36 +66,55 @@ import           System.IO.Unsafe
 #include FT_TRIGONOMETRY_H
 
 foreign import ccall "FT_MulDiv"
-  ft_MulDiv :: FT_Long -> FT_Long -> FT_Long -> FT_Long
+  ft_MulDiv
+    :: FT_Long -- ^ a
+    -> FT_Long -- ^ b
+    -> FT_Long -- ^ c
+    -> FT_Long
 
 
 
 foreign import ccall "FT_MulFix"
-  ft_MulFix :: FT_Long -> FT_Long -> FT_Long
+  ft_MulFix
+    :: FT_Long -- ^ a
+    -> FT_Long -- ^ b
+    -> FT_Long
 
 
 
 foreign import ccall "FT_DivFix"
-  ft_DivFix :: FT_Long -> FT_Long -> FT_Long
+  ft_DivFix
+    :: FT_Long -- ^ a
+    -> FT_Long -- ^ b
+    -> FT_Long
 
 
 
 foreign import ccall "FT_RoundFix"
-  ft_RoundFix :: FT_Fixed -> FT_Fixed
+  ft_RoundFix
+    :: FT_Fixed -- ^ a
+    -> FT_Fixed
 
 
 
 foreign import ccall "FT_CeilFix"
-  ft_CeilFix :: FT_Fixed -> FT_Fixed
+  ft_CeilFix
+    :: FT_Fixed -- ^ a
+    -> FT_Fixed
 
 
 
 foreign import ccall "FT_FloorFix"
-  ft_FloorFix :: FT_Fixed -> FT_Fixed
+  ft_FloorFix
+    :: FT_Fixed -- ^ a
+    -> FT_Fixed
 
 
 
-ft_Vector_Transform :: FT_Matrix -> FT_Vector -> FT_Vector
+ft_Vector_Transform
+  :: FT_Matrix -- ^ matrix
+  -> FT_Vector -- ^ vector
+  -> FT_Vector
 ft_Vector_Transform mat vec =
   unsafePerformIO
     . with mat $ \matPtr ->
@@ -105,7 +124,10 @@ ft_Vector_Transform mat vec =
 
 
 
-ft_Matrix_Multiply :: FT_Matrix -> FT_Matrix -> FT_Matrix
+ft_Matrix_Multiply
+  :: FT_Matrix -- ^ a
+  -> FT_Matrix -- ^ b
+  -> FT_Matrix
 ft_Matrix_Multiply mat1 mat2 =
   unsafePerformIO
     . with mat1 $ \mat1Ptr ->
@@ -115,7 +137,9 @@ ft_Matrix_Multiply mat1 mat2 =
 
 
 
-ft_Matrix_Invert :: FT_Matrix -> Maybe FT_Matrix
+ft_Matrix_Invert
+  :: FT_Matrix       -- ^ matrix
+  -> Maybe FT_Matrix
 ft_Matrix_Invert mat =
   unsafePerformIO
     . with mat $ \matPtr -> do
@@ -139,31 +163,45 @@ pattern FT_ANGLE_PI4 = #const FT_ANGLE_PI4
 
 
 foreign import ccall "FT_Sin"
-  ft_Sin :: FT_Angle -> FT_Fixed
+  ft_Sin
+    :: FT_Angle -- ^ angle
+    -> FT_Fixed
 
 
 
 foreign import ccall "FT_Cos"
-  ft_Cos :: FT_Angle -> FT_Fixed
+  ft_Cos
+    :: FT_Angle -- ^ angle
+    -> FT_Fixed
 
 
 
 foreign import ccall "FT_Tan"
-  ft_Tan :: FT_Angle -> FT_Fixed
+  ft_Tan
+    :: FT_Angle -- ^ angle
+    -> FT_Fixed
 
 
 
 foreign import ccall "FT_Atan2"
-  ft_Atan2 :: FT_Fixed -> FT_Fixed -> FT_Angle
+  ft_Atan2
+    :: FT_Fixed -- ^ x
+    -> FT_Fixed -- ^ y
+    -> FT_Angle
 
 
 
 foreign import ccall "FT_Angle_Diff"
-  ft_Angle_Diff :: FT_Angle -> FT_Angle -> FT_Angle
+  ft_Angle_Diff
+    :: FT_Angle -- ^ angle1
+    -> FT_Angle -- ^ angle2
+    -> FT_Angle
 
 
 
-ft_Vector_Unit :: FT_Angle -> FT_Vector
+ft_Vector_Unit
+  :: FT_Angle  -- ^ angle
+  -> FT_Vector -- ^ vec
 ft_Vector_Unit angle =
   unsafePerformIO $
     alloca $ \ptr -> do
@@ -172,7 +210,10 @@ ft_Vector_Unit angle =
 
 
 
-ft_Vector_Rotate :: FT_Angle -> FT_Vector -> FT_Vector
+ft_Vector_Rotate
+  :: FT_Angle  -- * vec
+  -> FT_Vector -- * angle
+  -> FT_Vector
 ft_Vector_Rotate angle vec =
   unsafePerformIO
     . with vec $ \vecPtr -> do
@@ -181,7 +222,9 @@ ft_Vector_Rotate angle vec =
 
 
 
-ft_Vector_Length :: FT_Vector -> FT_Fixed
+ft_Vector_Length
+  :: FT_Vector -- ^ vec
+  -> FT_Fixed
 ft_Vector_Length vec =
   unsafePerformIO
     . with vec
@@ -189,7 +232,9 @@ ft_Vector_Length vec =
 
 
 
-ft_Vector_Polarize :: FT_Vector -> (FT_Fixed, FT_Angle)
+ft_Vector_Polarize
+  :: FT_Vector            -- ^ vec
+  -> (FT_Fixed, FT_Angle) -- ^ (length, angle)
 ft_Vector_Polarize vec =
   unsafePerformIO
     . with vec $ \vecPtr ->
@@ -202,7 +247,10 @@ ft_Vector_Polarize vec =
 
 
 
-ft_Vector_From_Polar :: FT_Fixed -> FT_Angle -> FT_Vector
+ft_Vector_From_Polar
+  :: FT_Fixed  -- ^ length
+  -> FT_Angle  -- ^ angle
+  -> FT_Vector -- ^ vec
 ft_Vector_From_Polar length_ angle =
   unsafePerformIO
     . alloca $ \vecPtr -> do

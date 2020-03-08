@@ -10,8 +10,8 @@ type Handle = Ptr ()
 
 
 
-data FSSpec
+type FSSpec = Ptr ()
 
 
 
-data FSRef
+type FSRef = Ptr ()

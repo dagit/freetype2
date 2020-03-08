@@ -1,7 +1,7 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module FreeType.Format.Font.Internal
-  ( -- ^ FT_Get_Font_Format
+  ( -- ** FT_Get_Font_Format
     ft_Get_Font_Format'
   ) where
 
@@ -14,4 +14,6 @@ import           Foreign.Ptr
 #include FT_FREETYPE_H
 
 foreign import ccall "FT_Get_Font_Format"
-  ft_Get_Font_Format' :: FT_Face -> IO (Ptr #{type char})
+  ft_Get_Font_Format'
+    :: FT_Face               -- ^ face
+    -> IO (Ptr #{type char})

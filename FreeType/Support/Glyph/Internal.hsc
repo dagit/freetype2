@@ -39,54 +39,97 @@ import           Foreign.Ptr
 #include FT_STROKER_H
 
 foreign import ccall "FT_Glyph_Stroke"
-  ft_Glyph_Stroke' :: Ptr FT_Glyph -> FT_Stroker -> FT_Bool -> IO FT_Error
+  ft_Glyph_Stroke'
+    :: Ptr FT_Glyph -- ^ pglyph
+    -> FT_Stroker   -- ^ stroker
+    -> FT_Bool      -- ^ destroy
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Glyph_StrokeBorder"
-  ft_Glyph_StrokeBorder' :: Ptr FT_Glyph -> FT_Stroker -> FT_Bool -> FT_Bool -> IO FT_Error
+  ft_Glyph_StrokeBorder'
+    :: Ptr FT_Glyph -- ^ pglyph
+    -> FT_Stroker   -- ^ stroker
+    -> FT_Bool      -- ^ inside
+    -> FT_Bool      -- ^ destroy
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_New"
-  ft_Stroker_New' :: FT_Library -> Ptr FT_Stroker -> IO FT_Error
+  ft_Stroker_New'
+    :: FT_Library     -- ^ library
+    -> Ptr FT_Stroker -- ^ astroker
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_ParseOutline"
-  ft_Stroker_ParseOutline' :: FT_Stroker -> Ptr FT_Outline -> FT_Bool -> IO FT_Error
+  ft_Stroker_ParseOutline'
+    :: FT_Stroker     -- ^ stroker
+    -> Ptr FT_Outline -- ^ outline
+    -> FT_Bool        -- ^ opened
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_BeginSubPath"
-  ft_Stroker_BeginSubPath' :: FT_Stroker -> Ptr FT_Vector -> FT_Bool -> IO FT_Error
+  ft_Stroker_BeginSubPath'
+    :: FT_Stroker    -- ^ stroker
+    -> Ptr FT_Vector -- ^ to
+    -> FT_Bool       -- ^ open
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_EndSubPath"
-  ft_Stroker_EndSubPath' :: FT_Stroker -> IO FT_Error
+  ft_Stroker_EndSubPath'
+    :: FT_Stroker -- ^ stroker
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_LineTo"
-  ft_Stroker_LineTo' :: FT_Stroker -> Ptr FT_Vector -> IO FT_Error
+  ft_Stroker_LineTo'
+    :: FT_Stroker    -- ^ stroker
+    -> Ptr FT_Vector -- ^ to
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_ConicTo"
-  ft_Stroker_ConicTo' :: FT_Stroker -> Ptr FT_Vector -> Ptr FT_Vector -> IO FT_Error
+  ft_Stroker_ConicTo'
+    :: FT_Stroker    -- ^ stroker
+    -> Ptr FT_Vector -- ^ control
+    -> Ptr FT_Vector -- ^ to
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_CubicTo"
-  ft_Stroker_CubicTo' :: FT_Stroker -> Ptr FT_Vector -> Ptr FT_Vector -> Ptr FT_Vector -> IO FT_Error
+  ft_Stroker_CubicTo'
+    :: FT_Stroker    -- ^ stroker
+    -> Ptr FT_Vector -- ^ control1
+    -> Ptr FT_Vector -- ^ control2
+    -> Ptr FT_Vector -- ^ to
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_GetBorderCounts"
-  ft_Stroker_GetBorderCounts' :: FT_Stroker -> FT_StrokerBorder -> Ptr FT_UInt -> Ptr FT_UInt -> IO FT_Error
+  ft_Stroker_GetBorderCounts'
+    :: FT_Stroker       -- ^ stroker
+    -> FT_StrokerBorder -- ^ border
+    -> Ptr FT_UInt      -- ^ anum_points
+    -> Ptr FT_UInt      -- ^ anum_contours
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Stroker_GetCounts"
-  ft_Stroker_GetCounts' :: FT_Stroker -> Ptr FT_UInt -> Ptr FT_UInt -> IO FT_Error
+  ft_Stroker_GetCounts'
+    :: FT_Stroker  -- ^ stroker
+    -> Ptr FT_UInt -- ^ anum_points
+    -> Ptr FT_UInt -- ^ anum_contours
+    -> IO FT_Error

@@ -15,9 +15,15 @@ import           FreeType.Format.Type1.Types
 #include FT_TYPE1_TABLES_H
 
 foreign import ccall "FT_Get_PS_Font_Info"
-  ft_Get_PS_Font_Info' :: FT_Face -> PS_FontInfo -> IO FT_Error
+  ft_Get_PS_Font_Info'
+    :: FT_Face     -- ^ face
+    -> PS_FontInfo -- ^ afont_info
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Get_PS_Font_Private"
-  ft_Get_PS_Font_Private' :: FT_Face -> PS_Private -> IO FT_Error
+  ft_Get_PS_Font_Private'
+    :: FT_Face     -- ^ face
+    -> PS_Private  -- ^ afont_private
+    -> IO FT_Error

@@ -18,9 +18,17 @@ import           Foreign.Ptr
 #include FT_BDF_H
 
 foreign import ccall "FT_Get_BDF_Charset_ID"
-  ft_Get_BDF_Charset_ID' :: FT_Face -> Ptr (Ptr #{type char}) -> Ptr (Ptr #{type char}) -> IO FT_Error
+  ft_Get_BDF_Charset_ID'
+    :: FT_Face                -- ^ face
+    -> Ptr (Ptr #{type char}) -- ^ acharset_encoding
+    -> Ptr (Ptr #{type char}) -- ^ acharset_registry
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Get_BDF_Property"
-  ft_Get_BDF_Property' :: FT_Face -> Ptr #{type char} -> Ptr BDF_PropertyRec -> IO FT_Error
+  ft_Get_BDF_Property'
+    :: FT_Face             -- ^ face
+    -> Ptr #{type char}    -- ^ prop_name
+    -> Ptr BDF_PropertyRec -- ^ aproperty
+    -> IO FT_Error

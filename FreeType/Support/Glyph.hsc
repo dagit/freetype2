@@ -111,19 +111,23 @@ pattern FT_STROKER_BORDER_RIGHT = #const FT_STROKER_BORDER_LEFT
 
 
 foreign import ccall "FT_Outline_GetInsideBorder"
-  ft_Outline_GetInsideBorder :: Ptr FT_Outline -> IO FT_StrokerBorder
+  ft_Outline_GetInsideBorder
+    :: Ptr FT_Outline      -- ^ outline
+    -> IO FT_StrokerBorder
 
 
 
 foreign import ccall "FT_Outline_GetOutsideBorder"
-  ft_Outline_GetOutsideBorder :: Ptr FT_Outline -> IO FT_StrokerBorder
+  ft_Outline_GetOutsideBorder
+    :: Ptr FT_Outline      -- ^ outline
+    -> IO FT_StrokerBorder
 
 
 
 ft_Glyph_Stroke
-  :: FT_Glyph   -- ^ glyph
-  -> FT_Stroker -- ^ stroker
-  -> Bool       -- ^ destroy
+  :: FT_Glyph    -- ^ glyph
+  -> FT_Stroker  -- ^ stroker
+  -> Bool        -- ^ destroy
   -> IO FT_Glyph
 ft_Glyph_Stroke glyph stroker destroy =
   with glyph $ \glyphPtr -> do
@@ -133,10 +137,10 @@ ft_Glyph_Stroke glyph stroker destroy =
 
 
 ft_Glyph_StrokeBorder
-  :: FT_Glyph   -- ^ glyph
-  -> FT_Stroker -- ^ stroker
-  -> Bool       -- ^ inside
-  -> Bool       -- ^ destroy
+  :: FT_Glyph    -- ^ glyph
+  -> FT_Stroker  -- ^ stroker
+  -> Bool        -- ^ inside
+  -> Bool        -- ^ destroy
   -> IO FT_Glyph
 ft_Glyph_StrokeBorder glyph stroker inside destroy =
   with glyph $ \glyphPtr -> do
@@ -146,19 +150,29 @@ ft_Glyph_StrokeBorder glyph stroker inside destroy =
 
 
 
-ft_Stroker_New :: FT_Library -> IO FT_Stroker
+ft_Stroker_New
+  :: FT_Library    -- ^ library
+  -> IO FT_Stroker -- ^ stroker
 ft_Stroker_New =
   autoAllocaError 'ft_Stroker_New ft_Stroker_New'
 
 
 
 foreign import ccall "FT_Stroker_Set"
-  ft_Stroker_Set :: FT_Stroker -> FT_Fixed -> FT_Stroker_LineCap -> FT_Stroker_LineJoin -> FT_Fixed -> IO ()
+  ft_Stroker_Set
+    :: FT_Stroker          -- ^ stroker
+    -> FT_Fixed            -- ^ radius
+    -> FT_Stroker_LineCap  -- ^ line_cap
+    -> FT_Stroker_LineJoin -- ^ line_join
+    -> FT_Fixed            -- ^ miter_limit
+    -> IO ()
 
 
 
 foreign import ccall "FT_Stroker_Rewind"
-  ft_Stroker_Rewind :: FT_Stroker -> IO ()
+  ft_Stroker_Rewind
+    :: FT_Stroker -- ^ stroker
+    -> IO ()
 
 
 
@@ -190,7 +204,9 @@ ft_Stroker_BeginSubPath stroker to open =
 
 
 
-ft_Stroker_EndSubPath :: FT_Stroker -> IO ()
+ft_Stroker_EndSubPath
+  :: FT_Stroker -- ^ stroker
+  -> IO ()
 ft_Stroker_EndSubPath =
   autoError 'ft_Stroker_EndSubPath ft_Stroker_EndSubPath'
 
@@ -266,4 +282,7 @@ ft_Stroker_GetCounts stroker =
 
 
 foreign import ccall "FT_Stroker_Export"
-  ft_Stroker_Export :: FT_Stroker -> Ptr FT_Outline -> IO ()
+  ft_Stroker_Export
+    :: FT_Stroker     -- ^ stroker
+    -> Ptr FT_Outline -- ^ outline
+    -> IO ()

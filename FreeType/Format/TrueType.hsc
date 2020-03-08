@@ -496,7 +496,7 @@ module FreeType.Format.TrueType
   , pattern TT_UCR_LATIN_EXTENDED_ADDITIONAL
   , pattern TT_UCR_GREEK_EXTENDED
   , pattern TT_UCR_GENERAL_PUNCTUATION
-    -- *** ulUnicodeRange2 */
+    -- *** ulUnicodeRange2
   , pattern TT_UCR_SUPERSCRIPTS_SUBSCRIPTS
   , pattern TT_UCR_CURRENCY_SYMBOLS
   , pattern TT_UCR_COMBINING_DIACRITICAL_MARKS_SYMB
@@ -531,7 +531,7 @@ module FreeType.Format.TrueType
   , pattern TT_UCR_CJK_COMPATIBILITY_IDEOGRAPHS
   , pattern TT_UCR_ALPHABETIC_PRESENTATION_FORMS
   , pattern TT_UCR_ARABIC_PRESENTATION_FORMS_A
-    -- *** ulUnicodeRange3 */
+    -- *** ulUnicodeRange3
   , pattern TT_UCR_COMBINING_HALF_MARKS
   , pattern TT_UCR_CJK_COMPATIBILITY_FORMS
   , pattern TT_UCR_SMALL_FORM_VARIANTS
@@ -564,7 +564,7 @@ module FreeType.Format.TrueType
   , pattern TT_UCR_LIMBU
   , pattern TT_UCR_TAI_LE
   , pattern TT_UCR_NEW_TAI_LUE
-    -- *** ulUnicodeRange4 */
+    -- *** ulUnicodeRange4
   , pattern TT_UCR_BUGINESE
   , pattern TT_UCR_GLAGOLITIC
   , pattern TT_UCR_TIFINAGH
@@ -629,7 +629,10 @@ pattern FT_SFNT_PCLT = #const FT_SFNT_PCLT
 
 
 
-ft_Get_Sfnt_Table :: FT_Face -> FT_Sfnt_Tag -> IO (Maybe (Ptr ()))
+ft_Get_Sfnt_Table
+  :: FT_Face             -- ^ face
+  -> FT_Sfnt_Tag         -- ^ tag
+  -> IO (Maybe (Ptr ()))
 ft_Get_Sfnt_Table face tag = do
   result <- ft_Get_Sfnt_Table' face tag
   return $ if result == nullPtr
@@ -638,6 +641,11 @@ ft_Get_Sfnt_Table face tag = do
 
 
 
+-- | If @length@ is zero, 'ft_Load_Sfnt_Table' automatically reruns the
+--   the underlying function with the returned table length.
+--
+--   The returned buffer is allocated with 'malloc' and therefore must be 'free'd
+--   manually.
 ft_Load_Sfnt_Table
   :: FT_Face          -- ^ face
   -> FT_ULong         -- ^ tag

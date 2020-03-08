@@ -12,4 +12,7 @@ import           FreeType.Support.System.Types
 #include FT_BZIP2_H
 
 foreign import ccall "FT_Stream_OpenBzip2"
-  ft_Stream_OpenBzip2' :: FT_Stream -> FT_Stream -> IO FT_Error
+  ft_Stream_OpenBzip2'
+    :: FT_Stream   -- ^ stream
+    -> FT_Stream   -- ^ source
+    -> IO FT_Error

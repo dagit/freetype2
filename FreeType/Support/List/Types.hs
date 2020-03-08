@@ -14,8 +14,13 @@ import           Foreign.Ptr
 
 
 
-type FT_List_Iterator = FT_ListNode -> Ptr () -> IO FT_Error
+type FT_List_Iterator = FT_ListNode -- ^ node
+                     -> Ptr ()      -- ^ user
+                     -> IO FT_Error
 
 
 
-type FT_List_Destructor = FT_Memory -> Ptr () -> Ptr () -> IO ()
+type FT_List_Destructor = FT_Memory -- ^ memory
+                       -> Ptr ()    -- ^ data
+                       -> Ptr ()    -- ^ user
+                       -> IO ()

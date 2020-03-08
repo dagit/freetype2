@@ -16,9 +16,18 @@ import           Foreign.Ptr
 #include FT_GX_VALIDATE_H
 
 foreign import ccall "FT_TrueTypeGX_Validate"
-  ft_TrueTypeGX_Validate' :: FT_Face -> FT_UInt -> Ptr FT_Bytes -> FT_UInt -> IO FT_Error
+  ft_TrueTypeGX_Validate'
+    :: FT_Face      -- ^ face
+    -> FT_UInt      -- ^ validation_flags
+    -> Ptr FT_Bytes -- ^ tables
+    -> FT_UInt      -- ^ table_length
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_ClassicKern_Validate"
-  ft_ClassicKern_Validate' :: FT_Face -> FT_UInt -> Ptr FT_Bytes -> IO FT_Error
+  ft_ClassicKern_Validate'
+    :: FT_Face      -- ^ face
+    -> FT_UInt      -- ^ validation_flags
+    -> Ptr FT_Bytes -- ^ ckern_table
+    -> IO FT_Error

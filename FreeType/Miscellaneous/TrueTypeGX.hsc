@@ -53,7 +53,10 @@ ft_TrueTypeGX_Validate =
 
 
 foreign import ccall "FT_TrueTypeGX_Free"
-  ft_TrueTypeGX_Free :: FT_Face -> FT_Bytes -> IO ()
+  ft_TrueTypeGX_Free
+    :: FT_Face  -- ^ face
+    -> FT_Bytes -- ^ table
+    -> IO ()
 
 
 
@@ -68,7 +71,10 @@ ft_ClassicKern_Validate =
 
 
 foreign import ccall "FT_ClassicKern_Free"
-  ft_ClassicKern_Free :: FT_Face -> FT_Bytes -> IO ()
+  ft_ClassicKern_Free
+    :: FT_Face  -- ^ face
+    -> FT_Bytes -- ^ table
+    -> IO ()
 
 
 

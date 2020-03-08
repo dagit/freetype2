@@ -16,7 +16,7 @@ import           Foreign.Ptr
 #include FT_FREETYPE_H
 
 ft_Get_Font_Format
-  :: FT_Face        -- ^ face
+  :: FT_Face   -- ^ face
   -> IO String
 ft_Get_Font_Format face =
   peekCString . castPtr =<< ft_Get_Font_Format' face

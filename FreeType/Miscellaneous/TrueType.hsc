@@ -20,4 +20,6 @@ pattern FT_TRUETYPE_ENGINE_TYPE_PATENTED   = #const FT_TRUETYPE_ENGINE_TYPE_PATE
 
 
 foreign import ccall "FT_Get_TrueType_Engine_Type"
-  ft_Get_TrueType_Engine_Type :: FT_Library -> IO FT_TrueTypeEngineType
+  ft_Get_TrueType_Engine_Type
+    :: FT_Library               -- ^ library
+    -> IO FT_TrueTypeEngineType

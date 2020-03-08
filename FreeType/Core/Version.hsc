@@ -31,8 +31,9 @@ import           Foreign.Storable
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
--- | Wrapped version of 'ft_Library_Version''. The returned 3-tuple is @(major, minor, patch)@ versions.
-ft_Library_Version :: FT_Library -> IO (FT_Int, FT_Int, FT_Int)
+ft_Library_Version
+  :: FT_Library                  -- ^ library
+  -> IO (FT_Int, FT_Int, FT_Int) -- ^ (major, minor, patch)
 ft_Library_Version lib =
   alloca $ \majorPtr ->
     alloca $ \minorPtr ->
@@ -46,12 +47,17 @@ ft_Library_Version lib =
 
 
 foreign import ccall "FT_Face_CheckTrueTypePatents"
-  ft_Face_CheckTrueTypePatents :: FT_Face -> IO FT_Bool
+  ft_Face_CheckTrueTypePatents
+    :: FT_Face    -- ^ face
+    -> IO FT_Bool
 
 
 
 foreign import ccall "FT_Face_SetUnpatentedHinting"
-  ft_Face_SetUnpatentedHinting :: FT_Face -> FT_Bool -> IO FT_Bool
+  ft_Face_SetUnpatentedHinting
+    :: FT_Face    -- ^ face
+    -> FT_Bool    -- ^ value
+    -> IO FT_Bool
 
 
 

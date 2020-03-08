@@ -15,4 +15,7 @@ import           Foreign.Ptr
 #include FT_WINFONTS_H
 
 foreign import ccall "FT_Get_WinFNT_Header"
-  ft_Get_WinFNT_Header' :: FT_Face -> Ptr FT_WinFNT_HeaderRec -> IO FT_Error
+  ft_Get_WinFNT_Header'
+    :: FT_Face                 -- ^ face
+    -> Ptr FT_WinFNT_HeaderRec -- ^ aheader
+    -> IO FT_Error

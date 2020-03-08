@@ -126,6 +126,7 @@ module FreeType.Core.Base
   , ft_Get_Char_Index
     -- ** FT_Get_First_Char
     -- | Fused into 'ft_Get_Next_Char'.
+
     -- ** FT_Get_Next_Char
   , ft_Get_Next_Char
     -- ** FT_Get_Name_Index
@@ -417,13 +418,15 @@ pattern FT_IS_VARIATION <- _
 
 
 
-ft_Init_FreeType :: IO FT_Library
+ft_Init_FreeType :: IO FT_Library -- ^ library
 ft_Init_FreeType =
   autoAllocaError 'ft_Init_FreeType ft_Init_FreeType'
 
 
 
-ft_Done_FreeType :: FT_Library -> IO ()
+ft_Done_FreeType
+  :: FT_Library -- ^ library
+  -> IO ()
 ft_Done_FreeType =
   autoError 'ft_Done_FreeType ft_Done_FreeType'
 
@@ -433,7 +436,7 @@ ft_New_Face
   :: FT_Library -- ^ library
   -> FilePath   -- ^ filepathname
   -> FT_Long    -- ^ face_index
-  -> IO FT_Face
+  -> IO FT_Face -- ^ face
 ft_New_Face lib path index =
   withCString path $ \pathPtr ->
     alloca $ \facePtr -> do
@@ -442,13 +445,17 @@ ft_New_Face lib path index =
 
 
 
-ft_Done_Face :: FT_Face -> IO ()
+ft_Done_Face
+  :: FT_Face -- ^ face
+  -> IO ()
 ft_Done_Face =
   autoError 'ft_Done_Face ft_Done_Face'
 
 
 
-ft_Reference_Face :: FT_Face -> IO ()
+ft_Reference_Face
+  :: FT_Face -- ^ face
+  -> IO ()
 ft_Reference_Face =
   autoError 'ft_Reference_Face ft_Reference_Face'
 
@@ -459,7 +466,7 @@ ft_New_Memory_Face
   -> Ptr FT_Byte -- ^ file_base
   -> FT_Long     -- ^ file_size
   -> FT_Long     -- ^ face_index
-  -> IO FT_Face
+  -> IO FT_Face  -- ^ face
 ft_New_Memory_Face =
   autoAllocaError 'ft_New_Memory_Face ft_New_Memory_Face'
 
@@ -479,7 +486,7 @@ ft_Open_Face
   :: FT_Library       -- ^ library
   -> Ptr FT_Open_Args -- ^ args
   -> FT_Long          -- ^ face_index
-  -> IO FT_Face
+  -> IO FT_Face       -- ^ face
 ft_Open_Face =
   autoAllocaError 'ft_Open_Face ft_Open_Face'
 
@@ -584,13 +591,20 @@ ft_Load_Glyph =
 
 
 foreign import ccall "FT_Get_Char_Index"
-  ft_Get_Char_Index :: FT_Face -> FT_ULong -> IO FT_UInt
+  ft_Get_Char_Index
+    :: FT_Face    -- ^ face
+    -> FT_ULong   -- ^ charcode
+    -> IO FT_UInt
 
 
 
+-- | When @charcode@ is:
+--
+--     * @Nothing@ — behaves like 'ft_Get_First_Char''
+--     * @Just _ @ — behaves like 'ft_Get_Next_Char''
 ft_Get_Next_Char
-  :: FT_Face -- ^ face
-  -> Maybe FT_ULong
+  :: FT_Face                -- ^ face
+  -> Maybe FT_ULong         -- ^ charcode
   -> IO (FT_ULong, FT_UInt) -- ^ (charcode, gindex)
 ft_Get_Next_Char face Nothing =
   alloca $ \ptr ->
@@ -607,7 +621,10 @@ ft_Get_Next_Char face (Just code) =
 
 
 foreign import ccall "FT_Get_Name_Index"
-  ft_Get_Name_Index :: FT_Face -> Ptr FT_String -> IO FT_UInt
+  ft_Get_Name_Index
+    :: FT_Face       -- ^ face
+    -> Ptr FT_String -- ^ glyph_name
+    -> IO FT_UInt
 
 
 
@@ -653,11 +670,11 @@ pattern FT_RENDER_MODE_LCD_V  = #const FT_RENDER_MODE_LCD_V
 
 
 ft_Get_Kerning
-  :: FT_Face -- ^ face
-  -> FT_UInt -- ^ left_glyph
-  -> FT_UInt -- ^ right_glyph
-  -> FT_UInt -- ^ kern_mode
-  -> IO FT_Vector
+  :: FT_Face      -- ^ face
+  -> FT_UInt      -- ^ left_glyph
+  -> FT_UInt      -- ^ right_glyph
+  -> FT_UInt      -- ^ kern_mode
+  -> IO FT_Vector -- ^ kerning
 ft_Get_Kerning =
   autoAllocaError 'ft_Get_Kerning ft_Get_Kerning'
 
@@ -674,10 +691,10 @@ pattern FT_KERNING_UNSCALED = #const FT_KERNING_UNSCALED
 
 
 ft_Get_Track_Kerning
-  :: FT_Face  -- ^ face
-  -> FT_Fixed -- ^ point_size
-  -> FT_Int   -- ^ degree
-  -> IO FT_Fixed
+  :: FT_Face     -- ^ face
+  -> FT_Fixed    -- ^ point_size
+  -> FT_Int      -- ^ degree
+  -> IO FT_Fixed -- ^ kerning
 ft_Get_Track_Kerning =
   autoAllocaError 'ft_Get_Track_Kerning ft_Get_Track_Kerning'
 
@@ -687,7 +704,7 @@ ft_Get_Glyph_Name
   :: FT_Face    -- ^ face
   -> FT_UInt    -- ^ glyph_index
   -> FT_UInt    -- ^ buffer_max
-  -> IO String
+  -> IO String  -- ^ buffer
 ft_Get_Glyph_Name face index buffer_max =
   allocaArray (fromIntegral buffer_max) $ \buffer -> do
     ftError 'ft_Get_Glyph_Name $ ft_Get_Glyph_Name' face index (castPtr buffer) buffer_max
@@ -695,7 +712,9 @@ ft_Get_Glyph_Name face index buffer_max =
 
 
 
-ft_Get_Postscript_Name :: FT_Face -> IO String
+ft_Get_Postscript_Name
+  :: FT_Face   -- ^ face
+  -> IO String
 ft_Get_Postscript_Name =
   peekCString . castPtr <=< ft_Get_Postscript_Name'
 
@@ -720,20 +739,24 @@ ft_Set_Charmap =
 
 
 foreign import ccall "FT_Get_Charmap_Index"
-  ft_Get_Charmap_Index :: FT_CharMap -> IO FT_Int
+  ft_Get_Charmap_Index
+    :: FT_CharMap -- ^ charmap
+    -> IO FT_Int
 
 
 
 foreign import ccall "FT_Get_FSType_Flags"
-  ft_Get_FSType_Flags :: FT_Face -> IO FT_UShort
+  ft_Get_FSType_Flags
+    :: FT_Face      -- ^ face
+    -> IO FT_UShort
 
 
 
--- | The return type is @(p_index, p_flags, p_arg1, p_arg2, p_transform)@
 ft_Get_SubGlyph_Info
   :: FT_GlyphSlot -- ^ glyph
   -> FT_UInt      -- ^ sub_index
   -> IO (FT_Int, FT_UInt, FT_Int, FT_Int, FT_Matrix)
+        -- ^ (p_index, p_flags, p_arg1, p_arg2, p_transform)
 ft_Get_SubGlyph_Info glyph index =
   alloca $ \p_indexPtr ->
     alloca $ \p_flagsPtr ->

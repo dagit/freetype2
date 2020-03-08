@@ -18,14 +18,21 @@ import           Foreign.Ptr
 #include FT_FREETYPE_H
 
 foreign import ccall "FT_New_Size"
-  ft_New_Size' :: FT_Face -> Ptr FT_Size -> IO FT_Error
+  ft_New_Size'
+    :: FT_Face     -- ^ face
+    -> Ptr FT_Size -- ^ size
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Done_Size"
-  ft_Done_Size' :: FT_Size -> IO FT_Error
+  ft_Done_Size'
+    :: FT_Size     -- ^ size
+    -> IO FT_Error
 
 
 
 foreign import ccall "FT_Activate_Size"
-  ft_Activate_Size' :: FT_Size -> IO FT_Error
+  ft_Activate_Size'
+    :: FT_Size     -- ^ size
+    -> IO FT_Error

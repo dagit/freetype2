@@ -81,6 +81,7 @@ import           Foreign.Storable
 #include FT_IMAGE_H
 #include FT_OUTLINE_H
 
+-- | Newly created 'FT_Outline' is allocated using 'malloc' and thus     must be 'free'd manually.
 ft_Outline_New
   :: FT_Library          -- ^ library
   -> FT_UInt             -- ^ numPoints
@@ -93,27 +94,38 @@ ft_Outline_New lib points contours = do
 
 
 
-ft_Outline_Done :: FT_Library -> Ptr FT_Outline -> IO ()
+-- | Additionally 'free's the passed pointer.
+ft_Outline_Done
+  :: FT_Library     -- ^ library
+  -> Ptr FT_Outline -- ^ outline
+  -> IO ()
 ft_Outline_Done lib outlinePtr = do
   ftError 'ft_Outline_Done $ ft_Outline_Done' lib outlinePtr
   free outlinePtr
 
 
 
-ft_Outline_Copy :: Ptr FT_Outline -> Ptr FT_Outline -> IO ()
+ft_Outline_Copy
+  :: Ptr FT_Outline -- ^ source
+  -> Ptr FT_Outline -- ^ target
+  -> IO ()
 ft_Outline_Copy =
   autoError 'ft_Outline_Copy ft_Outline_Copy'
 
 
 
 foreign import ccall "FT_Outline_Translate"
-  ft_Outline_Translate :: Ptr FT_Outline -> FT_Pos -> FT_Pos -> IO ()
+  ft_Outline_Translate
+    :: Ptr FT_Outline -- ^ outline
+    -> FT_Pos         -- ^ xOffset
+    -> FT_Pos         -- ^ yOffset
+    -> IO ()
 
 
 
 ft_Outline_Transform
-  :: Ptr FT_Outline
-  -> FT_Matrix
+  :: Ptr FT_Outline   -- ^ outline
+  -> FT_Matrix        -- ^ matrix
   -> IO ()
 ft_Outline_Transform outlinePtr mat =
   with mat $ \matPtr ->
@@ -122,8 +134,8 @@ ft_Outline_Transform outlinePtr mat =
 
 
 ft_Outline_Embolden
-  :: Ptr FT_Outline
-  -> FT_Pos
+  :: Ptr FT_Outline -- ^ outline
+  -> FT_Pos         -- ^ strength
   -> IO ()
 ft_Outline_Embolden =
   autoError 'ft_Outline_Embolden ft_Outline_Embolden'
@@ -131,7 +143,7 @@ ft_Outline_Embolden =
 
 
 ft_Outline_EmboldenXY
-  :: Ptr FT_Outline
+  :: Ptr FT_Outline -- ^ outline
   -> FT_Pos         -- ^ xstrength
   -> FT_Pos         -- ^ ystrength
   -> IO ()
@@ -141,17 +153,23 @@ ft_Outline_EmboldenXY =
 
 
 foreign import ccall "FT_Outline_Reverse"
-  ft_Outline_Reverse :: Ptr FT_Outline -> IO ()
+  ft_Outline_Reverse
+    :: Ptr FT_Outline -- ^ outline
+    -> IO ()
 
 
 
-ft_Outline_Check :: Ptr FT_Outline -> IO ()
+ft_Outline_Check
+  :: Ptr FT_Outline -- ^ outline
+  -> IO ()
 ft_Outline_Check =
   autoError 'ft_Outline_Check ft_Outline_Check'
 
 
 
-ft_Outline_Get_CBox :: Ptr FT_Outline -> IO FT_BBox
+ft_Outline_Get_CBox
+  :: Ptr FT_Outline -- ^ outline
+  -> IO FT_BBox     -- ^ cbox
 ft_Outline_Get_CBox outlinePtr =
   alloca $ \bboxPtr -> do
     ft_Outline_Get_CBox' outlinePtr bboxPtr
@@ -159,7 +177,9 @@ ft_Outline_Get_CBox outlinePtr =
 
 
 
-ft_Outline_Get_BBox :: Ptr FT_Outline -> IO FT_BBox
+ft_Outline_Get_BBox
+  :: Ptr FT_Outline -- ^ outline
+  -> IO FT_BBox     -- ^ bbox
 ft_Outline_Get_BBox outlinePtr =
   alloca $ \bboxPtr -> do
     ftError 'ft_Outline_Get_BBox $ ft_Outline_Get_BBox' outlinePtr bboxPtr
@@ -167,19 +187,31 @@ ft_Outline_Get_BBox outlinePtr =
 
 
 
-ft_Outline_Get_Bitmap :: FT_Library -> Ptr FT_Outline -> Ptr FT_Bitmap -> IO ()
+ft_Outline_Get_Bitmap
+  :: FT_Library     -- ^ library
+  -> Ptr FT_Outline -- ^ outline
+  -> Ptr FT_Bitmap  -- ^ bitmap
+  -> IO ()
 ft_Outline_Get_Bitmap =
   autoError 'ft_Outline_Get_Bitmap ft_Outline_Get_Bitmap'
 
 
 
-ft_Outline_Render :: FT_Library -> Ptr FT_Outline -> Ptr FT_Raster_Params -> IO ()
+ft_Outline_Render
+  :: FT_Library           -- ^ library
+  -> Ptr FT_Outline       -- ^ outline
+  -> Ptr FT_Raster_Params -- ^ params
+  -> IO ()
 ft_Outline_Render =
   autoError 'ft_Outline_Render ft_Outline_Render'
 
 
 
-ft_Outline_Decompose :: Ptr FT_Outline -> FT_Outline_Funcs -> Ptr () -> IO ()
+ft_Outline_Decompose
+  :: Ptr FT_Outline   -- ^ outline
+  -> FT_Outline_Funcs -- ^ func_interface
+  -> Ptr ()           -- ^ user
+  -> IO ()
 ft_Outline_Decompose outlinePtr funcs dataPtr =
   with funcs $ \funcsPtr ->
     ftError 'ft_Outline_Decompose $ ft_Outline_Decompose' outlinePtr funcsPtr dataPtr
@@ -201,7 +233,9 @@ pattern FT_ORIENTATION_NONE       = #const FT_ORIENTATION_NONE
 
 
 foreign import ccall "FT_Outline_Get_Orientation"
-  ft_Outline_Get_Orientation :: Ptr FT_Outline -> IO FT_Orientation
+  ft_Outline_Get_Orientation
+    :: Ptr FT_Outline    -- ^ outline
+    -> IO FT_Orientation
 
 
 

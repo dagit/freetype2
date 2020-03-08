@@ -31,7 +31,7 @@ ft_Gzip_Uncompress
   -> FT_ULong    -- ^ output_len
   -> Ptr FT_Byte -- ^ input
   -> FT_ULong    -- ^ input_len
-  -> IO FT_ULong
+  -> IO FT_ULong -- ^ output_len
 ft_Gzip_Uncompress memory output outputLen input inputLen =
   with outputLen $ \outputLenPtr -> do
     ftError 'ft_Gzip_Uncompress

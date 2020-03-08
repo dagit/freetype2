@@ -29,7 +29,7 @@ import           Foreign.Ptr
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
-ft_Bitmap_Init :: IO (Ptr FT_Bitmap)
+ft_Bitmap_Init :: IO (Ptr FT_Bitmap) -- ^ bitmap
 ft_Bitmap_Init =
   alloca $ \bitmapPtr -> do
     ft_Bitmap_Init' bitmapPtr
@@ -69,12 +69,17 @@ ft_Bitmap_Convert =
 
 
 
-ft_GlyphSlot_Own_Bitmap :: FT_GlyphSlot -> IO ()
+ft_GlyphSlot_Own_Bitmap
+  :: FT_GlyphSlot -- ^ slot
+  -> IO ()
 ft_GlyphSlot_Own_Bitmap =
   autoError 'ft_GlyphSlot_Own_Bitmap ft_GlyphSlot_Own_Bitmap'
 
 
 
-ft_Bitmap_Done :: FT_Library -> Ptr FT_Bitmap -> IO ()
+ft_Bitmap_Done
+  :: FT_Library    -- ^ library
+  -> Ptr FT_Bitmap -- ^ bitmap
+  -> IO ()
 ft_Bitmap_Done =
   autoError 'ft_Bitmap_Done ft_Bitmap_Done'

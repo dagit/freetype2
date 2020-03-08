@@ -98,7 +98,9 @@ instance Storable FT_Outline_Funcs' where
 
 
 
-type FT_Outline_MoveToFunc = Ptr FT_Vector -> Ptr () -> IO #type int
+type FT_Outline_MoveToFunc = Ptr FT_Vector -- ^ to
+                          -> Ptr ()        -- ^ user
+                          -> IO #type int
 
 foreign import ccall "wrapper"
   ft_Outline_MoveToFunc :: FT_Outline_MoveToFunc -> IO (FunPtr FT_Outline_MoveToFunc)
@@ -108,7 +110,9 @@ foreign import ccall "dynamic"
 
 
 
-type FT_Outline_LineToFunc = Ptr FT_Vector -> Ptr () -> IO #type int
+type FT_Outline_LineToFunc = Ptr FT_Vector -- ^ to
+                          -> Ptr ()        -- ^ user
+                          -> IO #type int
 
 foreign import ccall "wrapper"
   ft_Outline_LineToFunc :: FT_Outline_LineToFunc -> IO (FunPtr FT_Outline_LineToFunc)
@@ -118,7 +122,10 @@ foreign import ccall "dynamic"
 
 
 
-type FT_Outline_ConicToFunc = Ptr FT_Vector -> Ptr FT_Vector -> Ptr () -> IO #type int
+type FT_Outline_ConicToFunc = Ptr FT_Vector -- ^ control
+                           -> Ptr FT_Vector -- ^ to
+                           -> Ptr ()        -- ^ user
+                           -> IO #type int
 
 foreign import ccall "wrapper"
   ft_Outline_ConicToFunc :: FT_Outline_ConicToFunc -> IO (FunPtr FT_Outline_ConicToFunc)
@@ -128,7 +135,11 @@ foreign import ccall "dynamic"
 
 
 
-type FT_Outline_CubicToFunc = Ptr FT_Vector -> Ptr FT_Vector -> Ptr FT_Vector -> Ptr () -> IO #type int
+type FT_Outline_CubicToFunc = Ptr FT_Vector -- ^ control1
+                           -> Ptr FT_Vector -- ^ control2
+                           -> Ptr FT_Vector -- ^ to
+                           -> Ptr ()        -- ^ user
+                           -> IO #type int
 
 foreign import ccall "wrapper"
   ft_Outline_CubicToFunc :: FT_Outline_CubicToFunc -> IO (FunPtr FT_Outline_CubicToFunc)

@@ -84,7 +84,7 @@ pattern FT_WinFNT_ID_OEM     = #const FT_WinFNT_ID_OEM
 
 
 ft_Get_WinFNT_Header
-  :: FT_Face                -- ^ face,
+  :: FT_Face                -- ^ face
   -> IO FT_WinFNT_HeaderRec -- ^ header
 ft_Get_WinFNT_Header =
   autoAllocaError 'ft_Get_WinFNT_Header ft_Get_WinFNT_Header'

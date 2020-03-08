@@ -38,11 +38,17 @@ pattern FT_PALETTE_FOR_DARK_BACKGROUND  = #const FT_PALETTE_FOR_DARK_BACKGROUND
 
 
 
-ft_Palette_Data_Get :: FT_Face -> IO FT_Palette_Data
+ft_Palette_Data_Get
+  :: FT_Face            -- ^ face
+  -> IO FT_Palette_Data -- ^ palette
 ft_Palette_Data_Get =
   autoAllocaError 'ft_Palette_Data_Get ft_Palette_Data_Get'
 
 
 
 foreign import ccall "FT_Palette_Select"    
-  ft_Palette_Select :: FT_Face -> FT_UShort -> Ptr FT_Color -> IO FT_Error    
+  ft_Palette_Select
+    :: FT_Face      -- ^ face
+    -> FT_UShort    -- ^ palette_index
+    -> Ptr FT_Color -- ^ apalette
+    -> IO FT_Error    

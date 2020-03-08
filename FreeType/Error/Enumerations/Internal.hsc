@@ -14,4 +14,6 @@ import           Foreign.Ptr
 #include FT_FREETYPE_H
 
 foreign import ccall "FT_Error_String"
-  ft_Error_String' :: FT_Error -> IO (Ptr #{type char})
+  ft_Error_String'
+    :: FT_Error              -- ^ error_code
+    -> IO (Ptr #{type char})

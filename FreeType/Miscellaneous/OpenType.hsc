@@ -42,7 +42,10 @@ ft_OpenType_Validate =
 
 
 foreign import ccall "FT_OpenType_Free"
-  ft_OpenType_Free :: FT_Face -> FT_Bytes -> IO ()
+  ft_OpenType_Free
+    :: FT_Face  -- ^ face
+    -> FT_Bytes -- ^ table
+    -> IO ()
 
 
 

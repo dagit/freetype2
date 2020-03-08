@@ -43,6 +43,7 @@ import           FreeType.Core.Glyph.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
 
+import           Data.Bool (bool)
 import           Foreign.Marshal.Alloc
 import           Foreign.Marshal.Utils
 import           Foreign.Ptr
@@ -51,25 +52,37 @@ import           Foreign.Storable
 #include "ft2build.h"
 #include FT_GLYPH_H
 
-ft_New_Glyph :: FT_Library -> FT_Glyph_Format -> IO FT_Glyph
+ft_New_Glyph
+  :: FT_Library      -- ^ library
+  -> FT_Glyph_Format -- ^ format
+  -> IO FT_Glyph     -- ^ aglyph
 ft_New_Glyph =
   autoAllocaError 'ft_New_Glyph ft_New_Glyph'
 
 
 
-ft_Get_Glyph :: FT_GlyphSlot -> IO FT_Glyph
+ft_Get_Glyph
+  :: FT_GlyphSlot -- ^ slot
+  -> IO FT_Glyph  -- ^ glyph
 ft_Get_Glyph =
   autoAllocaError 'ft_Get_Glyph ft_Get_Glyph'
 
 
 
-ft_Glyph_Copy :: FT_Glyph -> Ptr FT_Glyph -> IO ()
+ft_Glyph_Copy
+  :: FT_Glyph     -- ^ source
+  -> Ptr FT_Glyph -- ^ target
+  -> IO ()
 ft_Glyph_Copy glyph =
   ftError 'ft_Glyph_Copy . ft_Glyph_Copy' glyph
 
 
 
-ft_Glyph_Transform :: FT_Glyph -> FT_Matrix -> FT_Vector -> IO ()
+ft_Glyph_Transform
+  :: FT_Glyph  -- ^ glyph
+  -> FT_Matrix -- ^ matrix
+  -> FT_Vector -- ^ delta
+  -> IO ()
 ft_Glyph_Transform glyph mat vec =
   with mat $ \matPtr ->
     with vec $ \vecPtr ->
@@ -91,7 +104,10 @@ pattern FT_GLYPH_BBOX_PIXELS    = #const FT_GLYPH_BBOX_PIXELS
 
 
 
-ft_Glyph_Get_CBox :: FT_Glyph -> FT_UInt -> IO FT_BBox
+ft_Glyph_Get_CBox
+  :: FT_Glyph   -- ^ glyph
+  -> FT_UInt    -- ^ bbox_mode
+  -> IO FT_BBox -- ^ cbox
 ft_Glyph_Get_CBox glyph bbox_mode =
   alloca $ \ptr -> do
     ft_Glyph_Get_CBox' glyph bbox_mode ptr
@@ -103,12 +119,15 @@ ft_Glyph_To_Bitmap
   :: Ptr FT_Glyph   -- ^ the_glyph
   -> FT_Render_Mode -- ^ render_mode
   -> Ptr FT_Vector  -- ^ origin
-  -> FT_Bool        -- ^ destroy
+  -> Bool           -- ^ destroy
   -> IO ()
-ft_Glyph_To_Bitmap =
-  autoError 'ft_Glyph_To_Bitmap ft_Glyph_To_Bitmap'
+ft_Glyph_To_Bitmap glyph mode origin destroy =
+  ftError 'ft_Glyph_To_Bitmap
+    . ft_Glyph_To_Bitmap' glyph mode origin $ bool 0 1 destroy
 
 
 
 foreign import ccall "FT_Done_Glyph"
-  ft_Done_Glyph :: FT_Glyph -> IO ()
+  ft_Done_Glyph
+    :: FT_Glyph -- ^ glyph
+    -> IO ()
