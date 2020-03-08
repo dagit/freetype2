@@ -1,6 +1,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Support API > Quick retrieval of advance values](https://www.freetype.org/freetype2/docs/reference/ft2-quick_advance.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.Advance.Internal".
+ -}
+
 module FreeType.Support.Advance
   ( -- ** FT_Get_Advance
     ft_Get_Advance

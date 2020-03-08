@@ -5,6 +5,8 @@
 {- | Please refer to the
      [Core API > FreeType Version](https://www.freetype.org/freetype2/docs/reference/ft2-version.html)
      chapter of the reference.
+
+     Internal: "FreeType.Core.Version.Internal".
 -}
 
 module FreeType.Core.Version

@@ -1,5 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Support API > GZIP Streams](https://www.freetype.org/freetype2/docs/reference/ft2-gzip.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.GZIP.Internal".
+ -}
+
 module FreeType.Support.GZIP
   ( -- ** FT_Stream_OpenGzip
     ft_Stream_OpenGzip

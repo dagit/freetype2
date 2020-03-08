@@ -1,5 +1,10 @@
 {-# LANGUAGE PatternSynonyms #-}
 
+{- | Please refer to the
+     [Controlling FreeType Modules > Driver properties](https://www.freetype.org/freetype2/docs/reference/ft2-properties.html)
+     chapter of the reference.
+ -}
+
 module FreeType.Control.Driver
   ( -- ** FT_HINTING_XXX
     pattern FT_HINTING_FREETYPE

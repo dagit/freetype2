@@ -1,5 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Support API > BZIP2 Streams](https://www.freetype.org/freetype2/docs/reference/ft2-bzip2.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.BZIP2.Internal".
+ -}
+
 module FreeType.Support.BZIP2 where
 
 import           FreeType.Exception.Internal

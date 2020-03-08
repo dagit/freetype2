@@ -2,6 +2,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Controlling FreeType Modules > Subpixel Rendering](https://www.freetype.org/freetype2/docs/reference/ft2-lcd_rendering.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Control.Subpixel.Internal".
+ -}
+
 module FreeType.Control.Subpixel
   ( -- ** FT_LcdFilter
     FT_LcdFilter

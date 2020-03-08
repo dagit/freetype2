@@ -1,6 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Support API > List Processing](https://www.freetype.org/freetype2/docs/reference/ft2-list_processing.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.List.Internal".
+ -}
+
 module FreeType.Support.List
   ( -- ** FT_List
     FT_List

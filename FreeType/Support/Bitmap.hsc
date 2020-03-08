@@ -1,5 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Support API > Bitmap Handling](https://www.freetype.org/freetype2/docs/reference/ft2-bitmap_handling.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.Bitmap.Internal".
+ -}
+
 module FreeType.Support.Bitmap
   ( -- ** FT_Bitmap_Init
     ft_Bitmap_Init

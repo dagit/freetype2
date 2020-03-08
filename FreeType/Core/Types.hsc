@@ -3,7 +3,6 @@
 {- | Please refer to the
      [Core API > Basic Data Types](https://www.freetype.org/freetype2/docs/reference/ft2-basic_types.html)
      chapter of the reference.
-
  -}
 
 module FreeType.Core.Types

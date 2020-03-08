@@ -2,6 +2,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Miscellaneous > TrueTypeGX/AAT Validation](https://www.freetype.org/freetype2/docs/reference/ft2-gx_validation.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Miscellaneous.TrueTypeGX.Internal".
+ -}
+
 module FreeType.Miscellaneous.TrueTypeGX
   ( -- ** FT_TrueTypeGX_Validate
     ft_TrueTypeGX_Validate

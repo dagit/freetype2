@@ -1,7 +1,21 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
 
-module FreeType.Format.Gasp where
+{- | Please refer to the
+     [Format-Specific API > Gasp Table](https://www.freetype.org/freetype2/docs/reference/ft2-gasp_table.html)
+     chapter of the reference.
+ -}
+
+module FreeType.Format.Gasp
+  ( -- ** FT_GASP_XXX
+    pattern FT_GASP_NO_TABLE         
+  , pattern FT_GASP_DO_GRIDFIT       
+  , pattern FT_GASP_DO_GRAY          
+  , pattern FT_GASP_SYMMETRIC_GRIDFIT
+  , pattern FT_GASP_SYMMETRIC_SMOOTHING
+    -- ** FT_Get_Gasp
+  , ft_Get_Gasp
+  ) where
 
 import           FreeType.Core.Base
 import           FreeType.Core.Types.Types

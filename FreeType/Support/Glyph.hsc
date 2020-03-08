@@ -3,10 +3,16 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the    
+     [Support API > Glyph Stroker](https://www.freetype.org/freetype2/docs/reference/ft2-glyph_stroker.html)
+     chapter of the reference.    
+    
+     Internal: "FreeType.Support.Glyph.Internal".    
+ -}
+
 module FreeType.Support.Glyph
   ( -- ** FT_Stroker
     FT_Stroker
-  , FT_StrokerRec
     -- ** FT_Stroker_LineJoin
   , FT_Stroker_LineJoin
   , pattern FT_STROKER_LINEJOIN_ROUND

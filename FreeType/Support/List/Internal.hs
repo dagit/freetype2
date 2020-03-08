@@ -7,8 +7,10 @@ module FreeType.Support.List.Internal
   , ft_List_Iterate'
     -- ** FT_List_Iterator
   , ft_List_Iterator
+  , ft_List_Iterator'
     -- ** FT_List_Destructor
   , ft_List_Destructor
+  , ft_List_Destructor'
     -- ** FT_List_Finalize
   , ft_List_Finalize'
   )where

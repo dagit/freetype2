@@ -1,5 +1,10 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
+{- | Please refer to the
+     [Core API > Unicode Variation Sequences](https://www.freetype.org/freetype2/docs/reference/ft2-glyph_variants.html)
+     chapter of the reference.
+-}
+
 module FreeType.Core.Unicode
   ( -- ** FT_Face_GetCharVariantIndex
     ft_Face_GetCharVariantIndex

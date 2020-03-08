@@ -1,5 +1,10 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
+{- | Please refer to the    
+     [Core API > Glyph Layer Management](https://www.freetype.org/freetype2/docs/reference/ft2-layer_management.html)
+     chapter of the reference.    
+-}
+
 module FreeType.Core.Layer
   ( -- ** FT_LayerIterator
     FT_LayerIterator (..)

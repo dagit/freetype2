@@ -10,6 +10,8 @@
      Please refer to the
      [Core API > Mac Specific Interface](https://www.freetype.org/freetype2/docs/reference/ft2-mac_specific.html)
      chapter of the reference.
+
+     Internal: "FreeType.Core.Mac.Internal"
  -}
 
 module FreeType.Core.Mac
@@ -25,10 +27,6 @@ module FreeType.Core.Mac
   , ft_New_Face_From_FSSpec
     -- ** FT_New_Face_From_FSRef
   , ft_New_Face_From_FSRef
-    -- ** ???
-  , Handle
-  , FSSpec
-  , FSRef
   ) where
 
 import           FreeType.Core.Base.Types

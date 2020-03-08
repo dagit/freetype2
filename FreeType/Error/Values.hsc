@@ -1,6 +1,11 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
 
+{- | Please refer to the
+     [Error Codes > Error Code Values](https://www.freetype.org/freetype2/docs/reference/ft2-error_code_values.html)
+     chapter of the reference.
+ -}
+
 module FreeType.Error.Values
   ( -- ** FT_Err_XXX
     pattern FT_Err_Ok

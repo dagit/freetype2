@@ -2,6 +2,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Format-Specific API > BDF and PCF Files](https://www.freetype.org/freetype2/docs/reference/ft2-bdf_fonts.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.BDF.Internal".
+ -}
+
 module FreeType.Format.BDF
   ( -- ** BDF_PropertyType
     BDF_PropertyType

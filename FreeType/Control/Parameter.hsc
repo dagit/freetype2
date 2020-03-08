@@ -1,5 +1,10 @@
 {-# LANGUAGE PatternSynonyms #-}
 
+{- | Please refer to the
+     [Controlling FreeType Modules > Parameter Tags](https://www.freetype.org/freetype2/docs/reference/ft2-parameter_tags.html)
+     chapter of the reference.
+ -}
+
 module FreeType.Control.Parameter
   ( -- ** FT_PARAM_TAG_IGNORE_TYPOGRAPHIC_FAMILY
     pattern FT_PARAM_TAG_IGNORE_TYPOGRAPHIC_FAMILY

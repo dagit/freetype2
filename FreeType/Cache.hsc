@@ -1,10 +1,16 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Cache Sub-System > Cache Sub-System](https://www.freetype.org/freetype2/docs/reference/ft2-cache_subsystem.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Cache.Internal".
+ -}
+
 module FreeType.Cache
   ( -- ** FTC_Manager
     FTC_Manager
-  , FTC_ManagerRec
     -- ** FTC_FaceID
   , FTC_FaceID
     -- ** FTC_Face_Requester
@@ -23,12 +29,10 @@ module FreeType.Cache
   , ftc_Manager_RemoveFaceID
     -- ** FTC_Node
   , FTC_Node
-  , FTC_NodeRec
     -- ** FTC_Node_Unref
   , ftc_Node_Unref
     -- ** FTC_ImageCache
   , FTC_ImageCache
-  , FTC_ImageCacheRec
     -- ** FTC_ImageCache_New
   , ftc_ImageCache_New
     -- ** FTC_ImageCache_Lookup
@@ -37,7 +41,6 @@ module FreeType.Cache
   , FTC_SBit
     -- ** FTC_SBitCache
   , FTC_SBitCache
-  , FTC_SBitCacheRec
     -- ** FTC_SBitCache_New
   , ftc_SBitCache_New
     -- ** FTC_SBitCache_Lookup

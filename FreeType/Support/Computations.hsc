@@ -1,6 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
 
+{- | Please refer to the
+     [Support API > Computations](https://www.freetype.org/freetype2/docs/reference/ft2-computations.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.Computations.Internal".
+ -}
+
 module FreeType.Support.Computations
   ( -- ** FT_MulDiv
     ft_MulDiv
@@ -211,8 +218,8 @@ ft_Vector_Unit angle =
 
 
 ft_Vector_Rotate
-  :: FT_Angle  -- * vec
-  -> FT_Vector -- * angle
+  :: FT_Angle  -- ^ vec
+  -> FT_Vector -- ^ angle
   -> FT_Vector
 ft_Vector_Rotate angle vec =
   unsafePerformIO

@@ -2,10 +2,16 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Support API > Module Management](https://www.freetype.org/freetype2/docs/reference/ft2-module_management.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.Module.Internal".
+ -}
+
 module FreeType.Support.Module
   ( -- ** FT_Module
     FT_Module
-  , FT_ModuleRec
     -- ** FT_Module_Constructor
   , FT_Module_Constructor
     -- ** FT_Module_Destructor
@@ -37,7 +43,6 @@ module FreeType.Support.Module
   , ft_Reference_Library
     -- ** FT_Renderer
   , FT_Renderer
-  , FT_RendererRec
     -- ** FT_Renderer_Class
   , FT_Renderer_Class (..)
     -- ** FT_Get_Renderer
@@ -48,7 +53,6 @@ module FreeType.Support.Module
   , ft_Set_Debug_Hook
     -- ** FT_Driver
   , FT_Driver
-  , FT_DriverRec
     -- ** FT_DebugHook_Func
   , FT_DebugHook_Func
     -- ** FT_DEBUG_HOOK_XXX
@@ -135,10 +139,10 @@ ft_Property_Get lib modul prop valPtr =
 
 
 
-foreign import ccall "FT_Set_Default_Properties"    
+foreign import ccall "FT_Set_Default_Properties"
   ft_Set_Default_Properties
     :: FT_Library -- ^ library
-    -> IO ()    
+    -> IO ()
 
 
 

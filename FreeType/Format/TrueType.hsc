@@ -2,6 +2,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Format-Specific API > TrueType Tables](https://www.freetype.org/freetype2/docs/reference/ft2-truetype_tables.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.TrueType.Internal".
+ -}
+
 module FreeType.Format.TrueType
   ( -- ** TT_Header
     TT_Header (..)

@@ -1,6 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Format-Specific API > CID Fonts](https://www.freetype.org/freetype2/docs/reference/ft2-cid_fonts.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.CID.Internal".
+ -}
+
 module FreeType.Format.CID
   ( -- ** FT_Get_CID_Registry_Ordering_Supplement
     ft_Get_CID_Registry_Ordering_Supplement

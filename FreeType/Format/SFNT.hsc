@@ -1,6 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Format-Specific API > SFNT Names](https://www.freetype.org/freetype2/docs/reference/ft2-sfnt_names.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.SFNT.Internal".
+ -}
+
 module FreeType.Format.SFNT
   ( -- ** FT_SfntName
     FT_SfntName (..)

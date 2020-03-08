@@ -2,6 +2,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Miscellaneous > OpenType Validation](https://www.freetype.org/freetype2/docs/reference/ft2-ot_validation.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Miscellaneous.OpenType.Internal".
+ -}
+
 module FreeType.Miscellaneous.OpenType
   ( -- ** FT_OpenType_Validate
     ft_OpenType_Validate

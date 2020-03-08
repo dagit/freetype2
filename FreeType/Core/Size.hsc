@@ -1,6 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the    
+     [Core API > Size Management](https://www.freetype.org/freetype2/docs/reference/ft2-sizes_management.html)
+     chapter of the reference.    
+    
+     Internal: "FreeType.Core.Size.Internal".    
+-}
+
 module FreeType.Core.Size
   ( -- ** FT_New_Size
     ft_New_Size

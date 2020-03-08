@@ -47,7 +47,7 @@ foreign import ccall "dynamic"
 
 
 
-type FT_Module_Interface = ()
+type FT_Module_Interface = FT_Pointer
 
 type FT_Module_Requester = FT_Module              -- ^ module
                         -> Ptr #{type char}       -- ^ name
@@ -108,13 +108,13 @@ type FT_Renderer = Ptr FT_RendererRec
 
 
 
-type FT_Renderer_RenderFunc = ()
+data FT_Renderer_RenderFunc
 
-type FT_Renderer_TransformFunc = ()
+data FT_Renderer_TransformFunc
 
-type FT_Renderer_GetCBoxFunc = ()
+data FT_Renderer_GetCBoxFunc
 
-type FT_Renderer_SetModeFunc = ()
+data FT_Renderer_SetModeFunc
 
 data FT_Renderer_Class = FT_Renderer_Class
                            { rcRoot            :: FT_Module_Class

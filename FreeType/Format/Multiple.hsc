@@ -5,6 +5,12 @@
 {- | All of the functions in this module that get/set coordinates automatically
      set @num_coords@ based on list size and send 'nullPtr' as pointer if the
      array is 'null'.
+
+     Please refer to the
+     [Format-Specific API > Multiple Masters](https://www.freetype.org/freetype2/docs/reference/ft2-multiple_masters.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.Multiple.Internal".
  -}
 
 module FreeType.Format.Multiple
@@ -144,7 +150,7 @@ ft_Get_Var_Design_Coordinates =
 
 ft_Set_MM_Blend_Coordinates
   :: FT_Face    -- ^ face,
-  -> [FT_Fixed] -- ^ coords 
+  -> [FT_Fixed] -- ^ coords
   -> IO ()
 ft_Set_MM_Blend_Coordinates =
   setCoords 'ft_Set_MM_Blend_Coordinates ft_Set_MM_Blend_Coordinates'
@@ -162,14 +168,14 @@ ft_Get_MM_Blend_Coordinates =
 
 ft_Set_Var_Blend_Coordinates
   :: FT_Face    -- ^ face,
-  -> [FT_Fixed] -- ^ coords 
+  -> [FT_Fixed] -- ^ coords
   -> IO ()
 ft_Set_Var_Blend_Coordinates =
   setCoords 'ft_Set_Var_Blend_Coordinates ft_Set_Var_Blend_Coordinates'
 
 
 
-ft_Get_Var_Blend_Coordinates  
+ft_Get_Var_Blend_Coordinates
   :: FT_Face       -- ^ face
   -> FT_UInt       -- ^ num_coords
   -> IO [FT_Fixed] -- ^ coords
@@ -203,7 +209,7 @@ ft_Get_MM_WeightVector face len =
           FT_Err_Invalid_Argument -> ft_Get_MM_WeightVector' face lenPtr coordsPtr
           _                       -> return err
       peekArray (fromIntegral len) coordsPtr
-  
+
 
 
 pattern FT_VAR_AXIS_FLAG_HIDDEN

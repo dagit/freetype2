@@ -1,7 +1,13 @@
+{- | Please refer to the
+     [Miscellaneous > Incremental Loading](https://www.freetype.org/freetype2/docs/reference/ft2-incremental.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Miscellaneous.Incremental.Internal".
+ -}
+
 module FreeType.Miscellaneous.Incremental
   ( -- ** FT_Incremental
     FT_Incremental
-  , FT_IncrementalRec
     -- ** FT_Incremental_MetricsRec
   , FT_Incremental_MetricsRec (..)
     -- ** FT_Incremental_Metrics

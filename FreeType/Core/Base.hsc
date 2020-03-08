@@ -2,10 +2,16 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Core API > Base Interface](https://www.freetype.org/freetype2/docs/reference/ft2-base_interface.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Core.Base.Internal".
+-}
+
 module FreeType.Core.Base
   ( -- ** FT_Library
     FT_Library
-  , FT_LibraryRec
     -- ** FT_Face
   , FT_Face
     -- ** FT_Size
@@ -72,7 +78,6 @@ module FreeType.Core.Base
   , FT_Glyph_Metrics (..)
     -- ** FT_SubGlyph
   , FT_SubGlyph
-  , FT_SubGlyphRec
     -- ** FT_Bitmap_Size
   , FT_Bitmap_Size (..)
     -- ** FT_Init_FreeType
@@ -147,6 +152,7 @@ module FreeType.Core.Base
     -- ** FT_Get_Kerning
   , ft_Get_Kerning
     -- ** FT_Kerning_Mode
+  , FT_Kerning_Mode
   , pattern FT_KERNING_DEFAULT
   , pattern FT_KERNING_UNFITTED
   , pattern FT_KERNING_UNSCALED
@@ -170,13 +176,10 @@ module FreeType.Core.Base
   , ft_Get_SubGlyph_Info
     -- ** FT_Face_Internal
   , FT_Face_Internal
-  , FT_Face_InternalRec
     -- ** FT_Size_Internal
   , FT_Size_Internal
-  , FT_Size_InternalRec
     -- ** FT_Slot_Internal
   , FT_Slot_Internal
-  , FT_Slot_InternalRec
     -- ** FT_FACE_FLAG_XXX
   , pattern FT_FACE_FLAG_SCALABLE
   , pattern FT_FACE_FLAG_FIXED_SIZES
@@ -642,7 +645,7 @@ pattern FT_LOAD_TARGET_MODE :: FT_Int32 -> FT_Render_Mode
 pattern FT_LOAD_TARGET_MODE <- _
   where
     FT_LOAD_TARGET_MODE x = fromIntegral $ (x `shiftR` 16) .&. 15
-  
+
 
 
 

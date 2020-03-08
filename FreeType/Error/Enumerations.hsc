@@ -1,3 +1,10 @@
+{- | Please refer to the
+     [Error Codes > Error Enumerations](https://www.freetype.org/freetype2/docs/reference/ft2-error_enumerations.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Error.Enumerations.Internal".
+ -}
+
 module FreeType.Error.Enumerations
   ( -- ** FT_Error_String
     ft_Error_String

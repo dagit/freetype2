@@ -1,5 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Format-Specific API > PFR Fonts](https://www.freetype.org/freetype2/docs/reference/ft2-pfr_fonts.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.PFR.Internal".
+ -}
+
 module FreeType.Format.PFR
   ( -- ** FT_Get_PFR_Metrics
     ft_Get_PFR_Metrics

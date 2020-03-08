@@ -2,6 +2,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Format-Specific API > Window FNT Files](https://www.freetype.org/freetype2/docs/reference/ft2-winfnt_fonts.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.WinFNT.Internal".
+ -}
+
 module FreeType.Format.WinFNT
   ( -- ** FT_WinFNT_ID_XXX
     pattern FT_WinFNT_ID_CP1252

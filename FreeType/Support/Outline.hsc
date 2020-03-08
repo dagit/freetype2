@@ -2,6 +2,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Support API > Outline Processing](https://www.freetype.org/freetype2/docs/reference/ft2-outline_processing.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.Outline.Internal".
+ -}
+
 module FreeType.Support.Outline
   ( -- ** FT_Outline
     FT_Outline
@@ -45,7 +52,7 @@ module FreeType.Support.Outline
   , FT_Outline_CubicToFunc
     -- ** FT_Orientation
   , FT_Orientation
-  , pattern FT_ORIENTATION_TRUETYPE  
+  , pattern FT_ORIENTATION_TRUETYPE
   , pattern FT_ORIENTATION_POSTSCRIPT
   , pattern FT_ORIENTATION_FILL_RIGHT
   , pattern FT_ORIENTATION_FILL_LEFT

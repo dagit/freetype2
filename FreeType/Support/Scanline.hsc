@@ -1,9 +1,15 @@
 {-# LANGUAGE PatternSynonyms #-}
 
+{- | Please refer to the
+     [Support API > Scanline Converter](https://www.freetype.org/freetype2/docs/reference/ft2-raster.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Support.Scanline.Internal".
+ -}
+
 module FreeType.Support.Scanline
   ( -- ** FT_Raster
     FT_Raster
-  , FT_RasterRec
     -- ** FT_Span
   , FT_Span (..)
     -- ** FT_SpanFunc

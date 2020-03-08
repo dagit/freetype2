@@ -4,6 +4,13 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 
+{- | Please refer to the
+     [Format-Specific API > Type 1 Tables](https://www.freetype.org/freetype2/docs/reference/ft2-type1_tables.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.Type1.Internal".
+ -}
+
 module FreeType.Format.Type1
   ( -- ** PS_FontInfoRec
     PS_FontInfoRec (..)

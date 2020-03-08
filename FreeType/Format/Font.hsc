@@ -1,6 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Format-Specific API > Font Formats](https://www.freetype.org/freetype2/docs/reference/ft2-font_formats.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Format.Font.Internal".
+ -}
+
 module FreeType.Format.Font
   ( -- ** ft_Get_Font_Format
     ft_Get_Font_Format

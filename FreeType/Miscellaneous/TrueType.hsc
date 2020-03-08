@@ -1,7 +1,20 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
 
-module FreeType.Miscellaneous.TrueType where
+{- | Please refer to the
+     [Miscellaneous > The TrueType Engine](https://www.freetype.org/freetype2/docs/reference/ft2-truetype_engine.html)
+     chapter of the reference.
+ -}
+
+module FreeType.Miscellaneous.TrueType
+  ( -- ** FT_TrueTypeEngineType
+    FT_TrueTypeEngineType
+  , pattern FT_TRUETYPE_ENGINE_TYPE_NONE
+  , pattern FT_TRUETYPE_ENGINE_TYPE_UNPATENTED
+  , pattern FT_TRUETYPE_ENGINE_TYPE_PATENTED
+    -- ** FT_Get_TrueType_Engine_Type
+  , ft_Get_TrueType_Engine_Type
+  ) where
 
 import           FreeType.Core.Base.Types
 import           FreeType.Miscellaneous.TrueType.Types

@@ -2,6 +2,13 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE PatternSynonyms #-}
 
+{- | Please refer to the
+     [Core API > Glyph Management](https://www.freetype.org/freetype2/docs/reference/ft2-glyph_management.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Core.Glyph.Internal".
+-}
+
 module FreeType.Core.Glyph
   ( -- ** FT_Glyph
     FT_Glyph

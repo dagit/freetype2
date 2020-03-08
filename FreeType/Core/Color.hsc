@@ -2,6 +2,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- | Please refer to the
+     [Core API > Glyph Color Management](https://www.freetype.org/freetype2/docs/reference/ft2-color_management.html)
+     chapter of the reference.
+
+     Internal: "FreeType.Core.Color.Internal".
+-}
+
 module FreeType.Core.Color
   ( -- ** FT_Color
     FT_Color (..)
@@ -30,11 +37,11 @@ import           Foreign.Ptr
 #include FT_COLOR_H
 
 
-pattern FT_PALETTE_FOR_LIGHT_BACKGROUND    
-      , FT_PALETTE_FOR_DARK_BACKGROUND    
-     :: FT_UShort    
-pattern FT_PALETTE_FOR_LIGHT_BACKGROUND = #const FT_PALETTE_FOR_LIGHT_BACKGROUND    
-pattern FT_PALETTE_FOR_DARK_BACKGROUND  = #const FT_PALETTE_FOR_DARK_BACKGROUND    
+pattern FT_PALETTE_FOR_LIGHT_BACKGROUND
+      , FT_PALETTE_FOR_DARK_BACKGROUND
+     :: FT_UShort
+pattern FT_PALETTE_FOR_LIGHT_BACKGROUND = #const FT_PALETTE_FOR_LIGHT_BACKGROUND
+pattern FT_PALETTE_FOR_DARK_BACKGROUND  = #const FT_PALETTE_FOR_DARK_BACKGROUND
 
 
 
@@ -46,9 +53,9 @@ ft_Palette_Data_Get =
 
 
 
-foreign import ccall "FT_Palette_Select"    
+foreign import ccall "FT_Palette_Select"
   ft_Palette_Select
     :: FT_Face      -- ^ face
     -> FT_UShort    -- ^ palette_index
     -> Ptr FT_Color -- ^ apalette
-    -> IO FT_Error    
+    -> IO FT_Error
