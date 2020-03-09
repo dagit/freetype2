@@ -1,7 +1,7 @@
 # freetype2
 
-Bindings to the [FreeType2](https://www.freetype.org/) C library,
-following the [API reference](https://www.freetype.org/freetype2/docs/reference/index.html).
+Bindings to the [FreeType2](https://www.freetype.org/) C library (version 2.10.1 as of when this was edited),
+following the [API reference](https://www.freetype.org/freetype2/docs/reference/index.html)
 
 These are _mostly_ raw with a few key changes:
 - Every function that returns a `FT_Error` throws a `FtError` exception instead
