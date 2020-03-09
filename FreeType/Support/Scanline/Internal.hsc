@@ -18,9 +18,11 @@ module FreeType.Support.Scanline.Internal
   , ft_Raster_RenderFunc
   , ft_Raster_RenderFunc'
     -- ** FT_Raster_BitTest_Func
+  , FT_Raster_BitTest_Func
   , ft_Raster_BitTest_Func
   , ft_Raster_BitTest_Func'
     -- ** FT_Raster_BitSet_Func
+  , FT_Raster_BitSet_Func
   , ft_Raster_BitSet_Func
   , ft_Raster_BitSet_Func'
   ) where

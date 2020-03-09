@@ -57,6 +57,8 @@ module FreeType.Core.Base.Internal
   , ft_Set_Charmap'
     -- ** FT_Get_SubGlyph_Info
   , ft_Get_SubGlyph_Info'
+    -- ** FT_HAS_FAST_GLYPHS
+  , pattern FT_HAS_FAST_GLYPHS
   ) where
 
 import           FreeType.Circular.Types
@@ -305,3 +307,12 @@ foreign import ccall "FT_Get_SubGlyph_Info"
     -> Ptr FT_Int    -- ^ p_arg2
     -> Ptr FT_Matrix -- ^ p_transform
     -> IO FT_Error
+
+
+
+pattern FT_HAS_FAST_GLYPHS
+  :: FT_Face -- ^ face
+  -> Bool
+pattern FT_HAS_FAST_GLYPHS <- _
+  where
+    FT_HAS_FAST_GLYPHS _ = False

@@ -27,7 +27,7 @@ module FreeType.Support.Outline.Internal
     -- ** FT_Outline_Decompose
   , ft_Outline_Decompose'
     -- ** FT_Outline_Funcs
-  , FT_Outline_Funcs'
+  , FT_Outline_Funcs' (..)
     -- ** FT_Outline_MoveToFunc
   , ft_Outline_MoveToFunc
   , ft_Outline_MoveToFunc'

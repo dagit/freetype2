@@ -13,9 +13,11 @@ module FreeType.Core.Version
   ( -- ** FT_Library_Version
     ft_Library_Version
     -- ** FT_Face_CheckTrueTypePatents
-  , ft_Face_CheckTrueTypePatents
+    -- | Deprecated: 'ft_Face_CheckTrueTypePatents'.
+
     -- ** FT_Face_SetUnpatentedHinting
-  , ft_Face_SetUnpatentedHinting
+    -- | Deprecated: 'ft_Face_SetUnpatentedHinting'.
+
     -- ** FREETYPE_XXX
   , pattern FREETYPE_MINOR
   , pattern FREETYPE_MAJOR
@@ -45,21 +47,6 @@ ft_Library_Version lib =
           <$> peek majorPtr
           <*> peek minorPtr
           <*> peek patchPtr
-
-
-
-foreign import ccall "FT_Face_CheckTrueTypePatents"
-  ft_Face_CheckTrueTypePatents
-    :: FT_Face    -- ^ face
-    -> IO FT_Bool
-
-
-
-foreign import ccall "FT_Face_SetUnpatentedHinting"
-  ft_Face_SetUnpatentedHinting
-    :: FT_Face    -- ^ face
-    -> FT_Bool    -- ^ value
-    -> IO FT_Bool
 
 
 

@@ -44,18 +44,19 @@ module FreeType.Format.TrueType
     -- ** FT_Get_CMap_Format
   , ft_Get_CMap_Format
     -- ** FT_PARAM_TAG_UNPATENTED_HINTING
-  , pattern FT_PARAM_TAG_UNPATENTED_HINTING
+    -- | Deprecated: 'FT_PARAM_TAG_UNPATENTED_HINTING'.
+
     -- ** TT_PLATFORM_XXX
+    -- | 'TT_PLATFORM_ISO' is deprecated.
   , pattern TT_PLATFORM_APPLE_UNICODE
   , pattern TT_PLATFORM_MACINTOSH
-  , pattern TT_PLATFORM_ISO
   , pattern TT_PLATFORM_MICROSOFT
   , pattern TT_PLATFORM_CUSTOM
   , pattern TT_PLATFORM_ADOBE
     -- ** TT_APPLE_ID_XXX
+    -- | 'TT_APPLE_ID_ISO_10646' is deprecated.
   , pattern TT_APPLE_ID_DEFAULT
   , pattern TT_APPLE_ID_UNICODE_1_1
-  , pattern TT_APPLE_ID_ISO_10646
   , pattern TT_APPLE_ID_UNICODE_2_0
   , pattern TT_APPLE_ID_UNICODE_32
   , pattern TT_APPLE_ID_VARIANT_SELECTOR
@@ -96,9 +97,8 @@ module FreeType.Format.TrueType
   , pattern TT_MAC_ID_SINDHI
   , pattern TT_MAC_ID_UNINTERP
     -- ** TT_ISO_ID_XXX
-  , pattern TT_ISO_ID_7BIT_ASCII
-  , pattern TT_ISO_ID_10646
-  , pattern TT_ISO_ID_8859_1
+    -- | Deprecated: 'TT_ISO_ID_7BIT_ASCII', 'TT_ISO_ID_10646', 'TT_ISO_ID_8859_1'.
+
     -- ** TT_MS_ID_XXX
   , pattern TT_MS_ID_SYMBOL_CS
   , pattern TT_MS_ID_UNICODE_CS
@@ -467,8 +467,6 @@ module FreeType.Format.TrueType
   , pattern TT_NAME_ID_LIGHT_BACKGROUND
   , pattern TT_NAME_ID_DARK_BACKGROUND
   , pattern TT_NAME_ID_VARIATIONS_PREFIX
-  , pattern TT_NAME_ID_PREFERRED_FAMILY
-  , pattern TT_NAME_ID_PREFERRED_SUBFAMILY
     -- ** TT_UCR_XXX
     -- *** ulUnicodeRange1
   , pattern TT_UCR_BASIC_LATIN
@@ -526,7 +524,6 @@ module FreeType.Format.TrueType
   , pattern TT_UCR_BOPOMOFO
   , pattern TT_UCR_HANGUL_COMPATIBILITY_JAMO
   , pattern TT_UCR_CJK_MISC
-  , pattern TT_UCR_KANBUN
   , pattern TT_UCR_ENCLOSED_CJK_LETTERS_MONTHS
   , pattern TT_UCR_CJK_COMPATIBILITY
   , pattern TT_UCR_HANGUL
@@ -601,7 +598,6 @@ module FreeType.Format.TrueType
   , pattern TT_UCR_GAME_TILES
   ) where
 
-import           FreeType.Control.Parameter (pattern FT_PARAM_TAG_UNPATENTED_HINTING)
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
@@ -705,14 +701,12 @@ foreign import ccall "FT_Get_CMap_Format"
 
 pattern TT_PLATFORM_APPLE_UNICODE
       , TT_PLATFORM_MACINTOSH
-      , TT_PLATFORM_ISO
       , TT_PLATFORM_MICROSOFT
       , TT_PLATFORM_CUSTOM
       , TT_PLATFORM_ADOBE
      :: FT_UShort
 pattern TT_PLATFORM_APPLE_UNICODE = #const TT_PLATFORM_APPLE_UNICODE
 pattern TT_PLATFORM_MACINTOSH     = #const TT_PLATFORM_MACINTOSH
-pattern TT_PLATFORM_ISO           = #const TT_PLATFORM_ISO
 pattern TT_PLATFORM_MICROSOFT     = #const TT_PLATFORM_MICROSOFT
 pattern TT_PLATFORM_CUSTOM        = #const TT_PLATFORM_CUSTOM
 pattern TT_PLATFORM_ADOBE         = #const TT_PLATFORM_ADOBE
@@ -721,7 +715,6 @@ pattern TT_PLATFORM_ADOBE         = #const TT_PLATFORM_ADOBE
 
 pattern TT_APPLE_ID_DEFAULT
       , TT_APPLE_ID_UNICODE_1_1
-      , TT_APPLE_ID_ISO_10646
       , TT_APPLE_ID_UNICODE_2_0
       , TT_APPLE_ID_UNICODE_32
       , TT_APPLE_ID_VARIANT_SELECTOR
@@ -729,7 +722,6 @@ pattern TT_APPLE_ID_DEFAULT
      :: FT_UShort
 pattern TT_APPLE_ID_DEFAULT          = #const TT_APPLE_ID_DEFAULT
 pattern TT_APPLE_ID_UNICODE_1_1      = #const TT_APPLE_ID_UNICODE_1_1
-pattern TT_APPLE_ID_ISO_10646        = #const TT_APPLE_ID_ISO_10646
 pattern TT_APPLE_ID_UNICODE_2_0      = #const TT_APPLE_ID_UNICODE_2_0
 pattern TT_APPLE_ID_UNICODE_32       = #const TT_APPLE_ID_UNICODE_32
 pattern TT_APPLE_ID_VARIANT_SELECTOR = #const TT_APPLE_ID_VARIANT_SELECTOR
@@ -806,16 +798,6 @@ pattern TT_MAC_ID_SLAVIC              = #const TT_MAC_ID_SLAVIC
 pattern TT_MAC_ID_VIETNAMESE          = #const TT_MAC_ID_VIETNAMESE
 pattern TT_MAC_ID_SINDHI              = #const TT_MAC_ID_SINDHI
 pattern TT_MAC_ID_UNINTERP            = #const TT_MAC_ID_UNINTERP
-
-
-
-pattern TT_ISO_ID_7BIT_ASCII
-      , TT_ISO_ID_10646
-      , TT_ISO_ID_8859_1
-     :: FT_UShort
-pattern TT_ISO_ID_7BIT_ASCII = #const TT_ISO_ID_7BIT_ASCII
-pattern TT_ISO_ID_10646      = #const TT_ISO_ID_10646
-pattern TT_ISO_ID_8859_1     = #const TT_ISO_ID_8859_1
 
 
 
@@ -1536,8 +1518,6 @@ pattern TT_NAME_ID_COPYRIGHT
       , TT_NAME_ID_LIGHT_BACKGROUND
       , TT_NAME_ID_DARK_BACKGROUND
       , TT_NAME_ID_VARIATIONS_PREFIX
-      , TT_NAME_ID_PREFERRED_FAMILY
-      , TT_NAME_ID_PREFERRED_SUBFAMILY
      :: FT_Int32
 pattern TT_NAME_ID_COPYRIGHT             = #const TT_NAME_ID_COPYRIGHT
 pattern TT_NAME_ID_FONT_FAMILY           = #const TT_NAME_ID_FONT_FAMILY
@@ -1564,8 +1544,6 @@ pattern TT_NAME_ID_WWS_SUBFAMILY         = #const TT_NAME_ID_WWS_SUBFAMILY
 pattern TT_NAME_ID_LIGHT_BACKGROUND      = #const TT_NAME_ID_LIGHT_BACKGROUND
 pattern TT_NAME_ID_DARK_BACKGROUND       = #const TT_NAME_ID_DARK_BACKGROUND
 pattern TT_NAME_ID_VARIATIONS_PREFIX     = #const TT_NAME_ID_VARIATIONS_PREFIX
-pattern TT_NAME_ID_PREFERRED_FAMILY      = #const TT_NAME_ID_PREFERRED_FAMILY
-pattern TT_NAME_ID_PREFERRED_SUBFAMILY   = #const TT_NAME_ID_PREFERRED_SUBFAMILY
 
 
 
@@ -1623,8 +1601,6 @@ pattern TT_UCR_BASIC_LATIN
       , TT_UCR_BOPOMOFO
       , TT_UCR_HANGUL_COMPATIBILITY_JAMO
       , TT_UCR_CJK_MISC
-      , TT_UCR_KANBUN
---    , TT_UCR_PHAGSPA
       , TT_UCR_ENCLOSED_CJK_LETTERS_MONTHS
       , TT_UCR_CJK_COMPATIBILITY
       , TT_UCR_HANGUL
@@ -1750,8 +1726,6 @@ pattern TT_UCR_KATAKANA                         = #const TT_UCR_KATAKANA
 pattern TT_UCR_BOPOMOFO                         = #const TT_UCR_BOPOMOFO
 pattern TT_UCR_HANGUL_COMPATIBILITY_JAMO        = #const TT_UCR_HANGUL_COMPATIBILITY_JAMO
 pattern TT_UCR_CJK_MISC                         = #const TT_UCR_CJK_MISC
-pattern TT_UCR_KANBUN                           = #const TT_UCR_KANBUN
---pattern TT_UCR_PHAGSPA                          = #const TT_UCR_PHAGSPA
 pattern TT_UCR_ENCLOSED_CJK_LETTERS_MONTHS      = #const TT_UCR_ENCLOSED_CJK_LETTERS_MONTHS
 pattern TT_UCR_CJK_COMPATIBILITY                = #const TT_UCR_CJK_COMPATIBILITY
 pattern TT_UCR_HANGUL                           = #const TT_UCR_HANGUL

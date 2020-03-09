@@ -11,7 +11,7 @@
 
 module FreeType.Support.Outline
   ( -- ** FT_Outline
-    FT_Outline
+    FT_Outline (..)
     -- ** FT_Outline_New
   , ft_Outline_New
     -- ** FT_Outline_Done
@@ -41,7 +41,7 @@ module FreeType.Support.Outline
     -- ** FT_Outline_Decompose
   , ft_Outline_Decompose
     -- ** FT_Outline_Funcs
-  , FT_Outline_Funcs
+  , FT_Outline_Funcs (..)
     -- ** FT_Outline_MoveToFunc
   , FT_Outline_MoveToFunc
     -- ** FT_Outline_LineToFunc
@@ -214,6 +214,8 @@ ft_Outline_Render =
 
 
 
+-- | 'FT_Outline_Funcs' is only used as an argument (and this is the only function using
+--   it), so it's silently converted to 'FT_Outline_Funcs'' inside.
 ft_Outline_Decompose
   :: Ptr FT_Outline   -- ^ outline
   -> FT_Outline_Funcs -- ^ func_interface

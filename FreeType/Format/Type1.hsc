@@ -110,11 +110,13 @@ module FreeType.Format.Type1
     -- ** T1_FontInfo
   , T1_FontInfo
     -- ** T1_Private
-  , T1_Private
+    -- | Deprecated, equivalent to 'PS_FontInfoRec'.
+
     -- ** CID_FontDict
-  , CID_FontDict
+    -- | Deprecated, equivalent to 'PS_PrivateRec'.
+
     -- ** CID_Info
-  , CID_Info
+    -- | Deprecated, equivalent to 'CID_FaceDictRec'.
   ) where
 
 import           FreeType.Core.Base.Types

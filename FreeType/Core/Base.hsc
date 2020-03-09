@@ -247,7 +247,7 @@ module FreeType.Core.Base
   , pattern FT_FSTYPE_NO_SUBSETTING
   , pattern FT_FSTYPE_BITMAP_EMBEDDING_ONLY
     -- ** FT_HAS_FAST_GLYPHS
-  , pattern FT_HAS_FAST_GLYPHS
+    -- | Deprecated: 'FT_HAS_FAST_GLYPHS'.
   ) where
 
 import           FreeType.Core.Base.Internal
@@ -919,10 +919,3 @@ pattern FT_FSTYPE_PREVIEW_AND_PRINT_EMBEDDING  = #const FT_FSTYPE_PREVIEW_AND_PR
 pattern FT_FSTYPE_EDITABLE_EMBEDDING           = #const FT_FSTYPE_EDITABLE_EMBEDDING
 pattern FT_FSTYPE_NO_SUBSETTING                = #const FT_FSTYPE_NO_SUBSETTING
 pattern FT_FSTYPE_BITMAP_EMBEDDING_ONLY        = #const FT_FSTYPE_BITMAP_EMBEDDING_ONLY
-
-
-
-pattern FT_HAS_FAST_GLYPHS :: FT_Face -> Bool
-pattern FT_HAS_FAST_GLYPHS <- _
-  where
-    FT_HAS_FAST_GLYPHS _ = False
