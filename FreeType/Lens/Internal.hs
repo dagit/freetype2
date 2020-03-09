@@ -13,7 +13,10 @@ import           Language.Haskell.TH
 -- | Analogous to 'makeFields', but removes the prefix and aggressively checks for
 --   whether the field prefix matches the name of the datatype.
 --
---   E.g. in 'FTC_SBitRec' every field __has__ to be prefixed with @sbr@.
+--   E.g. in @FTC_SBitRec@ every field __has__ to be prefixed with @sbr@.
+--
+--   Note: datatypes with an asterisk at the end require an additional @t@ in the prefix, so
+--         if there existed @FTC_SBitRec'@, the prefix would be @sbrt@.
 makeFieldsFT :: Name -> DecsQ
 makeFieldsFT = flip makeFieldsFT' id
 
