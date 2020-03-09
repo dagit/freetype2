@@ -144,6 +144,139 @@ Extra-source-files:  freetype2/include/*.h
 
 Cabal-version:       >=1.8
 
+
+
+Flag examples
+  Description: Build example programs
+  Default: True
+
+Executable freetype-example
+  Main-is:       Main.hs
+  Build-depends: base > 4.5 && < 5
+               , freetype2
+               , microlens
+               , microlens-th
+               , template-haskell
+
+  Other-modules: FreeType
+                 FreeType.Internal
+
+                 FreeType.Lens
+                 FreeType.Lens.Internal
+
+                 FreeType.Exception
+                 FreeType.Exception.Internal
+
+                 FreeType.Core.Version
+                 FreeType.Core.Version.Internal
+                 FreeType.Core.Types
+                 FreeType.Core.Base
+                 FreeType.Core.Base.Internal
+                 FreeType.Core.Unicode
+                 FreeType.Core.Color
+                 FreeType.Core.Color.Internal
+                 FreeType.Core.Layer
+                 FreeType.Core.Glyph
+                 FreeType.Core.Glyph.Internal
+                 FreeType.Core.Mac
+                 FreeType.Core.Mac.Internal
+                 FreeType.Core.Size
+                 FreeType.Core.Size.Internal
+                 FreeType.Format.Multiple
+                 FreeType.Format.Multiple.Internal
+                 FreeType.Format.TrueType
+                 FreeType.Format.TrueType.Internal
+                 FreeType.Format.Type1
+                 FreeType.Format.Type1.Internal
+                 FreeType.Format.SFNT
+                 FreeType.Format.SFNT.Internal
+                 FreeType.Format.BDF
+                 FreeType.Format.BDF.Internal
+                 FreeType.Format.CID
+                 FreeType.Format.CID.Internal
+                 FreeType.Format.PFR
+                 FreeType.Format.PFR.Internal
+                 FreeType.Format.WinFNT
+                 FreeType.Format.WinFNT.Internal
+                 FreeType.Format.Font
+                 FreeType.Format.Font.Internal
+                 FreeType.Format.Gasp
+                 FreeType.Control.Driver
+                 FreeType.Control.Parameter
+                 FreeType.Control.Parameter.Internal
+                 FreeType.Control.Subpixel
+                 FreeType.Control.Subpixel.Internal
+                 FreeType.Cache
+                 FreeType.Cache.Internal
+                 FreeType.Support.Computations
+                 FreeType.Support.Computations.Internal
+                 FreeType.Support.List
+                 FreeType.Support.List.Internal
+                 FreeType.Support.Bitmap
+                 FreeType.Support.Bitmap.Internal
+                 FreeType.Support.Outline
+                 FreeType.Support.Outline.Internal
+                 FreeType.Support.Scanline
+                 FreeType.Support.Scanline.Internal
+                 FreeType.Support.Advance
+                 FreeType.Support.Advance.Internal
+                 FreeType.Support.Glyph
+                 FreeType.Support.Glyph.Internal
+                 FreeType.Support.System
+                 FreeType.Support.System.Internal
+                 FreeType.Support.Module
+                 FreeType.Support.Module.Internal
+                 FreeType.Support.GZIP
+                 FreeType.Support.GZIP.Internal
+                 FreeType.Support.LZW
+                 FreeType.Support.LZW.Internal
+                 FreeType.Support.BZIP2
+                 FreeType.Support.BZIP2.Internal
+                 FreeType.Error.Enumerations
+                 FreeType.Error.Enumerations.Internal
+                 FreeType.Error.Values
+                 FreeType.Miscellaneous.OpenType
+                 FreeType.Miscellaneous.OpenType.Internal
+                 FreeType.Miscellaneous.Incremental
+                 FreeType.Miscellaneous.Incremental.Internal
+                 FreeType.Miscellaneous.TrueType
+                 FreeType.Miscellaneous.TrueType.Internal
+                 FreeType.Miscellaneous.TrueTypeGX
+                 FreeType.Miscellaneous.TrueTypeGX.Internal
+
+                 FreeType.Circular.Types
+                 FreeType.Core.Types.Types
+                 FreeType.Core.Base.Types
+                 FreeType.Core.Color.Types
+                 FreeType.Core.Glyph.Types
+                 FreeType.Core.Layer.Types
+                 FreeType.Core.Mac.Types
+                 FreeType.Format.BDF.Types
+                 FreeType.Format.Multiple.Types
+                 FreeType.Format.SFNT.Types
+                 FreeType.Format.TrueType.Types
+                 FreeType.Format.Type1.Types
+                 FreeType.Format.WinFNT.Types
+                 FreeType.Control.Driver.Types
+                 FreeType.Control.Subpixel.Types
+                 FreeType.Cache.Types
+                 FreeType.Support.Computations.Types
+                 FreeType.Support.Glyph.Types
+                 FreeType.Support.List.Types
+                 FreeType.Support.Module.Types
+                 FreeType.Support.Outline.Types
+                 FreeType.Support.Scanline.Types
+                 FreeType.Support.System.Types
+                 FreeType.Miscellaneous.Incremental.Types
+                 FreeType.Miscellaneous.TrueType.Types
+
+  if flag(examples)
+    Buildable: True
+  else
+    Buildable: False
+
+
+
 Library
   Exposed-modules: FreeType
                    FreeType.Internal
@@ -230,7 +363,7 @@ Library
                    FreeType.Miscellaneous.TrueType.Internal
                    FreeType.Miscellaneous.TrueTypeGX
                    FreeType.Miscellaneous.TrueTypeGX.Internal
-  
+
   Other-modules: FreeType.Circular.Types
                  FreeType.Core.Types.Types
                  FreeType.Core.Base.Types
@@ -261,7 +394,6 @@ Library
                , microlens
                , microlens-th
                , template-haskell
-               , vector
 
   Build-tools: hsc2hs
   ghc-options: -Wall
@@ -350,7 +482,7 @@ test-suite dynamic-function-check
                , template-haskell
 
   other-modules: Test.Report
-                 
+
                  FreeType
                  FreeType.Internal
 
@@ -358,80 +490,80 @@ test-suite dynamic-function-check
 
                  FreeType.Lens
                  FreeType.Lens.Internal
-              
-                 FreeType.Core.Version    
-                 FreeType.Core.Version.Internal    
-                 FreeType.Core.Types    
-                 FreeType.Core.Base    
-                 FreeType.Core.Base.Internal    
-                 FreeType.Core.Unicode    
-                 FreeType.Core.Color    
-                 FreeType.Core.Color.Internal    
-                 FreeType.Core.Layer    
-                 FreeType.Core.Glyph    
-                 FreeType.Core.Glyph.Internal    
-                 FreeType.Core.Mac    
-                 FreeType.Core.Mac.Internal    
-                 FreeType.Core.Size    
-                 FreeType.Core.Size.Internal    
-                 FreeType.Format.Multiple    
-                 FreeType.Format.Multiple.Internal    
-                 FreeType.Format.TrueType    
-                 FreeType.Format.TrueType.Internal    
-                 FreeType.Format.Type1    
-                 FreeType.Format.Type1.Internal    
-                 FreeType.Format.SFNT    
-                 FreeType.Format.SFNT.Internal    
-                 FreeType.Format.BDF    
-                 FreeType.Format.BDF.Internal    
-                 FreeType.Format.CID    
-                 FreeType.Format.CID.Internal    
-                 FreeType.Format.PFR    
-                 FreeType.Format.PFR.Internal    
-                 FreeType.Format.WinFNT    
-                 FreeType.Format.WinFNT.Internal    
-                 FreeType.Format.Font    
-                 FreeType.Format.Font.Internal    
-                 FreeType.Format.Gasp    
-                 FreeType.Control.Driver    
-                 FreeType.Control.Parameter    
-                 FreeType.Control.Subpixel    
-                 FreeType.Control.Subpixel.Internal    
-                 FreeType.Cache    
-                 FreeType.Cache.Internal    
-                 FreeType.Support.Computations    
-                 FreeType.Support.Computations.Internal    
-                 FreeType.Support.List    
-                 FreeType.Support.List.Internal    
-                 FreeType.Support.Bitmap    
-                 FreeType.Support.Bitmap.Internal    
-                 FreeType.Support.Outline    
-                 FreeType.Support.Outline.Internal    
-                 FreeType.Support.Scanline    
-                 FreeType.Support.Scanline.Internal    
-                 FreeType.Support.Advance    
-                 FreeType.Support.Advance.Internal    
-                 FreeType.Support.Glyph    
-                 FreeType.Support.Glyph.Internal    
-                 FreeType.Support.System    
-                 FreeType.Support.System.Internal    
-                 FreeType.Support.Module    
-                 FreeType.Support.Module.Internal    
-                 FreeType.Support.GZIP    
-                 FreeType.Support.GZIP.Internal    
-                 FreeType.Support.LZW    
-                 FreeType.Support.LZW.Internal    
-                 FreeType.Support.BZIP2    
-                 FreeType.Support.BZIP2.Internal    
-                 FreeType.Error.Enumerations    
-                 FreeType.Error.Enumerations.Internal    
-                 FreeType.Error.Values    
-                 FreeType.Miscellaneous.OpenType    
-                 FreeType.Miscellaneous.OpenType.Internal    
-                 FreeType.Miscellaneous.Incremental    
-                 FreeType.Miscellaneous.Incremental.Internal    
-                 FreeType.Miscellaneous.TrueType    
-                 FreeType.Miscellaneous.TrueTypeGX    
+
+                 FreeType.Core.Version
+                 FreeType.Core.Version.Internal
+                 FreeType.Core.Types
+                 FreeType.Core.Base
+                 FreeType.Core.Base.Internal
+                 FreeType.Core.Unicode
+                 FreeType.Core.Color
+                 FreeType.Core.Color.Internal
+                 FreeType.Core.Layer
+                 FreeType.Core.Glyph
+                 FreeType.Core.Glyph.Internal
+                 FreeType.Core.Mac
+                 FreeType.Core.Mac.Internal
+                 FreeType.Core.Size
+                 FreeType.Core.Size.Internal
+                 FreeType.Format.Multiple
+                 FreeType.Format.Multiple.Internal
+                 FreeType.Format.TrueType
+                 FreeType.Format.TrueType.Internal
+                 FreeType.Format.Type1
+                 FreeType.Format.Type1.Internal
+                 FreeType.Format.SFNT
+                 FreeType.Format.SFNT.Internal
+                 FreeType.Format.BDF
+                 FreeType.Format.BDF.Internal
+                 FreeType.Format.CID
+                 FreeType.Format.CID.Internal
+                 FreeType.Format.PFR
+                 FreeType.Format.PFR.Internal
+                 FreeType.Format.WinFNT
+                 FreeType.Format.WinFNT.Internal
+                 FreeType.Format.Font
+                 FreeType.Format.Font.Internal
+                 FreeType.Format.Gasp
+                 FreeType.Control.Driver
+                 FreeType.Control.Parameter
+                 FreeType.Control.Subpixel
+                 FreeType.Control.Subpixel.Internal
+                 FreeType.Cache
+                 FreeType.Cache.Internal
+                 FreeType.Support.Computations
+                 FreeType.Support.Computations.Internal
+                 FreeType.Support.List
+                 FreeType.Support.List.Internal
+                 FreeType.Support.Bitmap
+                 FreeType.Support.Bitmap.Internal
+                 FreeType.Support.Outline
+                 FreeType.Support.Outline.Internal
+                 FreeType.Support.Scanline
+                 FreeType.Support.Scanline.Internal
+                 FreeType.Support.Advance
+                 FreeType.Support.Advance.Internal
+                 FreeType.Support.Glyph
+                 FreeType.Support.Glyph.Internal
+                 FreeType.Support.System
+                 FreeType.Support.System.Internal
+                 FreeType.Support.Module
+                 FreeType.Support.Module.Internal
+                 FreeType.Support.GZIP
+                 FreeType.Support.GZIP.Internal
+                 FreeType.Support.LZW
+                 FreeType.Support.LZW.Internal
+                 FreeType.Support.BZIP2
+                 FreeType.Support.BZIP2.Internal
+                 FreeType.Error.Enumerations
+                 FreeType.Error.Enumerations.Internal
+                 FreeType.Error.Values
+                 FreeType.Miscellaneous.OpenType
+                 FreeType.Miscellaneous.OpenType.Internal
+                 FreeType.Miscellaneous.Incremental
+                 FreeType.Miscellaneous.Incremental.Internal
+                 FreeType.Miscellaneous.TrueType
+                 FreeType.Miscellaneous.TrueTypeGX
                  FreeType.Miscellaneous.TrueTypeGX.Internal
 
                  FreeType.Circular.Types

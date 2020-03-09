@@ -1,120 +1,72 @@
 module Main where
 
-import Control.Monad
-import System.Environment
-import Graphics.Rendering.FreeType.Internal as FT
-import Graphics.Rendering.FreeType.Internal.Matrix as M
-import Graphics.Rendering.FreeType.Internal.Vector as V
-import Graphics.Rendering.FreeType.Internal.GlyphSlot as GS
-import Graphics.Rendering.FreeType.Internal.PrimitiveTypes as PT
-import Graphics.Rendering.FreeType.Internal.Face as F
-import Graphics.Rendering.FreeType.Internal.Bitmap as B
+import           FreeType
+import           FreeType.Lens
 
-import Foreign
-import Foreign.Marshal
-import Foreign.C.String
+import           Control.Monad
+import           Data.Char
+import           Data.Word
+import           Foreign.Marshal.Array
+import           Foreign.Marshal.Utils
+import           Foreign.Storable
+import           Lens.Micro
+import           Lens.Micro.Extras
+import           System.Environment
+import           System.Exit
 
-import System.Exit
 
-import Data.Array.IO as A
 
-runFreeType :: IO FT_Error -> IO ()
-runFreeType m = do
-  r <- m
-  unless (r == 0) $ fail $ "FreeType Error:" ++ show r
-
+-- | Takes a font filepath and a string as commanline arguments, printing to stdout
+--   every character from the string provided at size 16 if the bitmap is scalable.
+--
+--   Arguments after the first two are discarded.
 main :: IO ()
 main = do
-  let display_width  = 640
-      display_height = 480
-      angle  = (25 / 360) * pi * 2
-  matrix <- mallocForeignPtr
-  pen    <- mallocForeignPtr
-  withForeignPtr matrix $ \p-> poke p (FT_Matrix
-        { xx = round $   cos angle * 0x10000
-        , xy = round $ -(sin angle * 0x10000)
-        , yx = round $   sin angle * 0x10000
-        , yy = round $   cos angle * 0x10000
-        })
-  withForeignPtr pen $ \p -> poke p (FT_Vector
-        { x = 300 * 64
-        , y = (display_height - 200) * 64
-        })
-  (filename:text:_) <- getArgs
+  paths <- getArgs
+  (filepath, phrase) <- case paths of
+                          (filepath:phrase:_) -> return (filepath, phrase)
+                          _ -> die "Program accepts two arguments: first one is filepath, \
+                                   \second is a set of characters you wish to print"
+  forM_ phrase $ \charcode ->
+    ft_With_FreeType $ \lib ->
+      ft_With_Face lib filepath 0 $ \face -> do
+        isScalable <- FT_IS_SCALABLE face
+        when isScalable
+          $ ft_Set_Char_Size face 0 (16 * 64) 0 0
+        ft_Load_Char face (fromIntegral $ ord charcode) FT_LOAD_RENDER
+        slot <- peek . view glyph =<< peek face
+        withBitmap lib (slot^.bitmap) $ \bmap -> do
+          let bufferSize = fromIntegral $ bmap^.rows * bmap^.pitch.to fromIntegral
+          buffr <- peekArray bufferSize $ bmap^.buffer
+          drawBitmap (bmap^.pitch.to fromIntegral) buffr
 
-  putStrLn $ concat ["Loading file: ", filename]
-  putStrLn $ concat ["Drawing text: ", text]
 
-  library <- alloca $ \libraryptr -> do
-    putStr "Library ptr: "
-    print libraryptr
-    runFreeType $ ft_Init_FreeType libraryptr
-    peek libraryptr
 
-  face <- alloca $ \faceptr -> do
-    putStr "Face ptr: "
-    print faceptr
-    withCString filename $ \str -> do
-      runFreeType $ ft_New_Face library str 0 faceptr
-      peek faceptr
+withBitmap :: FT_Library -> FT_Bitmap -> (FT_Bitmap -> IO a) -> IO a
+withBitmap lib source f =
+  if any (== source^.pixel_mode.to fromIntegral)
+       [ FT_PIXEL_MODE_MONO, FT_PIXEL_MODE_GRAY2
+       , FT_PIXEL_MODE_GRAY4, FT_PIXEL_MODE_BGRA
+       ]
+    then ft_Bitmap_With lib $ \targetPtr -> do
+           with source $ \sourcePtr -> do
+             ft_Bitmap_Convert lib sourcePtr targetPtr (source^.pixel_mode^.to fromIntegral)
+             f =<< peek targetPtr
+    else f source
 
-  image <- A.newArray
-    ((0,0), (fromIntegral display_height - 1, fromIntegral display_width - 1)) 0
-    :: IO (IOUArray (Int, Int) Int)
 
-  runFreeType $ ft_Set_Char_Size face (50*64) 0 100 0
-  forM_ text $ \c -> do
-    withForeignPtr matrix $ \mp ->
-      withForeignPtr pen $ \pp -> do
-        ft_Set_Transform face mp pp
-        slot <- peek $ glyph face
-        runFreeType $
-          ft_Load_Char face (fromIntegral . fromEnum $ c) ft_LOAD_RENDER
-        numFaces <- peek $ num_faces face
-        putStrLn $ "face->num_faces = " ++ show numFaces
-        v <- peek $ advance slot
-        putStrLn $ "advance: " ++ show v
-        numGlyphs <- peek $ num_glyphs face
-        putStrLn $ "numGlyphs = " ++ show numGlyphs
-        pen' <- peek pp
-        poke pp $ FT_Vector { x = x v + x pen'
-                            , y = y v + y pen' }
-        b <- peek $ bitmap slot
-        left <- peek $ bitmap_left slot
-        top  <- peek $ bitmap_top slot
-        let b_top = fromIntegral display_height - top
-            b_right = left + width b
-            b_bottom = fromIntegral . fromEnum $ b_top + rows b
-        unless (b_right >= display_width || b_bottom >= display_height) $
-          drawBitmap b image left b_top
-  showImage image
-  runFreeType $ ft_Done_Face face
-  runFreeType $ ft_Done_FreeType library
 
-drawBitmap :: FT_Bitmap -> IOUArray (Int, Int) Int
-           -> FT_Int -> FT_Int -> IO ()
-drawBitmap bitmap image x y = do
-  let xMax = x + width bitmap
-      yMax = y + rows bitmap
-  forM_ (zip [ x .. xMax - 1] [0 .. ]) $ \(i,p) ->
-    forM_ (zip [ y .. yMax - 1] [0 .. ]) $ \(j,q) -> do
-      let index = q * width bitmap + p
-      v <- readArray image (fromIntegral j, fromIntegral i) :: IO Int
-      b <- peek $ (buffer bitmap) `plusPtr` fromIntegral index
-      writeArray image (fromIntegral j, fromIntegral i) $ v .|. b
-
-showImage :: IOUArray (Int, Int) Int -> IO ()
-showImage image = do
-  ((hmin,wmin), (hmax,wmax)) <- getBounds image
-  forM_ [ hmin .. hmax - 1 ] $ \i -> do
-    forM_ [ wmin .. wmax - 1 ] $ \j -> do
-      v <- readArray image (i,j)
-      putc v
-    putChar '\n'
+drawBitmap :: Int -> [Word8] -> IO ()
+drawBitmap n []   = return ()
+drawBitmap n list = do
+  putStrLn $ color <$> take n list
+  drawBitmap n $ drop n list
   where
-  putc :: Int -> IO ()
-  putc c
-    | c == 0    = putChar '0'
-    | c < 128   = putChar '+'
-    | otherwise = putChar '*'
-
+    color :: Word8 -> Char
+    color a =
+      case () of
+        () | a == 0    -> ' '
+           | a < 85    -> '░'
+           | a < 170   -> '▒'
+           | a < 255   -> '▓'
+           | otherwise -> '█'
