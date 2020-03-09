@@ -229,14 +229,14 @@ type FT_Generic_Finalizer = FunPtr (Ptr () -> IO ())
 
 
 data FT_Bitmap = FT_Bitmap
-                   { btRows         :: #type unsigned int
-                   , btWidth        :: #type unsigned int
-                   , btPitch        :: #type int
-                   , btBuffer       :: Ptr #type unsigned char
-                   , btNum_grays    :: #type unsigned short
-                   , btPixel_mode   :: #type unsigned char
-                   , btPalette_mode :: #type unsigned char
-                   , btPalette      :: Ptr ()
+                   { bRows         :: #type unsigned int
+                   , bWidth        :: #type unsigned int
+                   , bPitch        :: #type int
+                   , bBuffer       :: Ptr #type unsigned char
+                   , bNum_grays    :: #type unsigned short
+                   , bPixel_mode   :: #type unsigned char
+                   , bPalette_mode :: #type unsigned char
+                   , bPalette      :: Ptr ()
                    }
                  deriving (Show, Eq)
 
@@ -256,14 +256,14 @@ instance Storable FT_Bitmap where
       <*> #{peek struct FT_Bitmap_, palette     } ptr
 
   poke ptr val = do
-    #{poke struct FT_Bitmap_, rows        } ptr $ val & btRows
-    #{poke struct FT_Bitmap_, width       } ptr $ val & btWidth
-    #{poke struct FT_Bitmap_, pitch       } ptr $ val & btPitch
-    #{poke struct FT_Bitmap_, buffer      } ptr $ val & btBuffer
-    #{poke struct FT_Bitmap_, num_grays   } ptr $ val & btNum_grays
-    #{poke struct FT_Bitmap_, pixel_mode  } ptr $ val & btPixel_mode
-    #{poke struct FT_Bitmap_, palette_mode} ptr $ val & btPalette_mode
-    #{poke struct FT_Bitmap_, palette     } ptr $ val & btPalette
+    #{poke struct FT_Bitmap_, rows        } ptr $ val & bRows
+    #{poke struct FT_Bitmap_, width       } ptr $ val & bWidth
+    #{poke struct FT_Bitmap_, pitch       } ptr $ val & bPitch
+    #{poke struct FT_Bitmap_, buffer      } ptr $ val & bBuffer
+    #{poke struct FT_Bitmap_, num_grays   } ptr $ val & bNum_grays
+    #{poke struct FT_Bitmap_, pixel_mode  } ptr $ val & bPixel_mode
+    #{poke struct FT_Bitmap_, palette_mode} ptr $ val & bPalette_mode
+    #{poke struct FT_Bitmap_, palette     } ptr $ val & bPalette
 
 
 

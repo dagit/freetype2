@@ -42,15 +42,21 @@ synthesize modify dt this =
       reference = "(" <> dt <> ", " <> this <> ")"
   in if take prefixSize this /= strip dt
        then error $ "Prefix does not match function name " <> reference
-       else let name = modify . first toLower $ drop prefixSize this
-            in if null name
-                  then error $ "Nothing left after stripping prefix " <> reference
-                  else [MethodName (mkName $ "Has" <> first toUpper name) (mkName name)]
+       else if isLower . head $ drop prefixSize this
+              then error $ "Field prefix is larger than the datatype name " <> reference
+              else let name = modify . first toLower $ drop prefixSize this
+                   in if null name
+                         then error $ "Nothing left after stripping prefix " <> reference
+                         else [MethodName (mkName $ "Has" <> first toUpper name) (mkName name)]
 
 
 
 strip :: String -> String
-strip = fmap toLower . filter isUpper . drop 1 . dropWhile (/= '_')
+strip str =
+  let caps = filter (\a -> isUpper a || a == '\'') . drop 1 $ dropWhile (/= '_') str
+  in if last caps == '\''
+       then init (fmap toLower caps) <> "t"
+       else fmap toLower caps
 
 
 
