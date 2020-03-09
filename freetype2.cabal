@@ -74,7 +74,7 @@ Flag examples
 
 Executable freetype-example
   Main-is:       Main.hs
-  Build-depends: base > 4.5 && < 5
+  Build-depends: base >= 4.7 && < 5
                , freetype2
                , microlens
                , microlens-th
@@ -316,7 +316,7 @@ Library
                  FreeType.Miscellaneous.Incremental.Types
                  FreeType.Miscellaneous.TrueType.Types
 
-  Build-depends: base >= 4.5 && < 5
+  Build-depends: base >= 4.7 && < 5
                , microlens
                , microlens-th
                , template-haskell
@@ -402,7 +402,7 @@ Library
 test-suite dynamic-function-check
   type: exitcode-stdio-1.0
   main-is: Test.hs
-  build-depends: base >= 4.5 && < 5
+  build-depends: base >= 4.7 && < 5
                , microlens
                , microlens-th
                , template-haskell
