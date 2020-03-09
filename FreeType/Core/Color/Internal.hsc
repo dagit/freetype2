@@ -10,12 +10,12 @@ module FreeType.Core.Color.Internal
 import           FreeType.Core.Color.Types
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
-import           FreeType.Error.Values
 
 import           Foreign.Ptr
 
 #include "ft2build.h"
 #include FT_COLOR_H
+#include "ftcolor-plus.h"
 
 
 
@@ -27,16 +27,8 @@ foreign import ccall "FT_Palette_Data_Get"
 
 
 
-{-# WARNING ft_Palette_Set_Foreground_Color' "Not implemented, requires a function rewrite on the other side" #-}
-ft_Palette_Set_Foreground_Color'
-    :: FT_Face      -- ^ face
-    -> Ptr FT_Color -- ^ foreground_color
-    -> IO FT_Error
-ft_Palette_Set_Foreground_Color' _ _ = return FT_Err_Unimplemented_Feature
-{-
-foreign import ccall "FT_Palette_Set_Foreground_Color"
+foreign import ccall "FT_Palette_Set_Foreground_Color_Plus"
   ft_Palette_Set_Foreground_Color'
-    :: FT_Face
-    -> Ptr FT_Color
+    :: FT_Face      -- ^ face
+    -> Ptr FT_Color -- ^ color
     -> IO FT_Error
--}

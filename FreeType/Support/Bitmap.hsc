@@ -17,7 +17,7 @@ module FreeType.Support.Bitmap
     -- ** FT_Bitmap_Convert
   , ft_Bitmap_Convert
     -- ** FT_Bitmap_Blend
---, ft_Bitmap_Blend
+  , ft_Bitmap_Blend
     -- ** FT_GlyphSlot_Own_Bitmap
   , ft_GlyphSlot_Own_Bitmap
     -- ** FT_Bitmap_Done
@@ -25,13 +25,15 @@ module FreeType.Support.Bitmap
   ) where
 
 import           FreeType.Core.Base.Types
---import           FreeType.Core.Color.Types
+import           FreeType.Core.Color.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
 import           FreeType.Support.Bitmap.Internal
 
 import           Foreign.Marshal.Alloc
+import           Foreign.Marshal.Utils
 import           Foreign.Ptr
+import           Foreign.Storable
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -73,6 +75,24 @@ ft_Bitmap_Convert
   -> IO ()
 ft_Bitmap_Convert =
   autoError 'ft_Bitmap_Convert ft_Bitmap_Convert'
+
+
+
+ft_Bitmap_Blend
+  :: FT_Library    -- ^ library
+  -> Ptr FT_Bitmap -- ^ source
+  -> FT_Vector     -- ^ source_offset
+  -> Ptr FT_Bitmap -- ^ target
+  -> FT_Vector     -- ^ target_offset
+  -> FT_Color      -- ^ color 
+  -> IO FT_Vector  -- ^ target_offset
+ft_Bitmap_Blend lib source sourceOff target targetOff color =
+  with sourceOff $ \sourceOffPtr ->
+    with targetOff $ \targetOffPtr ->
+      with color $ \colorPtr -> do
+        ftError 'ft_Bitmap_Blend
+          $ ft_Bitmap_Blend' lib source sourceOffPtr target targetOffPtr colorPtr
+        peek targetOffPtr
 
 
 

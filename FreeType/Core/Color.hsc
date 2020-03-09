@@ -22,7 +22,7 @@ module FreeType.Core.Color
     -- ** FT_Palette_Select
   , ft_Palette_Select
     -- ** FT_Palette_Set_Foreground_Color
---  , ft_Palette_Set_Foreground_Color
+  , ft_Palette_Set_Foreground_Color
   ) where
 
 import           FreeType.Core.Base.Types
@@ -31,6 +31,7 @@ import           FreeType.Core.Color.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
 
+import           Foreign.Marshal.Utils
 import           Foreign.Ptr
 
 #include "ft2build.h"
@@ -59,3 +60,13 @@ foreign import ccall "FT_Palette_Select"
     -> FT_UShort    -- ^ palette_index
     -> Ptr FT_Color -- ^ apalette
     -> IO FT_Error
+
+
+
+ft_Palette_Set_Foreground_Color
+  :: FT_Face  -- ^ face
+  -> FT_Color -- ^ color
+  -> IO ()
+ft_Palette_Set_Foreground_Color face color =
+  with color $
+    ftError 'ft_Palette_Set_Foreground_Color . ft_Palette_Set_Foreground_Color' face

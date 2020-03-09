@@ -139,6 +139,8 @@ Extra-source-files:  freetype2/include/*.h
                      freetype2/src/type42/*.h
                      freetype2/src/winfonts/*.c
                      freetype2/src/winfonts/*.h
+                     freetype2-plus/src/*.c
+                     freetype2-plus/include/*.h
 
 Cabal-version:       >=1.8
 
@@ -285,6 +287,8 @@ Library
                 freetype2/src/lzw
                 freetype2/src/psaux
                 freetype2/src/psnames
+                freetype2-plus/include
+                freetype2-plus/src
 
   cc-options: -DFT_CONFIG_CONFIG_H=<ftconfig.h>
               -DFT2_BUILD_LIBRARY
@@ -332,6 +336,8 @@ Library
              freetype2/src/lzw/ftlzw.c
              freetype2/src/psaux/psaux.c
              freetype2/src/psnames/psmodule.c
+             freetype2-plus/src/ftbitmap-plus.c
+             freetype2-plus/src/ftcolor-plus.c
 
 test-suite dynamic-function-check
   type: exitcode-stdio-1.0
@@ -475,6 +481,8 @@ test-suite dynamic-function-check
                 freetype2/src/lzw
                 freetype2/src/psaux
                 freetype2/src/psnames
+                freetype2-plus/include
+                freetype2-plus/src
 
   cc-options: -DFT_CONFIG_CONFIG_H=<ftconfig.h>
               -DFT2_BUILD_LIBRARY
@@ -522,6 +530,8 @@ test-suite dynamic-function-check
              freetype2/src/lzw/ftlzw.c
              freetype2/src/psaux/psaux.c
              freetype2/src/psnames/psmodule.c
+             freetype2-plus/src/ftbitmap-plus.c
+             freetype2-plus/src/ftcolor-plus.c
 
 source-repository head
   type: git
