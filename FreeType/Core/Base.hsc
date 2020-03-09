@@ -82,16 +82,19 @@ module FreeType.Core.Base
   , FT_Bitmap_Size (..)
     -- ** FT_Init_FreeType
   , ft_Init_FreeType
+  , ft_With_FreeType
     -- ** FT_Done_FreeType
   , ft_Done_FreeType
     -- ** FT_New_Face
   , ft_New_Face
+  , ft_With_Face
     -- ** FT_Done_Face
   , ft_Done_Face
     -- ** FT_Reference_Face
   , ft_Reference_Face
     -- ** FT_New_Memory_Face
   , ft_New_Memory_Face
+  , ft_With_Memory_Face
     -- ** FT_Face_Properties
   , ft_Face_Properties
     -- ** FT_Open_Face
@@ -255,7 +258,7 @@ import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
 
-import           Control.Monad ((<=<))
+import           Control.Exception
 import           Data.Bits
 import           Foreign.C.String
 import           Foreign.Marshal
@@ -427,6 +430,14 @@ ft_Init_FreeType =
 
 
 
+-- | 'bracket' over 'ft_Init_FreeType' and 'ft_Done_FreeType'.
+--
+--   The provided 'FT_Library' should not be used after this function terminates.
+ft_With_FreeType :: (FT_Library -> IO a) -> IO a
+ft_With_FreeType =
+  bracket ft_Init_FreeType ft_Done_FreeType
+
+
 ft_Done_FreeType
   :: FT_Library -- ^ library
   -> IO ()
@@ -445,6 +456,19 @@ ft_New_Face lib path index =
     alloca $ \facePtr -> do
       ftError 'ft_New_Face $ ft_New_Face' lib (castPtr pathPtr) index facePtr
       peek facePtr
+
+
+
+-- | 'bracket' over 'ft_New_Face' and 'ft_Done_Face'.
+--
+--   The provided 'FT_Face' should not be used after this function terminates.
+ft_With_Face
+  :: FT_Library        -- ^ library
+  -> FilePath          -- ^ filepathname
+  -> FT_Long           -- ^ face_index
+  -> (FT_Face -> IO a)
+  -> IO a
+ft_With_Face lib path index = bracket (ft_New_Face lib path index) ft_Done_Face
 
 
 
@@ -472,6 +496,21 @@ ft_New_Memory_Face
   -> IO FT_Face  -- ^ face
 ft_New_Memory_Face =
   autoAllocaError 'ft_New_Memory_Face ft_New_Memory_Face'
+
+
+
+-- | 'bracket' over 'ft_New_Memory_Face' and 'ft_Done_Face'.
+--
+--   The provided 'FT_Face' should not be used after this function terminates.
+ft_With_Memory_Face
+  :: FT_Library        -- ^ library
+  -> Ptr FT_Byte       -- ^ file_base
+  -> FT_Long           -- ^ file_size
+  -> FT_Long           -- ^ face_index
+  -> (FT_Face -> IO a)
+  -> IO a
+ft_With_Memory_Face lib base size index =
+  bracket (ft_New_Memory_Face lib base size index) ft_Done_Face
 
 
 
@@ -718,8 +757,8 @@ ft_Get_Glyph_Name face index buffer_max =
 ft_Get_Postscript_Name
   :: FT_Face   -- ^ face
   -> IO String
-ft_Get_Postscript_Name =
-  peekCString . castPtr <=< ft_Get_Postscript_Name'
+ft_Get_Postscript_Name face =
+  peekCString . castPtr =<< ft_Get_Postscript_Name' face
 
 
 

@@ -10,6 +10,7 @@
 module FreeType.Support.Bitmap
   ( -- ** FT_Bitmap_Init
     ft_Bitmap_Init
+  , ft_Bitmap_With
     -- ** FT_Bitmap_Copy
   , ft_Bitmap_Copy
     -- ** FT_Bitmap_Embolden
@@ -30,6 +31,7 @@ import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
 import           FreeType.Support.Bitmap.Internal
 
+import           Control.Exception
 import           Foreign.Marshal.Alloc
 import           Foreign.Marshal.Utils
 import           Foreign.Ptr
@@ -38,11 +40,26 @@ import           Foreign.Storable
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
+-- | Newly created 'FT_Bitmap' is allocated using 'malloc' and thus must be 'free'd manually.
 ft_Bitmap_Init :: IO (Ptr FT_Bitmap) -- ^ bitmap
-ft_Bitmap_Init =
+ft_Bitmap_Init = do
+  bitmapPtr <- malloc
+  ft_Bitmap_Init' bitmapPtr
+  return bitmapPtr
+
+
+
+-- | 'bracket' over 'ft_Outline_Init' and 'ft_Bitmap_Done'.
+--
+--   The provided 'Ptr' 'FT_Bitmap' should not be used after this function terminates.
+ft_Bitmap_With
+  :: FT_Library              -- ^ library
+  -> (Ptr FT_Bitmap -> IO a)
+  -> IO a
+ft_Bitmap_With lib f =
   alloca $ \bitmapPtr -> do
     ft_Bitmap_Init' bitmapPtr
-    return bitmapPtr
+    finally (f bitmapPtr) . ftError 'ft_Bitmap_Done $ ft_Bitmap_Done' lib bitmapPtr
 
 
 
@@ -104,9 +121,11 @@ ft_GlyphSlot_Own_Bitmap =
 
 
 
+-- | Additionally 'free's the passed pointer.
 ft_Bitmap_Done
   :: FT_Library    -- ^ library
   -> Ptr FT_Bitmap -- ^ bitmap
   -> IO ()
-ft_Bitmap_Done =
-  autoError 'ft_Bitmap_Done ft_Bitmap_Done'
+ft_Bitmap_Done lib bitmapPtr = do
+  ftError 'ft_Bitmap_Done $ ft_Bitmap_Done' lib bitmapPtr
+  free bitmapPtr

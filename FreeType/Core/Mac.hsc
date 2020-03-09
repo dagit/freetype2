@@ -4,7 +4,7 @@
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {- | This module is only here for the sake of completeness, I don't know whether
-     there exists a Haskell library that provides these Mac primitives ¯\_(ツ)_/¯
+     there exists a Haskell library that provides these Mac primitives ¯\\_(ツ)_/¯
 
      If you're not on Macintosh every internal function is a dud that returns 'FT_Err_Unimplemented_Feature'.
 

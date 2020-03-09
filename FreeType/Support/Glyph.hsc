@@ -39,6 +39,7 @@ module FreeType.Support.Glyph
   , ft_Glyph_StrokeBorder
     -- ** FT_Stroker_New
   , ft_Stroker_New
+  , ft_Stroker_With
     -- ** FT_Stroker_Set
   , ft_Stroker_Set
     -- ** FT_Stroker_Rewind
@@ -75,6 +76,7 @@ import           FreeType.Support.Glyph.Internal
 import           FreeType.Support.Glyph.Types
 import           FreeType.Support.Outline
 
+import           Control.Exception
 import           Data.Bool (bool)
 import           Foreign.Marshal.Alloc
 import           Foreign.Marshal.Utils
@@ -161,6 +163,17 @@ ft_Stroker_New
   -> IO FT_Stroker -- ^ stroker
 ft_Stroker_New =
   autoAllocaError 'ft_Stroker_New ft_Stroker_New'
+
+
+
+-- | 'bracket' over 'ft_Stroker_New' and 'ft_Stroker_Done'.
+--
+--   The provided 'FT_Stroker' should not be used after this function terminates.
+ft_Stroker_With
+  :: FT_Library           -- ^ library
+  -> (FT_Stroker -> IO a)
+  -> IO a
+ft_Stroker_With lib = bracket (ft_Stroker_New lib) ft_Stroker_Done
 
 
 

@@ -17,6 +17,7 @@ module FreeType.Cache
   , FTC_Face_Requester
     -- ** FTC_Manager_New
   , ftc_Manager_New
+  , ftc_Manager_With
     -- ** FTC_Manager_Reset
   , ftc_Manager_Reset
     -- ** FTC_Manager_Done
@@ -74,6 +75,7 @@ import           FreeType.Core.Glyph.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
 
+import           Control.Exception
 import           Foreign.Marshal.Alloc
 import           Foreign.Ptr
 import           Foreign.Storable
@@ -92,6 +94,23 @@ ftc_Manager_New
   -> IO FTC_Manager     -- ^ manager
 ftc_Manager_New =
   autoAllocaError 'ftc_Manager_New ftc_Manager_New'
+
+
+
+-- | 'bracket' over 'ft_Manager_With' and 'ft_Manager_Done'.
+--
+--   The provided 'FTC_Manager' should not be used after this function terminates.
+ftc_Manager_With
+  :: FT_Library            -- ^ library
+  -> FT_UInt               -- ^ max_faces
+  -> FT_UInt               -- ^ max_sizes
+  -> FT_ULong              -- ^ max_bytes
+  -> FTC_Face_Requester    -- ^ requester
+  -> FT_Pointer            -- ^ req_data
+  -> (FTC_Manager -> IO a)
+  -> IO a
+ftc_Manager_With lib faces sizes bytes req data_ =
+  bracket (ftc_Manager_New lib faces sizes bytes req data_) ftc_Manager_Done
 
 
 

@@ -24,6 +24,7 @@ module FreeType.Core.Glyph
   , FT_OutlineGlyphRec (..)
     -- ** FT_New_Glyph
   , ft_New_Glyph
+  , ft_With_Glyph
     -- ** FT_Get_Glyph
   , ft_Get_Glyph
     -- ** FT_Glyph_Copy
@@ -50,6 +51,7 @@ import           FreeType.Core.Glyph.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
 
+import           Control.Exception
 import           Data.Bool (bool)
 import           Foreign.Marshal.Alloc
 import           Foreign.Marshal.Utils
@@ -62,9 +64,20 @@ import           Foreign.Storable
 ft_New_Glyph
   :: FT_Library      -- ^ library
   -> FT_Glyph_Format -- ^ format
-  -> IO FT_Glyph     -- ^ aglyph
+  -> IO FT_Glyph     -- ^ glyph
 ft_New_Glyph =
   autoAllocaError 'ft_New_Glyph ft_New_Glyph'
+
+
+-- | 'bracket' over 'ft_New_Glyph' and 'ft_With_Glyph'.
+--
+--   The provided 'FT_Glyph' should not be used after this function terminates.
+ft_With_Glyph
+  :: FT_Library         -- ^ library
+  -> FT_Glyph_Format    -- ^ format
+  -> (FT_Glyph -> IO a)
+  -> IO a
+ft_With_Glyph lib format = bracket (ft_New_Glyph lib format) ft_Done_Glyph
 
 
 

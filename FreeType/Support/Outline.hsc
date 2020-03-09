@@ -14,6 +14,7 @@ module FreeType.Support.Outline
     FT_Outline (..)
     -- ** FT_Outline_New
   , ft_Outline_New
+  , ft_Outline_With
     -- ** FT_Outline_Done
   , ft_Outline_Done
     -- ** FT_Outline_Copy
@@ -78,6 +79,7 @@ import           FreeType.Support.Outline.Internal
 import           FreeType.Support.Outline.Types
 import           FreeType.Support.Scanline.Types
 
+import           Control.Exception
 import           Data.Int
 import           Foreign.Marshal.Alloc
 import           Foreign.Marshal.Utils
@@ -88,7 +90,7 @@ import           Foreign.Storable
 #include FT_IMAGE_H
 #include FT_OUTLINE_H
 
--- | Newly created 'FT_Outline' is allocated using 'malloc' and thus     must be 'free'd manually.
+-- | Newly created 'FT_Outline' is allocated using 'malloc' and thus must be 'free'd manually.
 ft_Outline_New
   :: FT_Library          -- ^ library
   -> FT_UInt             -- ^ numPoints
@@ -98,6 +100,22 @@ ft_Outline_New lib points contours = do
   outlinePtr <- malloc
   ftError 'ft_Outline_New $ ft_Outline_New' lib points contours outlinePtr
   return outlinePtr
+
+
+
+-- | 'bracket' over 'ft_Outline_New' and 'ft_Outline_Done'.
+--
+--   The provided 'Ptr' 'FT_Outline' should not be used after this function terminates.
+ft_Outline_With
+  :: FT_Library          -- ^ library
+  -> FT_UInt             -- ^ numPoints
+  -> FT_Int              -- ^ numContours
+  -> (Ptr FT_Outline -> IO a)
+  -> IO a
+ft_Outline_With lib points contours f =
+  alloca $ \outlinePtr -> do
+    ftError 'ft_Outline_New $ ft_Outline_New' lib points contours outlinePtr
+    finally (f outlinePtr) . ftError 'ft_Outline_Done $ ft_Outline_Done' lib outlinePtr
 
 
 
