@@ -2,6 +2,10 @@ module FreeType.Exception.Types where
 
 import           Control.Exception
 import           Data.Data (Typeable)
+#if __GLASGOW_HASKELL__ < 804
+import           Data.Monoid
+#endif
+
 import           Data.Int
 
 #include "ft2build.h"

@@ -1,14 +1,12 @@
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE FunctionalDependencies #-}
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE UndecidableInstances #-}
 
 module Test.Report where
 
 import           Language.Haskell.TH
 
+#if __GLASGOW_HASKELL__ < 804
+import           Data.Monoid
+#endif
 import           Data.Int
 import           Data.Proxy
 import           Data.Word

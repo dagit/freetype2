@@ -1,9 +1,14 @@
+{-# LANGUAGE CPP #-}
+
 module FreeType.Lens.Internal
   ( makeFieldsFT
   , makeFieldsFT'
   ) where
 
 import           Data.Char
+#if __GLASGOW_HASKELL__ < 804
+import           Data.Monoid
+#endif
 import           Lens.Micro
 import           Lens.Micro.TH
 import           Language.Haskell.TH
