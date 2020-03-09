@@ -1,15 +1,3 @@
-{-| This module collects together all of the bindings for FreeType library.
-    Due to the sheer number of these, none of them are implicitly documented.
-    Instead you should use the [FreeType API Reference](https://www.freetype.org/freetype2/docs/reference/index.html)
-    or, if some of the functions are removed in upcoming FreeType versions,
-    the definitions from the files at @freetype2\/freetype2\/include\/freetype@ at
-    [this project's git](https://github.com/dagit/freetype2).
-
-    Structurally the module tree mirrors the API reference, omitting modules from which
-    nothing can be exported and certain functions that are impossible to
-    marshal without modifying freetype code (e.g. FT_Bitmap_Blend).
--}
-
 module FreeType.Internal
   ( -- * Core API
     module FreeType.Core.Version.Internal
@@ -28,7 +16,8 @@ module FreeType.Internal
   , module FreeType.Format.PFR.Internal
   , module FreeType.Format.WinFNT.Internal
   , module FreeType.Format.Font.Internal
-    -- * Controlling FreeType modules
+    -- * Controlling FreeType modulesa
+  , module FreeType.Control.Parameter.Internal
   , module FreeType.Control.Subpixel.Internal
     -- * Cache Sub-System
   , module FreeType.Cache.Internal
@@ -50,6 +39,7 @@ module FreeType.Internal
     -- * Miscellaneous
   , module FreeType.Miscellaneous.OpenType.Internal
   , module FreeType.Miscellaneous.Incremental.Internal
+  , module FreeType.Miscellaneous.TrueType.Internal
   , module FreeType.Miscellaneous.TrueTypeGX.Internal
   ) where
 
@@ -70,6 +60,7 @@ import           FreeType.Format.CID.Internal
 import           FreeType.Format.PFR.Internal
 import           FreeType.Format.WinFNT.Internal
 import           FreeType.Format.Font.Internal
+import           FreeType.Control.Parameter.Internal
 import           FreeType.Control.Subpixel.Internal
 import           FreeType.Cache.Internal
 import           FreeType.Support.Computations.Internal
@@ -87,4 +78,5 @@ import           FreeType.Support.BZIP2.Internal
 import           FreeType.Error.Enumerations.Internal
 import           FreeType.Miscellaneous.OpenType.Internal
 import           FreeType.Miscellaneous.Incremental.Internal
+import           FreeType.Miscellaneous.TrueType.Internal
 import           FreeType.Miscellaneous.TrueTypeGX.Internal

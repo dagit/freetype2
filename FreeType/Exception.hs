@@ -3,4 +3,4 @@ module FreeType.Exception
     FtError (..)
   ) where
 
-import FreeType.Exception.Internal (FtError (..))
+import FreeType.Exception.Types (FtError (..))

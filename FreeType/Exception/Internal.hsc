@@ -5,10 +5,10 @@
 
 module FreeType.Exception.Internal where
 
+import           FreeType.Exception.Types
+
 import           Control.Monad (unless)
 import           Control.Exception
-import           Data.Data (Typeable)
-import           Data.Int (Int32)
 import           Foreign.Ptr
 import           Foreign.Marshal.Alloc
 import           Foreign.Storable
@@ -16,23 +16,6 @@ import           Language.Haskell.TH (Name, nameBase)
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
-
-type FT_Error = #type FT_Error
-
--- | This is thrown whenever a function returns 'FT_Error'.
-data FtError = FtError
-                 { feFunction :: [Char]
-                 , feCode     :: FT_Error
-                 }
-               deriving Typeable
-
-instance Show FtError where
-  show (FtError name code) =
-    "FreeType function " <> show name <> " returned error code " <> show code
-
-instance Exception FtError
-
-
 
 -- | An internal function for throwing 'FtError's
 ftError :: Name -> IO FT_Error -> IO ()
@@ -44,6 +27,10 @@ ftError name action = do
 
 
 class AutoError a b where
+  -- | @
+  --     autoError name f = \a b c ... ->
+  --       ftError name $ f a b c ...
+  --   @
   autoError :: Name -> a -> b
 
 instance AutoError (a -> IO FT_Error)
@@ -75,7 +62,14 @@ instance AutoError (a -> b -> c -> d -> e -> f -> g -> IO FT_Error)
   autoError name f = \a b c d e f' -> ftError name . f a b c d e f'
 
 
+
 class AutoAllocaError a b where
+  -- | @
+  --     autoAllocaError name f = \a b c -> 
+  --       alloca $ \ptr -> do
+  --         ftError name $ f a b c ... ptr
+  --         peek ptr
+  --   @
   autoAllocaError :: Name -> a -> b
 
 instance Storable a

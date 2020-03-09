@@ -6,7 +6,7 @@ module FreeType.Core.Types.Types
   , FT_Error
   ) where
 
-import           FreeType.Exception.Internal (FT_Error)
+import           FreeType.Exception.Types (FT_Error)
 
 import           Prelude hiding (length)
 
