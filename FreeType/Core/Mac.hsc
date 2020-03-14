@@ -1,12 +1,10 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
-{- | This module is only here for the sake of completeness, I don't know whether
-     there exists a Haskell library that provides these Mac primitives ¯\\_(ツ)_/¯
-
-     If you're not on Macintosh every internal function is a dud that returns 'FT_Err_Unimplemented_Feature'.
+{- | Sadly I could not figure out how to link this module properly on OS X.
+     All of the code in this module is therefore commented out, so if you
+     truly need this functionality, you should fork the
+     [repo](https://github.com/dagit/freetype2)
 
      Please refer to the
      [Core API > Mac Specific Interface](https://www.freetype.org/freetype2/docs/reference/ft2-mac_specific.html)
@@ -15,7 +13,9 @@
      Internal: "FreeType.Core.Mac.Internal"
  -}
 
-module FreeType.Core.Mac
+module FreeType.Core.Mac where
+{-
+#ifdef darwin_HOST_OS
   ( -- ** FT_New_Face_From_FOND
     ft_New_Face_From_FOND
     -- ** FT_GetFile_From_Mac_Name
@@ -40,10 +40,6 @@ import           FreeType.Error.Values (pattern FT_Err_Unimplemented_Feature)
 import           Data.Word
 import           Foreign.C.String
 import           Foreign.Ptr
-
-
-
-
 
 ft_New_Face_From_FOND
   :: FT_Library -- ^ library
@@ -106,3 +102,5 @@ ft_New_Face_From_FSRef
   -> IO FT_Face -- ^ face
 ft_New_Face_From_FSRef =
   autoAllocaError 'ft_New_Face_From_FSRef ft_New_Face_From_FSRef'
+#endif
+-}

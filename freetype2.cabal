@@ -74,7 +74,7 @@ Flag examples
 
 Executable freetype-example
   Main-is:       Main.hs
-  Build-depends: base >= 4.7 && < 5
+  Build-depends: base >= 4.10 && < 5
                , freetype2
                , microlens
                , microlens-th
@@ -316,14 +316,13 @@ Library
                  FreeType.Miscellaneous.Incremental.Types
                  FreeType.Miscellaneous.TrueType.Types
 
-  Build-depends: base >= 4.7 && < 5
+  Build-depends: base >= 4.10 && < 5
                , microlens
                , microlens-th
                , template-haskell
 
   Build-tools: hsc2hs
   ghc-options: -Wall
-               -Wno-deprecations
   include-dirs: freetype2/include
                 freetype2/include/freetype
                 freetype2/include/freetype/config
@@ -367,6 +366,7 @@ Library
              freetype2/src/base/ftgasp.c
              freetype2/src/base/ftglyph.c
              freetype2/src/base/ftgxval.c
+             freetype2/src/base/ftmac.c
              freetype2/src/base/ftmm.c
              freetype2/src/base/ftotval.c
              freetype2/src/base/ftpatent.c
@@ -402,7 +402,7 @@ Library
 test-suite dynamic-function-check
   type: exitcode-stdio-1.0
   main-is: Test.hs
-  build-depends: base >= 4.7 && < 5
+  build-depends: base >= 4.10 && < 5
                , microlens
                , microlens-th
                , template-haskell
@@ -453,6 +453,7 @@ test-suite dynamic-function-check
                  FreeType.Format.Gasp
                  FreeType.Control.Driver
                  FreeType.Control.Parameter
+                 FreeType.Control.Parameter.Internal
                  FreeType.Control.Subpixel
                  FreeType.Control.Subpixel.Internal
                  FreeType.Cache
@@ -489,6 +490,7 @@ test-suite dynamic-function-check
                  FreeType.Miscellaneous.Incremental
                  FreeType.Miscellaneous.Incremental.Internal
                  FreeType.Miscellaneous.TrueType
+                 FreeType.Miscellaneous.TrueType.Internal
                  FreeType.Miscellaneous.TrueTypeGX
                  FreeType.Miscellaneous.TrueTypeGX.Internal
 
@@ -563,6 +565,7 @@ test-suite dynamic-function-check
              freetype2/src/base/ftgasp.c
              freetype2/src/base/ftglyph.c
              freetype2/src/base/ftgxval.c
+             freetype2/src/base/ftmac.c
              freetype2/src/base/ftmm.c
              freetype2/src/base/ftotval.c
              freetype2/src/base/ftpatent.c

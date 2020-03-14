@@ -85,13 +85,14 @@ main = do
   report 'ft_Done_Glyph       ft_Done_Glyph
 
   putStrLn "FreeType.Core.Mac"
+{-
   report 'ft_New_Face_From_FOND'            ft_New_Face_From_FOND'
   report 'ft_GetFile_From_Mac_Name'         ft_GetFile_From_Mac_Name'
   report 'ft_GetFile_From_Mac_ATS_Name'     ft_GetFile_From_Mac_ATS_Name'
   report 'ft_GetFilePath_From_Mac_ATS_Name' ft_GetFilePath_From_Mac_ATS_Name'
   report 'ft_New_Face_From_FSSpec'          ft_New_Face_From_FSSpec'
   report 'ft_New_Face_From_FSRef'           ft_New_Face_From_FSRef'
-
+-}
   putStrLn "FreeType.Core.Size"
   report 'ft_New_Size'      ft_New_Size'
   report 'ft_Done_Size'     ft_Done_Size'

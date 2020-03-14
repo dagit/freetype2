@@ -14,8 +14,8 @@
   {
     if ( !foreground_color )
       return FT_THROW ( Invalid_Argument );
-
-    FT_Palette_Set_Foreground_Color ( face, *foreground_color );
+    else
+      return FT_Palette_Set_Foreground_Color ( face, *foreground_color );
   }
 
 #endif

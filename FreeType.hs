@@ -1,3 +1,6 @@
+{-# OPTIONS_GHC -fno-warn-dodgy-exports #-}
+{-# OPTIONS_GHC -fno-warn-unused-imports #-}
+
 module FreeType
   ( -- * Core API
     module FreeType.Core.Version

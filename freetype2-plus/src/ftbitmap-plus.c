@@ -16,6 +16,6 @@
   {
     if ( !source_offset_ || !color )
       return FT_THROW ( Invalid_Argument );
-
-    FT_Bitmap_Blend ( library, source_, *source_offset_, target, atarget_offset, *color );
+    else
+      return FT_Bitmap_Blend ( library, source_, *source_offset_, target, atarget_offset, *color );
   }

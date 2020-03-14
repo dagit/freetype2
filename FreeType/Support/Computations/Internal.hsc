@@ -74,7 +74,7 @@ foreign import ccall "FT_Vector_Length"
 
 
 
-foreign import ccall "FT_Vector Polarize"
+foreign import ccall "FT_Vector_Polarize"
   ft_Vector_Polarize'
     :: Ptr FT_Vector -- ^ vec
     -> Ptr FT_Fixed  -- ^ length
