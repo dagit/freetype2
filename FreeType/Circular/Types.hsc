@@ -210,7 +210,7 @@ pattern FT_ENCODING_NONE
       , FT_ENCODING_ADOBE_LATIN_1
       , FT_ENCODING_OLD_LATIN_2
       , FT_ENCODING_APPLE_ROMAN
-     :: FT_Encoding
+     :: (Eq a, Num a) => a
 pattern FT_ENCODING_NONE           = #const FT_ENCODING_NONE
 pattern FT_ENCODING_MS_SYMBOL      = #const FT_ENCODING_MS_SYMBOL
 pattern FT_ENCODING_UNICODE        = #const FT_ENCODING_UNICODE

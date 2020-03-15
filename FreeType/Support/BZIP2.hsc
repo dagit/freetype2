@@ -7,7 +7,10 @@
      Internal: "FreeType.Support.BZIP2.Internal".
  -}
 
-module FreeType.Support.BZIP2 where
+module FreeType.Support.BZIP2
+  ( -- ** FT_Stream_OpenBzip2
+    ft_Stream_OpenBzip2
+  ) where
 
 import           FreeType.Exception.Internal
 import           FreeType.Support.BZIP2.Internal

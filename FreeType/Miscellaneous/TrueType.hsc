@@ -28,7 +28,7 @@ import           FreeType.Miscellaneous.TrueType.Types
 
 pattern FT_TRUETYPE_ENGINE_TYPE_NONE
       , FT_TRUETYPE_ENGINE_TYPE_PATENTED
-     :: FT_TrueTypeEngineType
+     :: (Eq a, Num a) => a
 pattern FT_TRUETYPE_ENGINE_TYPE_NONE     = #const FT_TRUETYPE_ENGINE_TYPE_NONE
 pattern FT_TRUETYPE_ENGINE_TYPE_PATENTED = #const FT_TRUETYPE_ENGINE_TYPE_PATENTED
 

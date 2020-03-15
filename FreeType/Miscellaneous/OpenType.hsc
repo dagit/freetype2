@@ -63,7 +63,7 @@ pattern FT_VALIDATE_BASE
       , FT_VALIDATE_JSTF
       , FT_VALIDATE_MATH
       , FT_VALIDATE_OT
-     :: FT_UInt
+     :: (Eq a, Num a) => a
 pattern FT_VALIDATE_BASE = #const FT_VALIDATE_BASE
 pattern FT_VALIDATE_GDEF = #const FT_VALIDATE_GDEF
 pattern FT_VALIDATE_GPOS = #const FT_VALIDATE_GPOS

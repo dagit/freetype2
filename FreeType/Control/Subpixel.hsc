@@ -45,7 +45,7 @@ pattern FT_LCD_FILTER_NONE
       , FT_LCD_FILTER_LIGHT
       , FT_LCD_FILTER_LEGACY1
       , FT_LCD_FILTER_LEGACY
-     :: FT_LcdFilter
+     :: (Eq a, Num a) => a
 pattern FT_LCD_FILTER_NONE    = #const FT_LCD_FILTER_NONE
 pattern FT_LCD_FILTER_DEFAULT = #const FT_LCD_FILTER_DEFAULT
 pattern FT_LCD_FILTER_LIGHT   = #const FT_LCD_FILTER_LIGHT
@@ -79,7 +79,7 @@ ft_Library_SetLcdFilterWeights lib (a, b, c, d, e) =
 
 
 
-pattern FT_LCD_FILTER_FIVE_TAPS :: FT_UInt
+pattern FT_LCD_FILTER_FIVE_TAPS :: (Eq a, Num a) => a
 pattern FT_LCD_FILTER_FIVE_TAPS = #const FT_LCD_FILTER_FIVE_TAPS
 
 

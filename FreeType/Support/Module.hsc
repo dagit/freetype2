@@ -206,5 +206,5 @@ ft_Set_Debug_Hook lib index hook = do
 
 
 pattern FT_DEBUG_HOOK_TRUETYPE
-     :: FT_UInt
+     :: (Eq a, Num a) => a
 pattern FT_DEBUG_HOOK_TRUETYPE = #const FT_DEBUG_HOOK_TRUETYPE

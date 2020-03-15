@@ -161,7 +161,7 @@ pattern FT_ANGLE_PI
       , FT_ANGLE_2PI
       , FT_ANGLE_PI2
       , FT_ANGLE_PI4
-     :: FT_Angle
+     :: (Eq a, Num a) => a
 pattern FT_ANGLE_PI  = #const FT_ANGLE_PI
 pattern FT_ANGLE_2PI = #const FT_ANGLE_2PI
 pattern FT_ANGLE_PI2 = #const FT_ANGLE_PI2

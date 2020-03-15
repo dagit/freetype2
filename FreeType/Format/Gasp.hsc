@@ -30,7 +30,7 @@ pattern FT_GASP_NO_TABLE
       , FT_GASP_DO_GRAY
       , FT_GASP_SYMMETRIC_GRIDFIT
       , FT_GASP_SYMMETRIC_SMOOTHING
-     :: FT_Int
+     :: (Eq a, Num a) => a
 pattern FT_GASP_NO_TABLE            = #const FT_GASP_NO_TABLE
 pattern FT_GASP_DO_GRIDFIT          = #const FT_GASP_DO_GRIDFIT
 pattern FT_GASP_DO_GRAY             = #const FT_GASP_DO_GRAY

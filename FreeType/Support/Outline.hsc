@@ -80,7 +80,6 @@ import           FreeType.Support.Outline.Types
 import           FreeType.Support.Scanline.Types
 
 import           Control.Exception
-import           Data.Int
 import           Foreign.Marshal.Alloc
 import           Foreign.Marshal.Utils
 import           Foreign.Ptr
@@ -250,7 +249,7 @@ pattern FT_ORIENTATION_TRUETYPE
       , FT_ORIENTATION_FILL_RIGHT
       , FT_ORIENTATION_FILL_LEFT
       , FT_ORIENTATION_NONE
-     :: FT_Orientation
+     :: (Eq a, Num a) => a
 pattern FT_ORIENTATION_TRUETYPE   = #const FT_ORIENTATION_TRUETYPE
 pattern FT_ORIENTATION_POSTSCRIPT = #const FT_ORIENTATION_POSTSCRIPT
 pattern FT_ORIENTATION_FILL_RIGHT = #const FT_ORIENTATION_FILL_RIGHT
@@ -275,7 +274,7 @@ pattern FT_OUTLINE_NONE
       , FT_OUTLINE_INCLUDE_STUBS
       , FT_OUTLINE_HIGH_PRECISION
       , FT_OUTLINE_SINGLE_PASS
-     :: #type int
+     :: (Eq a, Num a) => a
 pattern FT_OUTLINE_NONE            = #const FT_OUTLINE_NONE
 pattern FT_OUTLINE_OWNER           = #const FT_OUTLINE_OWNER
 pattern FT_OUTLINE_EVEN_ODD_FILL   = #const FT_OUTLINE_EVEN_ODD_FILL

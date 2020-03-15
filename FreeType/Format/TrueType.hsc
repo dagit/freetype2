@@ -621,7 +621,7 @@ pattern FT_SFNT_HEAD
       , FT_SFNT_VHEA
       , FT_SFNT_POST
       , FT_SFNT_PCLT
-     :: FT_Sfnt_Tag
+     :: (Eq a, Num a) => a
 pattern FT_SFNT_HEAD = #const FT_SFNT_HEAD
 pattern FT_SFNT_MAXP = #const FT_SFNT_MAXP
 pattern FT_SFNT_OS2  = #const FT_SFNT_OS2
@@ -704,7 +704,7 @@ pattern TT_PLATFORM_APPLE_UNICODE
       , TT_PLATFORM_MICROSOFT
       , TT_PLATFORM_CUSTOM
       , TT_PLATFORM_ADOBE
-     :: FT_UShort
+     :: (Eq a, Num a) => a
 pattern TT_PLATFORM_APPLE_UNICODE = #const TT_PLATFORM_APPLE_UNICODE
 pattern TT_PLATFORM_MACINTOSH     = #const TT_PLATFORM_MACINTOSH
 pattern TT_PLATFORM_MICROSOFT     = #const TT_PLATFORM_MICROSOFT
@@ -719,7 +719,7 @@ pattern TT_APPLE_ID_DEFAULT
       , TT_APPLE_ID_UNICODE_32
       , TT_APPLE_ID_VARIANT_SELECTOR
       , TT_APPLE_ID_FULL_UNICODE
-     :: FT_UShort
+     :: (Eq a, Num a) => a
 pattern TT_APPLE_ID_DEFAULT          = #const TT_APPLE_ID_DEFAULT
 pattern TT_APPLE_ID_UNICODE_1_1      = #const TT_APPLE_ID_UNICODE_1_1
 pattern TT_APPLE_ID_UNICODE_2_0      = #const TT_APPLE_ID_UNICODE_2_0
@@ -763,7 +763,7 @@ pattern TT_MAC_ID_ROMAN
       , TT_MAC_ID_VIETNAMESE
       , TT_MAC_ID_SINDHI
       , TT_MAC_ID_UNINTERP
-     :: FT_UShort
+     :: (Eq a, Num a) => a
 pattern TT_MAC_ID_ROMAN               = #const TT_MAC_ID_ROMAN
 pattern TT_MAC_ID_JAPANESE            = #const TT_MAC_ID_JAPANESE
 pattern TT_MAC_ID_TRADITIONAL_CHINESE = #const TT_MAC_ID_TRADITIONAL_CHINESE
@@ -810,7 +810,7 @@ pattern TT_MS_ID_SYMBOL_CS
       , TT_MS_ID_JOHAB
       , TT_MS_ID_UCS_4
       , TT_MS_ID_GB2312
-     :: FT_UShort
+     :: (Eq a, Num a) => a
 pattern TT_MS_ID_SYMBOL_CS  = #const TT_MS_ID_SYMBOL_CS
 pattern TT_MS_ID_UNICODE_CS = #const TT_MS_ID_UNICODE_CS
 pattern TT_MS_ID_SJIS       = #const TT_MS_ID_SJIS
@@ -827,7 +827,7 @@ pattern TT_ADOBE_ID_STANDARD
       , TT_ADOBE_ID_EXPERT
       , TT_ADOBE_ID_CUSTOM
       , TT_ADOBE_ID_LATIN_1
-     :: FT_UShort
+     :: (Eq a, Num a) => a
 pattern TT_ADOBE_ID_STANDARD = #const TT_ADOBE_ID_STANDARD
 pattern TT_ADOBE_ID_EXPERT   = #const TT_ADOBE_ID_EXPERT
 pattern TT_ADOBE_ID_CUSTOM   = #const TT_ADOBE_ID_CUSTOM
@@ -955,7 +955,7 @@ pattern TT_MAC_LANGID_ENGLISH
       , TT_MAC_LANGID_GREEK_POLYTONIC
       , TT_MAC_LANGID_GREELANDIC
       , TT_MAC_LANGID_AZERBAIJANI_ROMAN_SCRIPT
-     :: FT_UInt
+     :: (Eq a, Num a) => a
 pattern TT_MAC_LANGID_ENGLISH                     = #const TT_MAC_LANGID_ENGLISH
 pattern TT_MAC_LANGID_FRENCH                      = #const TT_MAC_LANGID_FRENCH
 pattern TT_MAC_LANGID_GERMAN                      = #const TT_MAC_LANGID_GERMAN
@@ -1284,7 +1284,7 @@ pattern TT_MS_LANGID_ARABIC_SAUDI_ARABIA
       , TT_MS_LANGID_KINYARWANDA_RWANDA
       , TT_MS_LANGID_WOLOF_SENEGAL
       , TT_MS_LANGID_DARI_AFGHANISTAN
-     :: FT_UInt
+     :: (Eq a, Num a) => a
 pattern TT_MS_LANGID_ARABIC_SAUDI_ARABIA            = #const TT_MS_LANGID_ARABIC_SAUDI_ARABIA
 pattern TT_MS_LANGID_ARABIC_IRAQ                    = #const TT_MS_LANGID_ARABIC_IRAQ
 pattern TT_MS_LANGID_ARABIC_EGYPT                   = #const TT_MS_LANGID_ARABIC_EGYPT
@@ -1518,7 +1518,7 @@ pattern TT_NAME_ID_COPYRIGHT
       , TT_NAME_ID_LIGHT_BACKGROUND
       , TT_NAME_ID_DARK_BACKGROUND
       , TT_NAME_ID_VARIATIONS_PREFIX
-     :: FT_Int32
+     :: (Eq a, Num a) => a
 pattern TT_NAME_ID_COPYRIGHT             = #const TT_NAME_ID_COPYRIGHT
 pattern TT_NAME_ID_FONT_FAMILY           = #const TT_NAME_ID_FONT_FAMILY
 pattern TT_NAME_ID_FONT_SUBFAMILY        = #const TT_NAME_ID_FONT_SUBFAMILY
@@ -1671,7 +1671,7 @@ pattern TT_UCR_BASIC_LATIN
       , TT_UCR_PHAISTOS_DISC
       , TT_UCR_OLD_ANATOLIAN
       , TT_UCR_GAME_TILES
-     :: FT_ULong
+     :: (Eq a, Num a) => a
 pattern TT_UCR_BASIC_LATIN                      = #const TT_UCR_BASIC_LATIN
 pattern TT_UCR_LATIN1_SUPPLEMENT                = #const TT_UCR_LATIN1_SUPPLEMENT
 pattern TT_UCR_LATIN_EXTENDED_A                 = #const TT_UCR_LATIN_EXTENDED_A

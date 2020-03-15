@@ -103,8 +103,6 @@ module FreeType.Core.Types
 
 import           FreeType.Core.Types.Types
 
-import           Data.Word
-
 #include "ft2build.h"
 #include FT_IMAGE_H
 
@@ -117,7 +115,7 @@ pattern FT_PIXEL_MODE_NONE
       , FT_PIXEL_MODE_LCD
       , FT_PIXEL_MODE_LCD_V
       , FT_PIXEL_MODE_BGRA
-     :: #type enum FT_Pixel_Mode_
+     :: (Eq a, Num a) => a
 pattern FT_PIXEL_MODE_NONE  = #const FT_PIXEL_MODE_NONE
 pattern FT_PIXEL_MODE_MONO  = #const FT_PIXEL_MODE_MONO
 pattern FT_PIXEL_MODE_GRAY  = #const FT_PIXEL_MODE_GRAY
@@ -134,7 +132,7 @@ pattern FT_GLYPH_FORMAT_NONE
       , FT_GLYPH_FORMAT_BITMAP
       , FT_GLYPH_FORMAT_OUTLINE
       , FT_GLYPH_FORMAT_PLOTTER
-     :: FT_Glyph_Format
+     :: (Eq a, Num a) => a
 pattern FT_GLYPH_FORMAT_NONE      = #const FT_GLYPH_FORMAT_NONE
 pattern FT_GLYPH_FORMAT_COMPOSITE = #const FT_GLYPH_FORMAT_COMPOSITE
 pattern FT_GLYPH_FORMAT_BITMAP    = #const FT_GLYPH_FORMAT_BITMAP

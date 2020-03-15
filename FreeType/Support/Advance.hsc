@@ -47,5 +47,5 @@ ft_Get_Advances =
 
 
 pattern FT_ADVANCE_FLAG_FAST_ONLY
-     :: FT_Fixed
+     :: (Eq a, Num a) => a
 pattern FT_ADVANCE_FLAG_FAST_ONLY = #const FT_ADVANCE_FLAG_FAST_ONLY

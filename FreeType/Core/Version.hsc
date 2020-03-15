@@ -53,7 +53,7 @@ ft_Library_Version lib =
 pattern FREETYPE_MAJOR
       , FREETYPE_MINOR
       , FREETYPE_PATCH
-     :: FT_Int
+     :: (Eq a, Num a) => a
 pattern FREETYPE_MAJOR = #const FREETYPE_MAJOR
 pattern FREETYPE_MINOR = #const FREETYPE_MINOR
 pattern FREETYPE_PATCH = #const FREETYPE_PATCH

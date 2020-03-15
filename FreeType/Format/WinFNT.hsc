@@ -39,7 +39,6 @@ module FreeType.Format.WinFNT
   ) where
 
 import           FreeType.Core.Base.Types
-import           FreeType.Core.Types.Types
 import           FreeType.Exception.Internal
 import           FreeType.Format.WinFNT.Internal
 import           FreeType.Format.WinFNT.Types
@@ -66,7 +65,7 @@ pattern FT_WinFNT_ID_CP1252
       , FT_WinFNT_ID_CP874
       , FT_WinFNT_ID_CP1250
       , FT_WinFNT_ID_OEM
-     :: FT_Byte
+     :: (Eq a, Num a) => a
 pattern FT_WinFNT_ID_CP1252  = #const FT_WinFNT_ID_CP1252
 pattern FT_WinFNT_ID_DEFAULT = #const FT_WinFNT_ID_DEFAULT
 pattern FT_WinFNT_ID_SYMBOL  = #const FT_WinFNT_ID_SYMBOL

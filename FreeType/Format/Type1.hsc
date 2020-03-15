@@ -185,7 +185,7 @@ pattern T1_BLEND_UNDERLINE_POSITION
       , T1_BLEND_FAMILY_BLUES
       , T1_BLEND_FAMILY_OTHER_BLUES
       , T1_BLEND_FORCE_BOLD
-     :: T1_Blend_Flags
+     :: (Eq a, Num a) => a
 pattern T1_BLEND_UNDERLINE_POSITION  = #const T1_BLEND_UNDERLINE_POSITION
 pattern T1_BLEND_UNDERLINE_THICKNESS = #const T1_BLEND_UNDERLINE_THICKNESS
 pattern T1_BLEND_ITALIC_ANGLE        = #const T1_BLEND_ITALIC_ANGLE
@@ -208,7 +208,7 @@ pattern T1_ENCODING_TYPE_NONE
       , T1_ENCODING_TYPE_STANDARD
       , T1_ENCODING_TYPE_ISOLATIN1
       , T1_ENCODING_TYPE_EXPERT
-     :: T1_EncodingType
+     :: (Eq a, Num a) => a
 pattern T1_ENCODING_TYPE_NONE      = #const T1_ENCODING_TYPE_NONE
 pattern T1_ENCODING_TYPE_ARRAY     = #const T1_ENCODING_TYPE_ARRAY
 pattern T1_ENCODING_TYPE_STANDARD  = #const T1_ENCODING_TYPE_STANDARD
@@ -263,7 +263,7 @@ pattern PS_DICT_FONT_TYPE
       , PS_DICT_UNDERLINE_THICKNESS
       , PS_DICT_FS_TYPE
       , PS_DICT_ITALIC_ANGLE
-     :: PS_Dict_Keys
+     :: (Eq a, Num a) => a
 pattern PS_DICT_FONT_TYPE              = #const PS_DICT_FONT_TYPE
 pattern PS_DICT_FONT_MATRIX            = #const PS_DICT_FONT_MATRIX
 pattern PS_DICT_FONT_BBOX              = #const PS_DICT_FONT_BBOX

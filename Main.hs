@@ -41,7 +41,7 @@ main = do
 
 withBitmap :: FT_Library -> FT_Bitmap -> (FT_Bitmap -> IO a) -> IO a
 withBitmap lib source f =
-  if any (== fromIntegral (bPixel_mode source))
+  if any (== bPixel_mode source)
        [ FT_PIXEL_MODE_MONO, FT_PIXEL_MODE_GRAY2
        , FT_PIXEL_MODE_GRAY4, FT_PIXEL_MODE_BGRA
        ]

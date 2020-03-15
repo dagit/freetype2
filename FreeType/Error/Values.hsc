@@ -103,8 +103,6 @@ module FreeType.Error.Values
   , pattern FT_Err_Corrupted_Font_Glyphs
   ) where
 
-import           FreeType.Core.Types.Types
-
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
@@ -203,7 +201,7 @@ pattern FT_Err_Ok
       , FT_Err_Bbx_Too_Big
       , FT_Err_Corrupted_Font_Header
       , FT_Err_Corrupted_Font_Glyphs
-     :: FT_Error
+     :: (Eq a, Num a) => a
 pattern FT_Err_Ok                            = #const FT_Err_Ok
 pattern FT_Err_Cannot_Open_Resource          = #const FT_Err_Cannot_Open_Resource
 pattern FT_Err_Unknown_File_Format           = #const FT_Err_Unknown_File_Format

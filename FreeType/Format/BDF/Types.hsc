@@ -16,14 +16,14 @@ import           Foreign.Storable
 
 type BDF_PropertyType = #type enum BDF_PropertyType_
 
-pattern BDF_PROPERTY_TYPE_NONE    
-      , BDF_PROPERTY_TYPE_ATOM    
-      , BDF_PROPERTY_TYPE_INTEGER    
-      , BDF_PROPERTY_TYPE_CARDINAL    
-     :: BDF_PropertyType    
-pattern BDF_PROPERTY_TYPE_NONE     = #const BDF_PROPERTY_TYPE_NONE    
-pattern BDF_PROPERTY_TYPE_ATOM     = #const BDF_PROPERTY_TYPE_ATOM    
-pattern BDF_PROPERTY_TYPE_INTEGER  = #const BDF_PROPERTY_TYPE_INTEGER    
+pattern BDF_PROPERTY_TYPE_NONE
+      , BDF_PROPERTY_TYPE_ATOM
+      , BDF_PROPERTY_TYPE_INTEGER
+      , BDF_PROPERTY_TYPE_CARDINAL
+     :: (Eq a, Num a) => a
+pattern BDF_PROPERTY_TYPE_NONE     = #const BDF_PROPERTY_TYPE_NONE
+pattern BDF_PROPERTY_TYPE_ATOM     = #const BDF_PROPERTY_TYPE_ATOM
+pattern BDF_PROPERTY_TYPE_INTEGER  = #const BDF_PROPERTY_TYPE_INTEGER
 pattern BDF_PROPERTY_TYPE_CARDINAL = #const BDF_PROPERTY_TYPE_CARDINAL
 
 

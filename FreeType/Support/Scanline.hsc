@@ -42,8 +42,6 @@ module FreeType.Support.Scanline
 
 import           FreeType.Support.Scanline.Types
 
-import           Data.Int
-
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
@@ -53,7 +51,7 @@ pattern FT_RASTER_FLAG_DEFAULT
       , FT_RASTER_FLAG_AA
       , FT_RASTER_FLAG_DIRECT
       , FT_RASTER_FLAG_CLIP
-     :: #type int
+     :: (Eq a, Num a) => a
 pattern FT_RASTER_FLAG_DEFAULT = #const FT_RASTER_FLAG_DEFAULT
 pattern FT_RASTER_FLAG_AA      = #const FT_RASTER_FLAG_AA
 pattern FT_RASTER_FLAG_DIRECT  = #const FT_RASTER_FLAG_DIRECT

@@ -86,7 +86,7 @@ foreign import ccall "FT_ClassicKern_Free"
 
 
 pattern FT_VALIDATE_GX_LENGTH
-     :: FT_UInt
+     :: (Eq a, Num a) => a
 pattern FT_VALIDATE_GX_LENGTH = #const FT_VALIDATE_GX_LENGTH
 
 
@@ -102,7 +102,7 @@ pattern FT_VALIDATE_feat
       , FT_VALIDATE_prop
       , FT_VALIDATE_lcar
       , FT_VALIDATE_GX
-     :: FT_UInt
+     :: (Eq a, Num a) => a
 pattern FT_VALIDATE_feat = #const FT_VALIDATE_feat
 pattern FT_VALIDATE_mort = #const FT_VALIDATE_mort
 pattern FT_VALIDATE_morx = #const FT_VALIDATE_morx
@@ -120,7 +120,7 @@ pattern FT_VALIDATE_GX   = #const FT_VALIDATE_GX
 pattern FT_VALIDATE_MS
       , FT_VALIDATE_APPLE
       , FT_VALIDATE_CKERN
-     :: FT_UInt
+     :: (Eq a, Num a) => a
 pattern FT_VALIDATE_MS    = #const FT_VALIDATE_MS
 pattern FT_VALIDATE_APPLE = #const FT_VALIDATE_APPLE
 pattern FT_VALIDATE_CKERN = #const FT_VALIDATE_CKERN
