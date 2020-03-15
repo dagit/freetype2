@@ -1,7 +1,6 @@
 module Main where
 
 import           FreeType
-import           FreeType.Lens
 
 import           Control.Monad
 import           Data.Char
@@ -9,8 +8,6 @@ import           Data.Word
 import           Foreign.Marshal.Array
 import           Foreign.Marshal.Utils
 import           Foreign.Storable
-import           Lens.Micro
-import           Lens.Micro.Extras
 import           System.Environment
 import           System.Exit
 
@@ -34,23 +31,23 @@ main = do
         when isScalable
           $ ft_Set_Char_Size face 0 (16 * 64) 0 0
         ft_Load_Char face (fromIntegral $ ord charcode) FT_LOAD_RENDER
-        slot <- peek . view glyph =<< peek face
-        withBitmap lib (slot^.bitmap) $ \bmap -> do
-          let bufferSize = fromIntegral $ bmap^.rows * bmap^.pitch.to fromIntegral
-          buffr <- peekArray bufferSize $ bmap^.buffer
-          drawBitmap (bmap^.pitch.to fromIntegral) buffr
+        slot <- peek . frGlyph =<< peek face
+        withBitmap lib (gsrBitmap slot) $ \bmap -> do
+          let bufferSize = fromIntegral $ (bRows bmap) * fromIntegral (bPitch bmap)
+          buffr <- peekArray bufferSize $ bBuffer bmap
+          drawBitmap (fromIntegral $ bPitch bmap) buffr
 
 
 
 withBitmap :: FT_Library -> FT_Bitmap -> (FT_Bitmap -> IO a) -> IO a
 withBitmap lib source f =
-  if any (== source^.pixel_mode.to fromIntegral)
+  if any (== fromIntegral (bPixel_mode source))
        [ FT_PIXEL_MODE_MONO, FT_PIXEL_MODE_GRAY2
        , FT_PIXEL_MODE_GRAY4, FT_PIXEL_MODE_BGRA
        ]
     then ft_Bitmap_With lib $ \targetPtr -> do
            with source $ \sourcePtr -> do
-             ft_Bitmap_Convert lib sourcePtr targetPtr (source^.pixel_mode^.to fromIntegral)
+             ft_Bitmap_Convert lib sourcePtr targetPtr . fromIntegral $ bPixel_mode source
              f =<< peek targetPtr
     else f source
 

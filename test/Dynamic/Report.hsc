@@ -1,9 +1,11 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE UndecidableInstances #-}
 
-module Test.Report where
+module Dynamic.Report where
 
-import           Language.Haskell.TH
+import           Language.Haskell.TH hiding (report)
 
 #if __GLASGOW_HASKELL__ < 804
 import           Data.Monoid
@@ -68,27 +70,8 @@ instance Report (IO z) z where
 instance Def a => Report (a -> IO z) z where
   report name f = report' name $ f def
 
-instance (Def a, Def b) => Report (a -> b -> IO z) z where
-  report name f = report' name $ f def def
-
-instance (Def a, Def b, Def c) => Report (a -> b -> c -> IO z) z where
-  report name f = report' name $ f def def def
-
-instance (Def a, Def b, Def c, Def d)
-      => Report (a -> b -> c -> d -> IO z) z where
-  report name f = report' name $ f def def def def
-
-instance (Def a, Def b, Def c, Def d, Def e)
-      => Report (a -> b -> c -> d -> e -> IO z) z where
-  report name f = report' name $ f def def def def def
-
-instance (Def a, Def b, Def c, Def d, Def e, Def f)
-      => Report (a -> b -> c -> d -> e -> f -> IO z) z where
-  report name f = report' name $ f def def def def def def
-
-instance (Def a, Def b, Def c, Def d, Def e, Def f, Def g)
-      => Report (a -> b -> c -> d -> e -> f -> g -> IO z) z where
-  report name f = report' name $ f def def def def def def def
+instance (Def a, Report (b -> c) z) => Report (a -> b -> c) z where
+  report name f = report name $ f def
 
 
 

@@ -2,7 +2,7 @@
 
 module Main where
 
-import           Test.Report
+import           Dynamic.Report
 
 import           FreeType
 import           FreeType.Internal

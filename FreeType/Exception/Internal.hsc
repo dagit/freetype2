@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
@@ -35,35 +36,15 @@ instance AutoError (a -> IO FT_Error)
                    (a -> IO ()) where
   autoError name f = ftError name . f
 
-instance AutoError (a -> b -> IO FT_Error)
-                   (a -> b -> IO ()) where
-  autoError name f = \a -> ftError name . f a
-
-instance AutoError (a -> b -> c -> IO FT_Error)
-                   (a -> b -> c -> IO ()) where
-  autoError name f = \a b -> ftError name . f a b
-
-instance AutoError (a -> b -> c -> d -> IO FT_Error)
-                   (a -> b -> c -> d -> IO ()) where
-  autoError name f = \a b c -> ftError name . f a b c
-
-instance AutoError (a -> b -> c -> d -> e -> IO FT_Error)
-                   (a -> b -> c -> d -> e -> IO ()) where
-  autoError name f = \a b c d -> ftError name . f a b c d
-
-instance AutoError (a -> b -> c -> d -> e -> f -> IO FT_Error)
-                   (a -> b -> c -> d -> e -> f -> IO ()) where
-  autoError name f = \a b c d e -> ftError name . f a b c d e
-
-instance AutoError (a -> b -> c -> d -> e -> f -> g -> IO FT_Error)
-                   (a -> b -> c -> d -> e -> f -> g -> IO ()) where
-  autoError name f = \a b c d e f' -> ftError name . f a b c d e f'
+instance AutoError (b -> c) (b -> d) => AutoError (a -> b -> c)
+                                                  (a -> b -> d) where
+  autoError name f = autoError name . f
 
 
 
 class AutoAllocaError a b where
   -- | @
-  --     autoAllocaError name f = \a b c -> 
+  --     autoAllocaError name f = \a b c ->
   --       alloca $ \ptr -> do
   --         ftError name $ f a b c ... ptr
   --         peek ptr
@@ -86,42 +67,8 @@ instance Storable b
       ftError name $ f a ptr
       peek ptr
 
-instance Storable c
-      => AutoAllocaError (a -> b -> Ptr c -> IO FT_Error)
-                         (a -> b -> IO c) where
-  autoAllocaError name f = \a b ->
-    alloca $ \ptr -> do
-      ftError name $ f a b ptr
-      peek ptr
+instance AutoAllocaError (b -> c) (b -> d)
+      => AutoAllocaError (a -> b -> c)
+                         (a -> b -> d) where
+  autoAllocaError name f = autoAllocaError name . f
 
-instance Storable d
-      => AutoAllocaError (a -> b -> c -> Ptr d -> IO FT_Error)
-                         (a -> b -> c -> IO d) where
-  autoAllocaError name f = \a b c ->
-    alloca $ \ptr -> do
-      ftError name $ f a b c ptr
-      peek ptr
-
-instance Storable e
-      => AutoAllocaError (a -> b -> c -> d -> Ptr e -> IO FT_Error)
-                         (a -> b -> c -> d -> IO e) where
-  autoAllocaError name f = \a b c d ->
-    alloca $ \ptr -> do
-      ftError name $ f a b c d ptr
-      peek ptr
-
-instance Storable f
-      => AutoAllocaError (a -> b -> c -> d -> e -> Ptr f -> IO FT_Error)
-                         (a -> b -> c -> d -> e -> IO f) where
-  autoAllocaError name f = \a b c d e ->
-    alloca $ \ptr -> do
-      ftError name $ f a b c d e ptr
-      peek ptr
-
-instance Storable g
-      => AutoAllocaError (a -> b -> c -> d -> e -> f -> Ptr g -> IO FT_Error)
-                         (a -> b -> c -> d -> e -> f -> IO g) where
-  autoAllocaError name f = \a b c d e f' ->
-    alloca $ \ptr -> do
-      ftError name $ f a b c d e f' ptr
-      peek ptr
