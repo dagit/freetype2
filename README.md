@@ -8,11 +8,12 @@ These are _mostly_ raw with a few key changes:
   (defined in `FreeType.Exception`);
 - A lot of the functions are wrappers that automatically allocate memory
   so you do not have to `alloca`/`peek`/`withCString` constantly;
-- Field names are lens-compatible with all of the lens in the package
-  (lens themselves are defined in `FreeType.Lens`);
-- Deprecated values that are simply synonyms to other values are omitted.
+- Deprecated values that are simply synonyms to other values are omitted;
+- Field names are prefixed, so none of them overlap;
 - Every function that was modified by this library has a raw counterpart
-  in a matching `*.Internal` module.
+  in a matching `*.Internal` module;
+
+There is also a separate [freetype2-lens](https://github.com/BurningWitness/freetype2-lens) library.
 
 ## Module structure
 
