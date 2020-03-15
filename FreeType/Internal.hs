@@ -1,13 +1,9 @@
-{-# OPTIONS_GHC -fno-warn-dodgy-exports #-}
-{-# OPTIONS_GHC -fno-warn-unused-imports #-}
-
 module FreeType.Internal
   ( -- * Core API
     module FreeType.Core.Version.Internal
   , module FreeType.Core.Base.Internal
   , module FreeType.Core.Color.Internal
   , module FreeType.Core.Glyph.Internal
-  , module FreeType.Core.Mac.Internal
   , module FreeType.Core.Size.Internal
     -- * Format-specific API
   , module FreeType.Format.Multiple.Internal
@@ -52,7 +48,6 @@ import           FreeType.Core.Version.Internal
 import           FreeType.Core.Base.Internal
 import           FreeType.Core.Color.Internal
 import           FreeType.Core.Glyph.Internal
-import           FreeType.Core.Mac.Internal
 import           FreeType.Core.Size.Internal
 import           FreeType.Format.Multiple.Internal
 import           FreeType.Format.TrueType.Internal
