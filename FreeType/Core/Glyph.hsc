@@ -1,5 +1,4 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE PatternSynonyms #-}
 
 {- | Please refer to the
@@ -66,7 +65,7 @@ ft_New_Glyph
   -> FT_Glyph_Format -- ^ format
   -> IO FT_Glyph     -- ^ glyph
 ft_New_Glyph =
-  autoAllocaError 'ft_New_Glyph ft_New_Glyph'
+  autoAllocaError "ft_New_Glyph" ft_New_Glyph'
 
 
 -- | 'bracket' over 'ft_New_Glyph' and 'ft_With_Glyph'.
@@ -85,7 +84,7 @@ ft_Get_Glyph
   :: FT_GlyphSlot -- ^ slot
   -> IO FT_Glyph  -- ^ glyph
 ft_Get_Glyph =
-  autoAllocaError 'ft_Get_Glyph ft_Get_Glyph'
+  autoAllocaError "ft_Get_Glyph" ft_Get_Glyph'
 
 
 
@@ -94,7 +93,7 @@ ft_Glyph_Copy
   -> Ptr FT_Glyph -- ^ target
   -> IO ()
 ft_Glyph_Copy glyph =
-  ftError 'ft_Glyph_Copy . ft_Glyph_Copy' glyph
+  ftError "ft_Glyph_Copy" . ft_Glyph_Copy' glyph
 
 
 
@@ -106,7 +105,7 @@ ft_Glyph_Transform
 ft_Glyph_Transform glyph mat vec =
   with mat $ \matPtr ->
     with vec $ \vecPtr ->
-      ftError 'ft_Glyph_Transform $ ft_Glyph_Transform' glyph matPtr vecPtr
+      ftError "ft_Glyph_Transform" $ ft_Glyph_Transform' glyph matPtr vecPtr
 
 
 
@@ -142,7 +141,7 @@ ft_Glyph_To_Bitmap
   -> Bool           -- ^ destroy
   -> IO ()
 ft_Glyph_To_Bitmap glyph mode origin destroy =
-  ftError 'ft_Glyph_To_Bitmap
+  ftError "ft_Glyph_To_Bitmap"
     . ft_Glyph_To_Bitmap' glyph mode origin $ bool 0 1 destroy
 
 

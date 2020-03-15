@@ -1,5 +1,4 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Cache Sub-System > Cache Sub-System](https://www.freetype.org/freetype2/docs/reference/ft2-cache_subsystem.html)
@@ -79,7 +78,6 @@ import           Control.Exception
 import           Foreign.Marshal.Alloc
 import           Foreign.Ptr
 import           Foreign.Storable
-import           Language.Haskell.TH.Syntax (Name)
 
 #include "ft2build.h"
 #include FT_CACHE_H
@@ -93,7 +91,7 @@ ftc_Manager_New
   -> FT_Pointer         -- ^ req_data
   -> IO FTC_Manager     -- ^ manager
 ftc_Manager_New =
-  autoAllocaError 'ftc_Manager_New ftc_Manager_New'
+  autoAllocaError "ftc_Manager_New" ftc_Manager_New'
 
 
 
@@ -133,7 +131,7 @@ ftc_Manager_LookupFace
   -> FTC_FaceID  -- ^ face_id
   -> IO FT_Face  -- ^ face
 ftc_Manager_LookupFace =
-  autoAllocaError 'ftc_Manager_LookupFace ftc_Manager_LookupFace'
+  autoAllocaError "ftc_Manager_LookupFace" ftc_Manager_LookupFace'
 
 
 
@@ -142,7 +140,7 @@ ftc_Manager_LookupSize
   -> FTC_Scaler  -- ^ scaler
   -> IO FT_Size  -- ^ size
 ftc_Manager_LookupSize =
-  autoAllocaError 'ftc_Manager_LookupSize ftc_Manager_LookupSize'
+  autoAllocaError "ftc_Manager_LookupSize" ftc_Manager_LookupSize'
 
 
 
@@ -166,11 +164,11 @@ ftc_ImageCache_New
   :: FTC_Manager       -- ^ manager
   -> IO FTC_ImageCache -- ^ cache
 ftc_ImageCache_New =
-  autoAllocaError 'ftc_ImageCache_New ftc_ImageCache_New'
+  autoAllocaError "ftc_ImageCache_New" ftc_ImageCache_New'
 
 
 
-anodize :: Storable a => Name -> (Ptr a -> Ptr FTC_Node -> IO FT_Error) -> IO (a, Maybe FTC_Node)
+anodize :: Storable a => String -> (Ptr a -> Ptr FTC_Node -> IO FT_Error) -> IO (a, Maybe FTC_Node)
 anodize name f =
   alloca $ \objPtr ->
     alloca $ \anodePtr -> do
@@ -190,7 +188,7 @@ ftc_ImageCache_Lookup
   -> FT_UInt                       -- ^ gindex
   -> IO (FT_Glyph, Maybe FTC_Node) -- ^ (aglyph, anode)
 ftc_ImageCache_Lookup cache type_ gindex =
-  anodize 'ftc_ImageCache_Lookup $ ftc_ImageCache_Lookup' cache type_ gindex
+  anodize "ftc_ImageCache_Lookup" $ ftc_ImageCache_Lookup' cache type_ gindex
 
 
 
@@ -198,7 +196,7 @@ ftc_SBitCache_New
   :: FTC_Manager      -- ^ manager
   -> IO FTC_SBitCache -- ^ acache
 ftc_SBitCache_New =
-  autoAllocaError 'ftc_SBitCache_New ftc_SBitCache_New'
+  autoAllocaError "ftc_SBitCache_New" ftc_SBitCache_New'
 
 
 
@@ -208,7 +206,7 @@ ftc_SBitCache_Lookup
   -> FT_UInt                       -- ^ gindex
   -> IO (FTC_SBit, Maybe FTC_Node) -- ^ (sbit, anode)
 ftc_SBitCache_Lookup cache type_ gindex =
-  anodize 'ftc_SBitCache_Lookup $ ftc_SBitCache_Lookup' cache type_ gindex
+  anodize "ftc_SBitCache_Lookup" $ ftc_SBitCache_Lookup' cache type_ gindex
 
 
 
@@ -216,7 +214,7 @@ ftc_CMapCache_New
   :: FTC_Manager      -- ^ manager
   -> IO FTC_CMapCache -- ^ acache
 ftc_CMapCache_New =
-  autoAllocaError 'ftc_CMapCache_New ftc_CMapCache_New'
+  autoAllocaError "ftc_CMapCache_New" ftc_CMapCache_New'
 
 
 
@@ -237,7 +235,7 @@ ftc_ImageCache_LookupScaler
   -> FT_UInt                       -- ^ gindex
   -> IO (FT_Glyph, Maybe FTC_Node) -- ^(aglyph, anode)
 ftc_ImageCache_LookupScaler cache scaler flags gindex =
-  anodize 'ftc_ImageCache_LookupScaler $ ftc_ImageCache_LookupScaler' cache scaler flags gindex
+  anodize "ftc_ImageCache_LookupScaler" $ ftc_ImageCache_LookupScaler' cache scaler flags gindex
 
 
 
@@ -248,4 +246,4 @@ ftc_SBitCache_LookupScaler
   -> FT_UInt                       -- ^ gindex
   -> IO (FTC_SBit, Maybe FTC_Node) -- ^ (sbit, anode)
 ftc_SBitCache_LookupScaler cache scaler flags gindex =
-  anodize 'ftc_SBitCache_LookupScaler $ ftc_SBitCache_LookupScaler' cache scaler flags gindex
+  anodize "ftc_SBitCache_LookupScaler" $ ftc_SBitCache_LookupScaler' cache scaler flags gindex

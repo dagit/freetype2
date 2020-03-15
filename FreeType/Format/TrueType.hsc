@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Format-Specific API > TrueType Tables](https://www.freetype.org/freetype2/docs/reference/ft2-truetype_tables.html)
@@ -657,16 +656,16 @@ ft_Load_Sfnt_Table
   -> IO (Ptr FT_Byte) -- ^ buffer
 ft_Load_Sfnt_Table face tag offset 0 =
   alloca $ \lengthPtr -> do
-    ftError 'ft_Load_Sfnt_Table $ ft_Load_Sfnt_Table' face tag offset nullPtr lengthPtr
+    ftError "ft_Load_Sfnt_Table" $ ft_Load_Sfnt_Table' face tag offset nullPtr lengthPtr
     length_ <- peek lengthPtr
     bufferPtr <- mallocArray $ fromIntegral length_
-    ftError 'ft_Load_Sfnt_Table $ ft_Load_Sfnt_Table' face tag offset bufferPtr lengthPtr
+    ftError "ft_Load_Sfnt_Table" $ ft_Load_Sfnt_Table' face tag offset bufferPtr lengthPtr
     return bufferPtr
 
 ft_Load_Sfnt_Table face tag offset length_ =
   with length_ $ \lengthPtr -> do
     bufferPtr <- mallocArray $ fromIntegral length_
-    ftError 'ft_Load_Sfnt_Table $ ft_Load_Sfnt_Table' face tag offset bufferPtr lengthPtr
+    ftError "ft_Load_Sfnt_Table" $ ft_Load_Sfnt_Table' face tag offset bufferPtr lengthPtr
     return bufferPtr
 
 
@@ -678,13 +677,13 @@ ft_Sfnt_Table_Info
   -> IO FT_ULong    -- ^ length
 ft_Sfnt_Table_Info face index Nothing =
   alloca $ \lengthPtr -> do
-    ftError 'ft_Sfnt_Table_Info $ ft_Sfnt_Table_Info' face index nullPtr lengthPtr
+    ftError "ft_Sfnt_Table_Info" $ ft_Sfnt_Table_Info' face index nullPtr lengthPtr
     peek lengthPtr
 
 ft_Sfnt_Table_Info face index (Just tag) =
   with tag $ \tagPtr ->
     alloca $ \lengthPtr -> do
-      ftError 'ft_Sfnt_Table_Info $ ft_Sfnt_Table_Info' face index tagPtr lengthPtr
+      ftError "ft_Sfnt_Table_Info" $ ft_Sfnt_Table_Info' face index tagPtr lengthPtr
       peek lengthPtr
 
 

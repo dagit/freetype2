@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 {- | Please refer to the
      [Support API > BZIP2 Streams](https://www.freetype.org/freetype2/docs/reference/ft2-bzip2.html)
      chapter of the reference.
@@ -23,4 +21,4 @@ ft_Stream_OpenBzip2
   -> FT_Stream -- ^ source
   -> IO ()
 ft_Stream_OpenBzip2 =
-  autoError 'ft_Stream_OpenBzip2 ft_Stream_OpenBzip2'
+  autoError "ft_Stream_OpenBzip2" ft_Stream_OpenBzip2'

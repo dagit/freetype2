@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Core API > Base Interface](https://www.freetype.org/freetype2/docs/reference/ft2-base_interface.html)
@@ -426,7 +425,7 @@ pattern FT_IS_VARIATION <- _
 
 ft_Init_FreeType :: IO FT_Library -- ^ library
 ft_Init_FreeType =
-  autoAllocaError 'ft_Init_FreeType ft_Init_FreeType'
+  autoAllocaError "ft_Init_FreeType" ft_Init_FreeType'
 
 
 
@@ -442,7 +441,7 @@ ft_Done_FreeType
   :: FT_Library -- ^ library
   -> IO ()
 ft_Done_FreeType =
-  autoError 'ft_Done_FreeType ft_Done_FreeType'
+  autoError "ft_Done_FreeType" ft_Done_FreeType'
 
 
 
@@ -454,7 +453,7 @@ ft_New_Face
 ft_New_Face lib path index =
   withCString path $ \pathPtr ->
     alloca $ \facePtr -> do
-      ftError 'ft_New_Face $ ft_New_Face' lib (castPtr pathPtr) index facePtr
+      ftError "ft_New_Face" $ ft_New_Face' lib (castPtr pathPtr) index facePtr
       peek facePtr
 
 
@@ -476,7 +475,7 @@ ft_Done_Face
   :: FT_Face -- ^ face
   -> IO ()
 ft_Done_Face =
-  autoError 'ft_Done_Face ft_Done_Face'
+  autoError "ft_Done_Face" ft_Done_Face'
 
 
 
@@ -484,7 +483,7 @@ ft_Reference_Face
   :: FT_Face -- ^ face
   -> IO ()
 ft_Reference_Face =
-  autoError 'ft_Reference_Face ft_Reference_Face'
+  autoError "ft_Reference_Face" ft_Reference_Face'
 
 
 
@@ -495,7 +494,7 @@ ft_New_Memory_Face
   -> FT_Long     -- ^ face_index
   -> IO FT_Face  -- ^ face
 ft_New_Memory_Face =
-  autoAllocaError 'ft_New_Memory_Face ft_New_Memory_Face'
+  autoAllocaError "ft_New_Memory_Face" ft_New_Memory_Face'
 
 
 
@@ -520,7 +519,7 @@ ft_Face_Properties
   -> Ptr FT_Parameter -- ^ properties
   -> IO ()
 ft_Face_Properties =
-  autoError 'ft_Face_Properties ft_Face_Properties'
+  autoError "ft_Face_Properties" ft_Face_Properties'
 
 
 
@@ -530,7 +529,7 @@ ft_Open_Face
   -> FT_Long          -- ^ face_index
   -> IO FT_Face       -- ^ face
 ft_Open_Face =
-  autoAllocaError 'ft_Open_Face ft_Open_Face'
+  autoAllocaError "ft_Open_Face" ft_Open_Face'
 
 
 
@@ -540,7 +539,7 @@ ft_Attach_File
   -> IO ()
 ft_Attach_File face path =
   withCString path $
-    ftError 'ft_Attach_File . ft_Attach_File' face . castPtr
+    ftError "ft_Attach_File" . ft_Attach_File' face . castPtr
 
 
 
@@ -549,7 +548,7 @@ ft_Attach_Stream
   -> Ptr FT_Open_Args -- ^ parameters
   -> IO ()
 ft_Attach_Stream =
-  autoError 'ft_Attach_Stream ft_Attach_Stream'
+  autoError "ft_Attach_Stream" ft_Attach_Stream'
 
 
 
@@ -562,7 +561,7 @@ ft_Set_Char_Size
   -> FT_UInt    -- ^ vert_resolution
   -> IO ()
 ft_Set_Char_Size =
-  autoError 'ft_Set_Char_Size ft_Set_Char_Size'
+  autoError "ft_Set_Char_Size" ft_Set_Char_Size'
 
 
 
@@ -572,7 +571,7 @@ ft_Set_Pixel_Sizes
   -> FT_UInt -- ^ pixel_height
   -> IO ()
 ft_Set_Pixel_Sizes =
-  autoError 'ft_Set_Pixel_Sizes ft_Set_Pixel_Sizes'
+  autoError "ft_Set_Pixel_Sizes" ft_Set_Pixel_Sizes'
 
 
 
@@ -581,7 +580,7 @@ ft_Request_Size
   -> FT_Size_Request -- ^ req
   -> IO ()
 ft_Request_Size =
-  autoError 'ft_Request_Size ft_Request_Size'
+  autoError "ft_Request_Size" ft_Request_Size'
 
 
 
@@ -590,7 +589,7 @@ ft_Select_Size
   -> FT_Int  -- ^ strike_index
   -> IO ()
 ft_Select_Size =
-  autoError 'ft_Select_Size ft_Select_Size'
+  autoError "ft_Select_Size" ft_Select_Size'
 
 
 
@@ -628,7 +627,7 @@ ft_Load_Glyph
   -> FT_Int32 -- ^ load_flags
   -> IO ()
 ft_Load_Glyph =
-  autoError 'ft_Load_Glyph $ ft_Load_Glyph'
+  autoError "ft_Load_Glyph" $ ft_Load_Glyph'
 
 
 
@@ -676,7 +675,7 @@ ft_Load_Char
   -> FT_Int32 -- ^ load_flags
   -> IO ()
 ft_Load_Char =
-  autoError 'ft_Load_Char ft_Load_Char'
+  autoError "ft_Load_Char" ft_Load_Char'
 
 
 
@@ -693,7 +692,7 @@ ft_Render_Glyph
   -> FT_Render_Mode -- ^ render_mode
   -> IO ()
 ft_Render_Glyph =
-  autoError 'ft_Render_Glyph ft_Render_Glyph'
+  autoError "ft_Render_Glyph" ft_Render_Glyph'
 
 
 
@@ -718,7 +717,7 @@ ft_Get_Kerning
   -> FT_UInt      -- ^ kern_mode
   -> IO FT_Vector -- ^ kerning
 ft_Get_Kerning =
-  autoAllocaError 'ft_Get_Kerning ft_Get_Kerning'
+  autoAllocaError "ft_Get_Kerning" ft_Get_Kerning'
 
 
 
@@ -738,7 +737,7 @@ ft_Get_Track_Kerning
   -> FT_Int      -- ^ degree
   -> IO FT_Fixed -- ^ kerning
 ft_Get_Track_Kerning =
-  autoAllocaError 'ft_Get_Track_Kerning ft_Get_Track_Kerning'
+  autoAllocaError "ft_Get_Track_Kerning" ft_Get_Track_Kerning'
 
 
 
@@ -749,7 +748,7 @@ ft_Get_Glyph_Name
   -> IO String  -- ^ buffer
 ft_Get_Glyph_Name face index buffer_max =
   allocaArray (fromIntegral buffer_max) $ \buffer -> do
-    ftError 'ft_Get_Glyph_Name $ ft_Get_Glyph_Name' face index (castPtr buffer) buffer_max
+    ftError "ft_Get_Glyph_Name" $ ft_Get_Glyph_Name' face index (castPtr buffer) buffer_max
     peekCString buffer
 
 
@@ -767,7 +766,7 @@ ft_Select_Charmap
   -> FT_Encoding -- ^ encoding
   -> IO ()
 ft_Select_Charmap =
-  autoError 'ft_Select_Charmap ft_Select_Charmap'
+  autoError "ft_Select_Charmap" ft_Select_Charmap'
 
 
 
@@ -776,7 +775,7 @@ ft_Set_Charmap
   -> FT_CharMap -- ^ charmap
   -> IO ()
 ft_Set_Charmap =
-  autoError 'ft_Set_Charmap ft_Set_Charmap'
+  autoError "ft_Set_Charmap" ft_Set_Charmap'
 
 
 
@@ -805,7 +804,7 @@ ft_Get_SubGlyph_Info glyph index =
       alloca $ \p_arg1Ptr ->
         alloca $ \p_arg2Ptr ->
           alloca $ \p_transformPtr -> do
-            ftError 'ft_Get_SubGlyph_Info $ ft_Get_SubGlyph_Info' glyph index p_indexPtr p_flagsPtr p_arg1Ptr p_arg2Ptr p_transformPtr
+            ftError "ft_Get_SubGlyph_Info" $ ft_Get_SubGlyph_Info' glyph index p_indexPtr p_flagsPtr p_arg1Ptr p_arg2Ptr p_transformPtr
             (,,,,)
               <$> peek p_indexPtr
               <*> peek p_flagsPtr

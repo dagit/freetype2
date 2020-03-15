@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Core API > FreeType Version](https://www.freetype.org/freetype2/docs/reference/ft2-version.html)

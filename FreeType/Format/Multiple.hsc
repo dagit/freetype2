@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | All of the functions in this module that get/set coordinates automatically
      set @num_coords@ based on list size and send 'nullPtr' as pointer if the
@@ -67,7 +66,6 @@ import           Foreign.Marshal.Array
 import           Foreign.Marshal.Utils
 import           Foreign.Ptr
 import           Foreign.Storable
-import           Language.Haskell.TH.Syntax (Name)
 
 #include "ft2build.h"
 #include FT_MULTIPLE_MASTERS_H
@@ -76,14 +74,14 @@ ft_Get_Multi_Master
   :: FT_Face            -- ^ face
   -> IO FT_Multi_Master -- ^ master
 ft_Get_Multi_Master =
-  autoAllocaError 'ft_Get_Multi_Master ft_Get_Multi_Master'
+  autoAllocaError "ft_Get_Multi_Master" ft_Get_Multi_Master'
 
 
 ft_Get_MM_Var
   :: FT_Face            -- ^ face
   -> IO (Ptr FT_MM_Var) -- ^ master
 ft_Get_MM_Var =
-  autoAllocaError 'ft_Get_MM_Var ft_Get_MM_Var'
+  autoAllocaError "ft_Get_MM_Var" ft_Get_MM_Var'
 
 
 
@@ -92,13 +90,13 @@ ft_Done_MM_Var
   -> Ptr FT_MM_Var -- ^ master
   -> IO ()
 ft_Done_MM_Var =
-  autoError 'ft_Done_MM_Var ft_Done_MM_Var'
+  autoError "ft_Done_MM_Var" ft_Done_MM_Var'
 
 
 
 setCoords
   :: Storable a
-  => Name
+  => String
   -> (FT_Face -> FT_UInt -> Ptr a -> IO FT_Error)
   -> (FT_Face -> [a] -> IO ())
 setCoords name f face []     =
@@ -111,7 +109,7 @@ setCoords name f face coords =
 
 getCoords
   :: Storable a
-  => Name
+  => String
   -> (FT_Face -> FT_UInt -> Ptr a -> IO FT_Error)
   -> (FT_Face -> FT_UInt -> IO [a])
 getCoords name f = \face num ->
@@ -126,7 +124,7 @@ ft_Set_MM_Design_Coordinates
   -> [FT_Long] -- ^ coords
   -> IO ()
 ft_Set_MM_Design_Coordinates =
-  setCoords 'ft_Set_MM_Design_Coordinates ft_Set_MM_Design_Coordinates'
+  setCoords "ft_Set_MM_Design_Coordinates" ft_Set_MM_Design_Coordinates'
 
 
 
@@ -135,7 +133,7 @@ ft_Set_Var_Design_Coordinates
   -> [FT_Fixed] -- ^ coords
   -> IO ()
 ft_Set_Var_Design_Coordinates =
-  setCoords 'ft_Set_Var_Design_Coordinates ft_Set_Var_Design_Coordinates'
+  setCoords "ft_Set_Var_Design_Coordinates" ft_Set_Var_Design_Coordinates'
 
 
 
@@ -144,7 +142,7 @@ ft_Get_Var_Design_Coordinates
   -> FT_UInt       -- ^ num_coords
   -> IO [FT_Fixed] -- ^ coords
 ft_Get_Var_Design_Coordinates =
-  getCoords 'ft_Get_Var_Design_Coordinates ft_Get_Var_Design_Coordinates'
+  getCoords "ft_Get_Var_Design_Coordinates" ft_Get_Var_Design_Coordinates'
 
 
 
@@ -153,7 +151,7 @@ ft_Set_MM_Blend_Coordinates
   -> [FT_Fixed] -- ^ coords
   -> IO ()
 ft_Set_MM_Blend_Coordinates =
-  setCoords 'ft_Set_MM_Blend_Coordinates ft_Set_MM_Blend_Coordinates'
+  setCoords "ft_Set_MM_Blend_Coordinates" ft_Set_MM_Blend_Coordinates'
 
 
 
@@ -162,7 +160,7 @@ ft_Get_MM_Blend_Coordinates
   -> FT_UInt       -- ^ num_coords
   -> IO [FT_Fixed] -- ^ coords
 ft_Get_MM_Blend_Coordinates =
-  getCoords 'ft_Get_MM_Blend_Coordinates ft_Get_MM_Blend_Coordinates'
+  getCoords "ft_Get_MM_Blend_Coordinates" ft_Get_MM_Blend_Coordinates'
 
 
 
@@ -171,7 +169,7 @@ ft_Set_Var_Blend_Coordinates
   -> [FT_Fixed] -- ^ coords
   -> IO ()
 ft_Set_Var_Blend_Coordinates =
-  setCoords 'ft_Set_Var_Blend_Coordinates ft_Set_Var_Blend_Coordinates'
+  setCoords "ft_Set_Var_Blend_Coordinates" ft_Set_Var_Blend_Coordinates'
 
 
 
@@ -180,7 +178,7 @@ ft_Get_Var_Blend_Coordinates
   -> FT_UInt       -- ^ num_coords
   -> IO [FT_Fixed] -- ^ coords
 ft_Get_Var_Blend_Coordinates =
-  getCoords 'ft_Get_Var_Blend_Coordinates ft_Get_Var_Blend_Coordinates'
+  getCoords "ft_Get_Var_Blend_Coordinates" ft_Get_Var_Blend_Coordinates'
 
 
 
@@ -189,7 +187,7 @@ ft_Set_MM_WeightVector
   -> [FT_Fixed] -- ^ weightvector
   -> IO ()
 ft_Set_MM_WeightVector =
-  setCoords 'ft_Set_MM_WeightVector ft_Set_MM_WeightVector'
+  setCoords "ft_Set_MM_WeightVector" ft_Set_MM_WeightVector'
 
 
 
@@ -203,7 +201,7 @@ ft_Get_MM_WeightVector
 ft_Get_MM_WeightVector face len =
   with len $ \lenPtr ->
     allocaArray (fromIntegral len) $ \coordsPtr -> do
-      ftError 'ft_Get_MM_WeightVector $ do
+      ftError "ft_Get_MM_WeightVector" $ do
         err <- ft_Get_MM_WeightVector' face lenPtr coordsPtr
         case err of
           FT_Err_Invalid_Argument -> ft_Get_MM_WeightVector' face lenPtr coordsPtr
@@ -223,7 +221,7 @@ ft_Get_Var_Axis_Flags
   -> FT_UInt       -- ^ axis_index
   -> IO FT_UInt    -- ^ flags
 ft_Get_Var_Axis_Flags =
-  autoAllocaError 'ft_Get_Var_Axis_Flags ft_Get_Var_Axis_Flags'
+  autoAllocaError "ft_Get_Var_Axis_Flags" ft_Get_Var_Axis_Flags'
 
 
 
@@ -232,4 +230,4 @@ ft_Set_Named_Instance
   -> FT_UInt -- ^ instance_index
   -> IO ()
 ft_Set_Named_Instance =
-  autoError 'ft_Set_Named_Instance ft_Set_Named_Instance'
+  autoError "ft_Set_Named_Instance" ft_Set_Named_Instance'

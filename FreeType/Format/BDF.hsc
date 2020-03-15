@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Format-Specific API > BDF and PCF Files](https://www.freetype.org/freetype2/docs/reference/ft2-bdf_fonts.html)
@@ -45,7 +44,7 @@ ft_Get_BDF_Charset_ID
 ft_Get_BDF_Charset_ID face =
   alloca $ \encodingPtr ->
     alloca $ \registryPtr -> do
-      ftError 'ft_Get_BDF_Charset_ID
+      ftError "ft_Get_BDF_Charset_ID"
         $ ft_Get_BDF_Charset_ID' face encodingPtr registryPtr
       (,)
         <$> (peekCString . castPtr =<< peek encodingPtr)
@@ -60,6 +59,6 @@ ft_Get_BDF_Property
 ft_Get_BDF_Property face name =
   withCString name $ \namePtr ->
     alloca $ \propPtr -> do
-      ftError 'ft_Get_BDF_Property
+      ftError "ft_Get_BDF_Property"
         $ ft_Get_BDF_Property' face (castPtr namePtr) propPtr
       peek propPtr

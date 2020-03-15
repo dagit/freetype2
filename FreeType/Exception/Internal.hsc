@@ -11,17 +11,16 @@ import           Control.Exception
 import           Foreign.Ptr
 import           Foreign.Marshal.Alloc
 import           Foreign.Storable
-import           Language.Haskell.TH (Name, nameBase)
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
 -- | An internal function for throwing 'FtError's
-ftError :: Name -> IO FT_Error -> IO ()
+ftError :: String -> IO FT_Error -> IO ()
 ftError name action = do
   code <- action
   unless (code == 0)
-    . throwIO $ FtError (nameBase name) code
+    . throwIO $ FtError name code
 
 
 
@@ -30,7 +29,7 @@ class AutoError a b where
   --     autoError name f = \a b c ... ->
   --       ftError name $ f a b c ...
   --   @
-  autoError :: Name -> a -> b
+  autoError :: String -> a -> b
 
 instance AutoError (a -> IO FT_Error)
                    (a -> IO ()) where
@@ -49,7 +48,7 @@ class AutoAllocaError a b where
   --         ftError name $ f a b c ... ptr
   --         peek ptr
   --   @
-  autoAllocaError :: Name -> a -> b
+  autoAllocaError :: String -> a -> b
 
 instance Storable a
       => AutoAllocaError (Ptr a -> IO FT_Error)

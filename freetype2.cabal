@@ -76,7 +76,6 @@ Executable freetype-example
   Main-is:       Main.hs
   Build-depends: base >= 4.10 && < 5
                , freetype2
-               , template-haskell
 
   Other-modules: FreeType
                  FreeType.Internal
@@ -309,7 +308,6 @@ Library
                  FreeType.Miscellaneous.TrueType.Types
 
   Build-depends: base >= 4.10 && < 5
-               , template-haskell
 
   Build-tools: hsc2hs
   ghc-options: -Wall
@@ -395,7 +393,6 @@ test-suite dynamic-function-check
   hs-source-dirs: .
                 , test
   build-depends: base >= 4.10 && < 5
-               , template-haskell
 
   other-modules: Dynamic.Report
 

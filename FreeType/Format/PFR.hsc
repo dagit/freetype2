@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 {- | Please refer to the
      [Format-Specific API > PFR Fonts](https://www.freetype.org/freetype2/docs/reference/ft2-pfr_fonts.html)
      chapter of the reference.
@@ -37,7 +35,7 @@ ft_Get_PFR_Metrics face =
     alloca $ \metricsPtr ->
       alloca $ \metXPtr ->
         alloca $ \metYPtr -> do
-          ftError 'ft_Get_PFR_Metrics
+          ftError "ft_Get_PFR_Metrics"
             $ ft_Get_PFR_Metrics' face outlinePtr metricsPtr metXPtr metYPtr
           (,,,)
             <$> nothingOnNULL outlinePtr
@@ -57,7 +55,7 @@ ft_Get_PFR_Kerning
   -> FT_UInt      -- ^ right
   -> IO FT_Vector -- ^ vector
 ft_Get_PFR_Kerning =
-  autoAllocaError 'ft_Get_PFR_Kerning ft_Get_PFR_Kerning'
+  autoAllocaError "ft_Get_PFR_Kerning" ft_Get_PFR_Kerning'
 
 
 
@@ -66,4 +64,4 @@ ft_Get_PFR_Advance
   -> FT_UInt   -- ^ gindex
   -> IO FT_Pos -- ^ advance
 ft_Get_PFR_Advance =
-  autoAllocaError 'ft_Get_PFR_Advance ft_Get_PFR_Advance'
+  autoAllocaError "ft_Get_PFR_Advance" ft_Get_PFR_Advance'

@@ -1,5 +1,4 @@
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Support API > Quick retrieval of advance values](https://www.freetype.org/freetype2/docs/reference/ft2-quick_advance.html)
@@ -31,7 +30,7 @@ ft_Get_Advance
   -> FT_Int32    -- ^ load_flags
   -> IO FT_Fixed -- ^ advance
 ft_Get_Advance =
-  autoAllocaError 'ft_Get_Advance ft_Get_Advance'
+  autoAllocaError "ft_Get_Advance" ft_Get_Advance'
 
 
 
@@ -42,7 +41,7 @@ ft_Get_Advances
   -> FT_Int32    -- ^ load_flags
   -> IO FT_Fixed -- ^ advances
 ft_Get_Advances =
-  autoAllocaError 'ft_Get_Advances ft_Get_Advances'
+  autoAllocaError "ft_Get_Advances" ft_Get_Advances'
 
 
 

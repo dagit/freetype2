@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Support API > Outline Processing](https://www.freetype.org/freetype2/docs/reference/ft2-outline_processing.html)
@@ -97,7 +96,7 @@ ft_Outline_New
   -> IO (Ptr FT_Outline) -- ^ outline
 ft_Outline_New lib points contours = do
   outlinePtr <- malloc
-  ftError 'ft_Outline_New $ ft_Outline_New' lib points contours outlinePtr
+  ftError "ft_Outline_New" $ ft_Outline_New' lib points contours outlinePtr
   return outlinePtr
 
 
@@ -113,8 +112,8 @@ ft_Outline_With
   -> IO a
 ft_Outline_With lib points contours f =
   alloca $ \outlinePtr -> do
-    ftError 'ft_Outline_New $ ft_Outline_New' lib points contours outlinePtr
-    finally (f outlinePtr) . ftError 'ft_Outline_Done $ ft_Outline_Done' lib outlinePtr
+    ftError "ft_Outline_New" $ ft_Outline_New' lib points contours outlinePtr
+    finally (f outlinePtr) . ftError "ft_Outline_Done" $ ft_Outline_Done' lib outlinePtr
 
 
 
@@ -124,7 +123,7 @@ ft_Outline_Done
   -> Ptr FT_Outline -- ^ outline
   -> IO ()
 ft_Outline_Done lib outlinePtr = do
-  ftError 'ft_Outline_Done $ ft_Outline_Done' lib outlinePtr
+  ftError "ft_Outline_Done" $ ft_Outline_Done' lib outlinePtr
   free outlinePtr
 
 
@@ -134,7 +133,7 @@ ft_Outline_Copy
   -> Ptr FT_Outline -- ^ target
   -> IO ()
 ft_Outline_Copy =
-  autoError 'ft_Outline_Copy ft_Outline_Copy'
+  autoError "ft_Outline_Copy" ft_Outline_Copy'
 
 
 
@@ -162,7 +161,7 @@ ft_Outline_Embolden
   -> FT_Pos         -- ^ strength
   -> IO ()
 ft_Outline_Embolden =
-  autoError 'ft_Outline_Embolden ft_Outline_Embolden'
+  autoError "ft_Outline_Embolden" ft_Outline_Embolden'
 
 
 
@@ -172,7 +171,7 @@ ft_Outline_EmboldenXY
   -> FT_Pos         -- ^ ystrength
   -> IO ()
 ft_Outline_EmboldenXY =
-  autoError 'ft_Outline_EmboldenXY ft_Outline_EmboldenXY'
+  autoError "ft_Outline_EmboldenXY" ft_Outline_EmboldenXY'
 
 
 
@@ -187,7 +186,7 @@ ft_Outline_Check
   :: Ptr FT_Outline -- ^ outline
   -> IO ()
 ft_Outline_Check =
-  autoError 'ft_Outline_Check ft_Outline_Check'
+  autoError "ft_Outline_Check" ft_Outline_Check'
 
 
 
@@ -206,7 +205,7 @@ ft_Outline_Get_BBox
   -> IO FT_BBox     -- ^ bbox
 ft_Outline_Get_BBox outlinePtr =
   alloca $ \bboxPtr -> do
-    ftError 'ft_Outline_Get_BBox $ ft_Outline_Get_BBox' outlinePtr bboxPtr
+    ftError "ft_Outline_Get_BBox" $ ft_Outline_Get_BBox' outlinePtr bboxPtr
     peek bboxPtr
 
 
@@ -217,7 +216,7 @@ ft_Outline_Get_Bitmap
   -> Ptr FT_Bitmap  -- ^ bitmap
   -> IO ()
 ft_Outline_Get_Bitmap =
-  autoError 'ft_Outline_Get_Bitmap ft_Outline_Get_Bitmap'
+  autoError "ft_Outline_Get_Bitmap" ft_Outline_Get_Bitmap'
 
 
 
@@ -227,7 +226,7 @@ ft_Outline_Render
   -> Ptr FT_Raster_Params -- ^ params
   -> IO ()
 ft_Outline_Render =
-  autoError 'ft_Outline_Render ft_Outline_Render'
+  autoError "ft_Outline_Render" ft_Outline_Render'
 
 
 
@@ -240,7 +239,7 @@ ft_Outline_Decompose
   -> IO ()
 ft_Outline_Decompose outlinePtr funcs dataPtr =
   with funcs $ \funcsPtr ->
-    ftError 'ft_Outline_Decompose $ ft_Outline_Decompose' outlinePtr funcsPtr dataPtr
+    ftError "ft_Outline_Decompose" $ ft_Outline_Decompose' outlinePtr funcsPtr dataPtr
 
 
 

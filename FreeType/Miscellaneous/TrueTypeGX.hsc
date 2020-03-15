@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Miscellaneous > TrueTypeGX/AAT Validation](https://www.freetype.org/freetype2/docs/reference/ft2-gx_validation.html)
@@ -55,7 +54,7 @@ ft_TrueTypeGX_Validate
   -> FT_UInt      -- ^ table_length
   -> IO ()
 ft_TrueTypeGX_Validate =
-  autoError 'ft_TrueTypeGX_Validate ft_TrueTypeGX_Validate'
+  autoError "ft_TrueTypeGX_Validate" ft_TrueTypeGX_Validate'
 
 
 
@@ -73,7 +72,7 @@ ft_ClassicKern_Validate
   -> Ptr FT_Bytes -- ^ ckern_table
   -> IO ()
 ft_ClassicKern_Validate =
-  autoError 'ft_ClassicKern_Validate ft_ClassicKern_Validate'
+  autoError "ft_ClassicKern_Validate" ft_ClassicKern_Validate'
 
 
 

@@ -1,5 +1,4 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Support API > List Processing](https://www.freetype.org/freetype2/docs/reference/ft2-list_processing.html)
@@ -81,7 +80,7 @@ ft_List_Iterate :: FT_List -> FT_List_Iterator -> Ptr () -> IO ()
 ft_List_Iterate list iterator user = do
   bracket (ft_List_Iterator iterator)
           freeHaskellFunPtr
-        $ \funterator -> ftError 'ft_List_Iterate $ ft_List_Iterate' list funterator user
+        $ \funterator -> ftError "ft_List_Iterate" $ ft_List_Iterate' list funterator user
 
 
 

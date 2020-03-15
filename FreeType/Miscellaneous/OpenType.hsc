@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Miscellaneous > OpenType Validation](https://www.freetype.org/freetype2/docs/reference/ft2-ot_validation.html)
@@ -44,7 +43,7 @@ ft_OpenType_Validate
   -> Ptr FT_Bytes -- ^ JSTF_table
   -> IO ()
 ft_OpenType_Validate =
-  autoError 'ft_OpenType_Validate ft_OpenType_Validate'
+  autoError "ft_OpenType_Validate" ft_OpenType_Validate'
 
 
 

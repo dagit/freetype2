@@ -5,8 +5,6 @@
 
 module Dynamic.Report where
 
-import           Language.Haskell.TH hiding (report)
-
 #if __GLASGOW_HASKELL__ < 804
 import           Data.Monoid
 #endif
@@ -18,10 +16,10 @@ import           Foreign.Ptr
 
 
 
-report' :: Name -> IO a -> IO a
+report' :: String -> IO a -> IO a
 report' name action = do
   result <- action
-  putStrLn $ "✓ " <> nameBase name
+  putStrLn $ "✓ " <> name
   return result
 
 
@@ -62,7 +60,7 @@ instance Def (FunPtr a) where
 
 
 class Report a z | a -> z where
-  report :: Name -> a -> IO z
+  report :: String -> a -> IO z
 
 instance Report (IO z) z where
   report = report'
@@ -75,22 +73,22 @@ instance (Def a, Report (b -> c) z) => Report (a -> b -> c) z where
 
 
 
-report0 :: Name -> z -> IO z
+report0 :: String -> z -> IO z
 report0 name = report' name . return
 
-report1 :: Def a => Name -> (a -> z) -> IO z
+report1 :: Def a => String -> (a -> z) -> IO z
 report1 name f = report' name . return $ f def
 
-report2 :: (Def a, Def b) => Name -> (a -> b -> z) -> IO z
+report2 :: (Def a, Def b) => String -> (a -> b -> z) -> IO z
 report2 name f = report' name . return $ f def def
 
-report3 :: (Def a, Def b, Def c) => Name -> (a -> b -> c -> z) -> IO z
+report3 :: (Def a, Def b, Def c) => String -> (a -> b -> c -> z) -> IO z
 report3 name f = report' name . return $ f def def def
 
 report4 :: (Def a, Def b, Def c, Def d)
-        => Name -> (a -> b -> c -> d -> z) -> IO z
+        => String -> (a -> b -> c -> d -> z) -> IO z
 report4 name f = report' name . return $ f def def def def
 
 report5 :: (Def a, Def b, Def c, Def d, Def e)
-        => Name -> (a -> b -> c -> d -> e -> z) -> IO z
+        => String -> (a -> b -> c -> d -> e -> z) -> IO z
 report5 name f = report' name . return $ f def def def def def

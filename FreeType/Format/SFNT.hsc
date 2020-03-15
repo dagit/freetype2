@@ -1,5 +1,4 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Format-Specific API > SFNT Names](https://www.freetype.org/freetype2/docs/reference/ft2-sfnt_names.html)
@@ -40,7 +39,7 @@ ft_Get_Sfnt_Name
   -> FT_UInt        -- ^ idx
   -> IO FT_SfntName -- ^ name
 ft_Get_Sfnt_Name =
-  autoAllocaError 'ft_Get_Sfnt_Name ft_Get_Sfnt_Name'
+  autoAllocaError "ft_Get_Sfnt_Name" ft_Get_Sfnt_Name'
 
 
 
@@ -49,4 +48,4 @@ ft_Get_Sfnt_LangTag
   -> FT_UInt           -- ^ langID
   -> IO FT_SfntLangTag -- ^ langTag
 ft_Get_Sfnt_LangTag =
-  autoAllocaError 'ft_Get_Sfnt_LangTag ft_Get_Sfnt_LangTag'
+  autoAllocaError "ft_Get_Sfnt_LangTag" ft_Get_Sfnt_LangTag'

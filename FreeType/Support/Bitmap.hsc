@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 {- | Please refer to the
      [Support API > Bitmap Handling](https://www.freetype.org/freetype2/docs/reference/ft2-bitmap_handling.html)
      chapter of the reference.
@@ -59,7 +57,7 @@ ft_Bitmap_With
 ft_Bitmap_With lib f =
   alloca $ \bitmapPtr -> do
     ft_Bitmap_Init' bitmapPtr
-    finally (f bitmapPtr) . ftError 'ft_Bitmap_Done $ ft_Bitmap_Done' lib bitmapPtr
+    finally (f bitmapPtr) . ftError "ft_Bitmap_Done" $ ft_Bitmap_Done' lib bitmapPtr
 
 
 
@@ -69,7 +67,7 @@ ft_Bitmap_Copy
   -> Ptr FT_Bitmap -- ^ target
   -> IO ()
 ft_Bitmap_Copy =
-  autoError 'ft_Bitmap_Copy ft_Bitmap_Copy'
+  autoError "ft_Bitmap_Copy" ft_Bitmap_Copy'
 
 
 
@@ -80,7 +78,7 @@ ft_Bitmap_Embolden
   -> FT_Pos        -- ^ yStrength
   -> IO ()
 ft_Bitmap_Embolden =
-  autoError 'ft_Bitmap_Embolden ft_Bitmap_Embolden'
+  autoError "ft_Bitmap_Embolden" ft_Bitmap_Embolden'
 
 
 
@@ -91,7 +89,7 @@ ft_Bitmap_Convert
   -> FT_Int        -- ^ alignment
   -> IO ()
 ft_Bitmap_Convert =
-  autoError 'ft_Bitmap_Convert ft_Bitmap_Convert'
+  autoError "ft_Bitmap_Convert" ft_Bitmap_Convert'
 
 
 
@@ -107,7 +105,7 @@ ft_Bitmap_Blend lib source sourceOff target targetOff color =
   with sourceOff $ \sourceOffPtr ->
     with targetOff $ \targetOffPtr ->
       with color $ \colorPtr -> do
-        ftError 'ft_Bitmap_Blend
+        ftError "ft_Bitmap_Blend"
           $ ft_Bitmap_Blend' lib source sourceOffPtr target targetOffPtr colorPtr
         peek targetOffPtr
 
@@ -117,7 +115,7 @@ ft_GlyphSlot_Own_Bitmap
   :: FT_GlyphSlot -- ^ slot
   -> IO ()
 ft_GlyphSlot_Own_Bitmap =
-  autoError 'ft_GlyphSlot_Own_Bitmap ft_GlyphSlot_Own_Bitmap'
+  autoError "ft_GlyphSlot_Own_Bitmap" ft_GlyphSlot_Own_Bitmap'
 
 
 
@@ -127,5 +125,5 @@ ft_Bitmap_Done
   -> Ptr FT_Bitmap -- ^ bitmap
   -> IO ()
 ft_Bitmap_Done lib bitmapPtr = do
-  ftError 'ft_Bitmap_Done $ ft_Bitmap_Done' lib bitmapPtr
+  ftError "ft_Bitmap_Done" $ ft_Bitmap_Done' lib bitmapPtr
   free bitmapPtr

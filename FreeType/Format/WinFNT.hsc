@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Format-Specific API > Window FNT Files](https://www.freetype.org/freetype2/docs/reference/ft2-winfnt_fonts.html)
@@ -93,4 +92,4 @@ ft_Get_WinFNT_Header
   :: FT_Face                -- ^ face
   -> IO FT_WinFNT_HeaderRec -- ^ header
 ft_Get_WinFNT_Header =
-  autoAllocaError 'ft_Get_WinFNT_Header ft_Get_WinFNT_Header'
+  autoAllocaError "ft_Get_WinFNT_Header" ft_Get_WinFNT_Header'

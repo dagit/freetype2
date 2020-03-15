@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Controlling FreeType Modules > Subpixel Rendering](https://www.freetype.org/freetype2/docs/reference/ft2-lcd_rendering.html)
@@ -59,7 +58,7 @@ ft_Library_SetLcdFilter
   -> FT_LcdFilter -- ^ filter
   -> IO ()
 ft_Library_SetLcdFilter =
-  autoError 'ft_Library_SetLcdFilter ft_Library_SetLcdFilter'
+  autoError "ft_Library_SetLcdFilter" ft_Library_SetLcdFilter'
 
 
 
@@ -74,7 +73,7 @@ ft_Library_SetLcdFilterWeights
   -> IO ()
 ft_Library_SetLcdFilterWeights lib (a, b, c, d, e) =
   withArray [a, b, c, d, e] $ \weightsPtr ->
-    ftError 'ft_Library_SetLcdFilterWeights
+    ftError "ft_Library_SetLcdFilterWeights"
       $ ft_Library_SetLcdFilterWeights' lib weightsPtr
 
 
@@ -90,4 +89,4 @@ ft_Library_SetLcdGeometry
   -> IO ()
 ft_Library_SetLcdGeometry lib (a, b, c) =
   withArray [a, b, c] $ \subPtr ->
-    ftError 'ft_Library_SetLcdGeometry $ ft_Library_SetLcdGeometry' lib subPtr
+    ftError "ft_Library_SetLcdGeometry" $ ft_Library_SetLcdGeometry' lib subPtr

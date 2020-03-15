@@ -1,6 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Core API > Glyph Color Management](https://www.freetype.org/freetype2/docs/reference/ft2-color_management.html)
@@ -50,7 +49,7 @@ ft_Palette_Data_Get
   :: FT_Face            -- ^ face
   -> IO FT_Palette_Data -- ^ palette
 ft_Palette_Data_Get =
-  autoAllocaError 'ft_Palette_Data_Get ft_Palette_Data_Get'
+  autoAllocaError "ft_Palette_Data_Get" ft_Palette_Data_Get'
 
 
 
@@ -69,4 +68,4 @@ ft_Palette_Set_Foreground_Color
   -> IO ()
 ft_Palette_Set_Foreground_Color face color =
   with color $
-    ftError 'ft_Palette_Set_Foreground_Color . ft_Palette_Set_Foreground_Color' face
+    ftError "ft_Palette_Set_Foreground_Color" . ft_Palette_Set_Foreground_Color' face

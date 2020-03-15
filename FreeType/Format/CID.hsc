@@ -1,5 +1,4 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the
      [Format-Specific API > CID Fonts](https://www.freetype.org/freetype2/docs/reference/ft2-cid_fonts.html)
@@ -37,7 +36,7 @@ ft_Get_CID_Registry_Ordering_Supplement face =
   alloca $ \registryPtr ->
     alloca $ \orderingPtr ->
       alloca $ \supplementPtr -> do
-        ftError 'ft_Get_CID_Registry_Ordering_Supplement $
+        ftError "ft_Get_CID_Registry_Ordering_Supplement" $
           ft_Get_CID_Registry_Ordering_Supplement' face registryPtr orderingPtr supplementPtr
         (,,)
           <$> (peekCString . castPtr =<< peek registryPtr)
@@ -51,7 +50,7 @@ ft_Get_CID_Is_Internally_CID_Keyed
   -> IO Bool -- ^ is_cid
 ft_Get_CID_Is_Internally_CID_Keyed face =
   alloca $ \isCidPtr -> do
-    ftError 'ft_Get_CID_Is_Internally_CID_Keyed
+    ftError "ft_Get_CID_Is_Internally_CID_Keyed"
       $ ft_Get_CID_Is_Internally_CID_Keyed' face isCidPtr
     isCid <- peek isCidPtr
     return $ if isCid == 1
@@ -65,4 +64,4 @@ ft_Get_CID_From_Glyph_Index
   -> FT_UInt    -- ^ glyph_index
   -> IO FT_UInt -- ^ cid
 ft_Get_CID_From_Glyph_Index =
-  autoAllocaError 'ft_Get_CID_From_Glyph_Index ft_Get_CID_From_Glyph_Index'
+  autoAllocaError "ft_Get_CID_From_Glyph_Index" ft_Get_CID_From_Glyph_Index'

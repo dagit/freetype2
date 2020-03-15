@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 {- | Please refer to the
      [Support API > GZIP Streams](https://www.freetype.org/freetype2/docs/reference/ft2-gzip.html)
      chapter of the reference.
@@ -28,7 +26,7 @@ ft_Stream_OpenGzip
   -> FT_Stream -- ^ source
   -> IO ()
 ft_Stream_OpenGzip =
-  autoError 'ft_Stream_OpenGzip ft_Stream_OpenGzip'
+  autoError "ft_Stream_OpenGzip" ft_Stream_OpenGzip'
 
 
 
@@ -41,6 +39,6 @@ ft_Gzip_Uncompress
   -> IO FT_ULong -- ^ output_len
 ft_Gzip_Uncompress memory output outputLen input inputLen =
   with outputLen $ \outputLenPtr -> do
-    ftError 'ft_Gzip_Uncompress
+    ftError "ft_Gzip_Uncompress"
       $ ft_Gzip_Uncompress' memory output outputLenPtr input inputLen
     peek outputLenPtr

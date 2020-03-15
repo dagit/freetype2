@@ -78,7 +78,7 @@ ft_Add_Module
   -> Ptr FT_Module_Class -- ^ clazz
   -> IO ()
 ft_Add_Module =
-  autoError 'ft_Add_Module ft_Add_Module'
+  autoError "ft_Add_Module" ft_Add_Module'
 
 
 
@@ -100,7 +100,7 @@ ft_Remove_Module
   -> FT_Module  -- ^ module
   -> IO ()
 ft_Remove_Module =
-  autoError 'ft_Remove_Module ft_Remove_Module'
+  autoError "ft_Remove_Module" ft_Remove_Module'
 
 
 
@@ -120,7 +120,7 @@ ft_Property_Set
 ft_Property_Set lib modul prop valPtr =
   withCString modul $ \modulPtr ->
     withCString prop $ \propPtr ->
-      ftError 'ft_Property_Set
+      ftError "ft_Property_Set"
         $ ft_Property_Set' lib (castPtr modulPtr) (castPtr propPtr) valPtr
 
 
@@ -134,7 +134,7 @@ ft_Property_Get
 ft_Property_Get lib modul prop valPtr =
   withCString modul $ \modulPtr ->
     withCString prop $ \propPtr ->
-      ftError 'ft_Property_Get
+      ftError "ft_Property_Get"
         $ ft_Property_Get' lib (castPtr modulPtr) (castPtr propPtr) valPtr
 
 
@@ -150,7 +150,7 @@ ft_New_Library
   :: FT_Memory     -- ^ memory
   -> IO FT_Library -- ^ library
 ft_New_Library =
-  autoAllocaError 'ft_New_Library ft_New_Library'
+  autoAllocaError "ft_New_Library" ft_New_Library'
 
 
 
@@ -158,7 +158,7 @@ ft_Done_Library
   :: FT_Library -- ^ library
   -> IO ()
 ft_Done_Library =
-  autoError 'ft_Done_Library ft_Done_Library'
+  autoError "ft_Done_Library" ft_Done_Library'
 
 
 
@@ -166,7 +166,7 @@ ft_Reference_Library
   :: FT_Library -- ^ library
   -> IO ()
 ft_Reference_Library =
-  autoError 'ft_Reference_Library ft_Reference_Library'
+  autoError "ft_Reference_Library" ft_Reference_Library'
 
 
 
@@ -189,7 +189,7 @@ ft_Set_Renderer
   -> Ptr FT_Parameter -- ^ parameters
   -> IO ()
 ft_Set_Renderer =
-  autoError 'ft_Set_Renderer ft_Set_Renderer'
+  autoError "ft_Set_Renderer" ft_Set_Renderer'
 
 
 

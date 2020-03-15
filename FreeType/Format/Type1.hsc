@@ -1,8 +1,5 @@
-{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
 
 {- | Please refer to the
      [Format-Specific API > Type 1 Tables](https://www.freetype.org/freetype2/docs/reference/ft2-type1_tables.html)
@@ -144,7 +141,7 @@ ft_Get_PS_Font_Info
   -> IO PS_FontInfo -- ^ font_info
 ft_Get_PS_Font_Info face = do
   infoPtr <- malloc
-  ftError 'ft_Get_PS_Font_Info $ ft_Get_PS_Font_Info' face infoPtr
+  ftError "ft_Get_PS_Font_Info" $ ft_Get_PS_Font_Info' face infoPtr
   return infoPtr
 
 
@@ -155,7 +152,7 @@ ft_Get_PS_Font_Private
   -> IO PS_Private -- ^ font_private
 ft_Get_PS_Font_Private face = do
   privPtr <- malloc
-  ftError 'ft_Get_PS_Font_Private $ ft_Get_PS_Font_Private' face privPtr
+  ftError "ft_Get_PS_Font_Private" $ ft_Get_PS_Font_Private' face privPtr
   return privPtr
 
 

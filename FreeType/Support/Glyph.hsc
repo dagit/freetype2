@@ -1,7 +1,6 @@
 {-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 {- | Please refer to the    
      [Support API > Glyph Stroker](https://www.freetype.org/freetype2/docs/reference/ft2-glyph_stroker.html)
@@ -139,7 +138,7 @@ ft_Glyph_Stroke
   -> IO FT_Glyph
 ft_Glyph_Stroke glyph stroker destroy =
   with glyph $ \glyphPtr -> do
-    ftError 'ft_Glyph_Stroke . ft_Glyph_Stroke' glyphPtr stroker $ bool 0 1 destroy
+    ftError "ft_Glyph_Stroke" . ft_Glyph_Stroke' glyphPtr stroker $ bool 0 1 destroy
     peek glyphPtr
 
 
@@ -152,7 +151,7 @@ ft_Glyph_StrokeBorder
   -> IO FT_Glyph
 ft_Glyph_StrokeBorder glyph stroker inside destroy =
   with glyph $ \glyphPtr -> do
-    ftError 'ft_Glyph_StrokeBorder
+    ftError "ft_Glyph_StrokeBorder"
       . ft_Glyph_StrokeBorder' glyphPtr stroker (bool 0 1 inside) $ bool 0 1 destroy
     peek glyphPtr
 
@@ -162,7 +161,7 @@ ft_Stroker_New
   :: FT_Library    -- ^ library
   -> IO FT_Stroker -- ^ stroker
 ft_Stroker_New =
-  autoAllocaError 'ft_Stroker_New ft_Stroker_New'
+  autoAllocaError "ft_Stroker_New" ft_Stroker_New'
 
 
 
@@ -201,7 +200,7 @@ ft_Stroker_ParseOutline
   -> Bool           -- ^ opened
   -> IO ()
 ft_Stroker_ParseOutline stroker outlinePtr opened =
-  ftError 'ft_Stroker_ParseOutline
+  ftError "ft_Stroker_ParseOutline"
     . ft_Stroker_ParseOutline' stroker outlinePtr $ bool 0 1 opened
 
 
@@ -218,7 +217,7 @@ ft_Stroker_BeginSubPath
   -> IO ()
 ft_Stroker_BeginSubPath stroker to open =
   with to $ \toPtr ->
-    ftError 'ft_Stroker_BeginSubPath
+    ftError "ft_Stroker_BeginSubPath"
       . ft_Stroker_BeginSubPath' stroker toPtr $ bool 0 1 open
 
 
@@ -227,7 +226,7 @@ ft_Stroker_EndSubPath
   :: FT_Stroker -- ^ stroker
   -> IO ()
 ft_Stroker_EndSubPath =
-  autoError 'ft_Stroker_EndSubPath ft_Stroker_EndSubPath'
+  autoError "ft_Stroker_EndSubPath" ft_Stroker_EndSubPath'
 
 
 
@@ -237,7 +236,7 @@ ft_Stroker_LineTo
   -> IO ()
 ft_Stroker_LineTo stroker to =
   with to $
-    ftError 'ft_Stroker_LineTo . ft_Stroker_LineTo' stroker
+    ftError "ft_Stroker_LineTo" . ft_Stroker_LineTo' stroker
 
 
 
@@ -249,7 +248,7 @@ ft_Stroker_ConicTo
 ft_Stroker_ConicTo stroker control to =
   with control $ \controlPtr ->
     with to $
-      ftError 'ft_Stroker_ConicTo . ft_Stroker_ConicTo' stroker controlPtr
+      ftError "ft_Stroker_ConicTo" . ft_Stroker_ConicTo' stroker controlPtr
 
 
 
@@ -263,7 +262,7 @@ ft_Stroker_CubicTo stroker control1 control2 to =
   with control1 $ \control1Ptr ->
     with control2 $ \control2Ptr ->
       with to $
-        ftError 'ft_Stroker_CubicTo . ft_Stroker_CubicTo' stroker control1Ptr control2Ptr
+        ftError "ft_Stroker_CubicTo" . ft_Stroker_CubicTo' stroker control1Ptr control2Ptr
 
 
 
@@ -274,7 +273,7 @@ ft_Stroker_GetBorderCounts
 ft_Stroker_GetBorderCounts stroker border =
   alloca $ \pointsPtr ->
     alloca $ \contoursPtr -> do
-      ftError 'ft_Stroker_GetBorderCounts
+      ftError "ft_Stroker_GetBorderCounts"
         $ ft_Stroker_GetBorderCounts' stroker border pointsPtr contoursPtr
       (,)
         <$> peek pointsPtr
@@ -293,7 +292,7 @@ ft_Stroker_GetCounts
 ft_Stroker_GetCounts stroker =
   alloca $ \pointsPtr -> do
     alloca $ \contoursPtr -> do
-      ftError 'ft_Stroker_GetCounts
+      ftError "ft_Stroker_GetCounts"
         $ ft_Stroker_GetCounts' stroker pointsPtr contoursPtr
       (,)
         <$> peek pointsPtr
