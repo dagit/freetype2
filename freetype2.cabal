@@ -7,9 +7,10 @@ Description:         Mostly complete and mostly raw bindings to the [FreeType2](
                      bindings operate.
 License:             BSD3
 License-file:        LICENSE
-Author:              Jason Dagit <dagitj@gmail.com>
-Maintainer:          Jason Dagit <dagitj@gmail.com>
-Copyright:           Copyright Jason Dagit 2011
+Author:              Jason Dagit, Oleksii Divak
+Maintainer:          Oleksii Divak <frozenwitness@gmail.com>
+Copyright:           Copyright © 2011-2012 Jason Dagit
+                     Copyright © 2020 Oleksii Divak
 Category:            Graphics
 Build-type:          Simple
 Extra-source-files:  freetype2/include/*.h
