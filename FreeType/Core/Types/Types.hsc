@@ -69,7 +69,6 @@ data FT_Vector = FT_Vector
                    { vX :: FT_Pos
                    , vY :: FT_Pos
                    }
-                 deriving (Show, Eq)
 
 instance Storable FT_Vector where
   sizeOf _    = #size      struct FT_Vector_
@@ -92,7 +91,6 @@ data FT_BBox = FT_BBox
                  , bbXMax :: FT_Pos
                  , bbYMax :: FT_Pos
                  }
-               deriving (Show, Eq)
 
 instance Storable FT_BBox where
   sizeOf    _ = #size      struct FT_BBox_
@@ -119,7 +117,6 @@ data FT_Matrix = FT_Matrix
                    , mYx :: FT_Fixed
                    , mYy :: FT_Fixed
                    }
-                 deriving (Show, Eq)
 
 instance Storable FT_Matrix where
   sizeOf _    = #size      struct FT_Matrix_
@@ -152,7 +149,6 @@ data FT_UnitVector = FT_UnitVector
                        { uvX :: FT_F2Dot14
                        , uvY :: FT_F2Dot14
                        }
-                     deriving (Show, Eq)
 
 instance Storable FT_UnitVector where
   sizeOf _    = #size      struct FT_UnitVector_
@@ -176,7 +172,6 @@ data FT_Data = FT_Data
                  { dPointer :: Ptr FT_Byte
                  , dLength  :: FT_Int
                  }
-               deriving (Show, Eq)
 
 instance Storable FT_Data where
   sizeOf _    = #size      struct FT_Data_
@@ -238,7 +233,6 @@ data FT_Bitmap = FT_Bitmap
                    , bPalette_mode :: #type unsigned char
                    , bPalette      :: Ptr ()
                    }
-                 deriving (Show, Eq)
 
 instance Storable FT_Bitmap where
   sizeOf _    = #size      struct FT_Bitmap_
