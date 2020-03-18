@@ -8,8 +8,6 @@ module FreeType.Core.Types.Types
 
 import           FreeType.Exception.Types (FT_Error)
 
-import           Prelude hiding (length)
-
 import           Data.Function ((&))
 import           Foreign
 
@@ -34,11 +32,15 @@ type FT_UInt16  = #type FT_UInt16
 type FT_Int32   = #type FT_Int32
 
 type FT_UInt32  = #type FT_UInt32
-
+#ifndef mingw32_HOST_OS
 type FT_Int64   = #type FT_Int64
 
 type FT_UInt64  = #type FT_UInt64
+#else
+type FT_Int64   = Int64
 
+type FT_UInt64  = Word64
+#endif
 type FT_Short   = #type FT_Short
 
 type FT_UShort  = #type FT_UShort
