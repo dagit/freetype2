@@ -1,22 +1,23 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftzopen.c                                                              */
-/*                                                                         */
-/*    FreeType support for .Z compressed files.                            */
-/*                                                                         */
-/*  This optional component relies on NetBSD's zopen().  It should mainly  */
-/*  be used to parse compressed PCF fonts, as found with many X11 server   */
-/*  distributions.                                                         */
-/*                                                                         */
-/*  Copyright 2005, 2006, 2007, 2009 by David Turner.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftzopen.c
+ *
+ *   FreeType support for .Z compressed files.
+ *
+ * This optional component relies on NetBSD's zopen().  It should mainly
+ * be used to parse compressed PCF fonts, as found with many X11 server
+ * distributions.
+ *
+ * Copyright (C) 2005-2019 by
+ * David Turner.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 #include "ftzopen.h"
 #include FT_INTERNAL_MEMORY_H
@@ -41,7 +42,12 @@
     state->buf_total += count;
     state->in_eof     = FT_BOOL( count < state->num_bits );
     state->buf_offset = 0;
-    state->buf_size   = ( state->buf_size << 3 ) - ( state->num_bits - 1 );
+
+    state->buf_size <<= 3;
+    if ( state->buf_size > state->num_bits )
+      state->buf_size -= state->num_bits - 1;
+    else
+      return -1; /* not enough data */
 
     if ( count == 0 )  /* end of file */
       return -1;
@@ -54,7 +60,7 @@
   ft_lzwstate_get_code( FT_LzwState  state )
   {
     FT_UInt   num_bits = state->num_bits;
-    FT_Int    offset   = state->buf_offset;
+    FT_UInt   offset   = state->buf_offset;
     FT_Byte*  p;
     FT_Int    result;
 
@@ -65,7 +71,10 @@
     {
       if ( state->free_ent >= state->free_bits )
       {
-        state->num_bits  = ++num_bits;
+        state->num_bits = ++num_bits;
+        if ( num_bits > LZW_MAX_BITS )
+          return -1;
+
         state->free_bits = state->num_bits < state->max_bits
                            ? (FT_UInt)( ( 1UL << num_bits ) - 256 )
                            : state->max_free + 1;
@@ -124,6 +133,15 @@
         old_size     = 0;
       }
 
+      /* requirement of the character stack larger than 1<<LZW_MAX_BITS */
+      /* implies bug in the decompression code                          */
+      if ( new_size > ( 1 << LZW_MAX_BITS ) )
+      {
+        new_size = 1 << LZW_MAX_BITS;
+        if ( new_size == old_size )
+          return -1;
+      }
+
       if ( FT_RENEW_ARRAY( state->stack, old_size, new_size ) )
         return -1;
 
@@ -149,11 +167,11 @@
       new_size += new_size >> 2;  /* don't grow too fast */
 
     /*
-     *  Note that the `suffix' array is located in the same memory block
-     *  pointed to by `prefix'.
+     * Note that the `suffix' array is located in the same memory block
+     * pointed to by `prefix'.
      *
-     *  I know that sizeof(FT_Byte) == 1 by definition, but it is clearer
-     *  to write it literally.
+     * I know that sizeof(FT_Byte) == 1 by definition, but it is clearer
+     * to write it literally.
      *
      */
     if ( FT_REALLOC_MULT( state->prefix, old_size, new_size,
@@ -279,7 +297,7 @@
                            : state->max_free + 1;
 
         c = ft_lzwstate_get_code( state );
-        if ( c < 0 )
+        if ( c < 0 || c > 255 )
           goto Eof;
 
         old_code = old_char = (FT_UInt)c;
@@ -312,11 +330,12 @@
           /* why not LZW_FIRST-256 ? */
           state->free_ent  = ( LZW_FIRST - 1 ) - 256;
           state->buf_clear = 1;
-          c = ft_lzwstate_get_code( state );
-          if ( c < 0 )
-            goto Eof;
 
-          code = (FT_UInt)c;
+          /* not quite right, but at least more predictable */
+          old_code = 0;
+          old_char = 0;
+
+          goto NextCode;
         }
 
         in_code = code; /* save code for later */
@@ -326,6 +345,10 @@
           /* special case for KwKwKwK */
           if ( code - 256U >= state->free_ent )
           {
+            /* corrupted LZW stream */
+            if ( code - 256U > state->free_ent )
+              goto Eof;
+
             FTLZW_STACK_PUSH( old_char );
             code = old_code;
           }
@@ -351,7 +374,7 @@
       {
         while ( state->stack_top > 0 )
         {
-          --state->stack_top;
+          state->stack_top--;
 
           if ( buffer )
             buffer[result] = state->stack[state->stack_top];

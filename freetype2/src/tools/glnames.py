@@ -6,7 +6,7 @@
 #
 
 
-# Copyright 1996-2000, 2003, 2005, 2007, 2008 by
+# Copyright (C) 1996-2019 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -35,7 +35,7 @@ import sys, string, struct, re, os.path
 #
 # See
 #
-#   http://fonts.apple.com/TTRefMan/RM06/Chap6post.html
+#   https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6post.html
 #
 # for the official list.
 #
@@ -151,7 +151,7 @@ mac_standard_names = \
 # The list of standard `SID' glyph names.  For the official list,
 # see Annex A of document at
 #
-#   http://partners.adobe.com/asn/developer/pdfs/tn/5176.CFF.pdf.
+#   https://www.adobe.com/content/dam/acom/en/devnet/font/pdfs/5176.CFF.pdf  .
 #
 sid_standard_names = \
 [
@@ -412,11 +412,10 @@ t1_expert_encoding = \
 ]
 
 
-# This data has been taken literally from the file `glyphlist.txt',
-# version 2.0, 22 Sept 2002.  It is available from
+# This data has been taken literally from the files `glyphlist.txt'
+# and `zapfdingbats.txt' version 2.0, Sept 2002.  It is available from
 #
-#   http://partners.adobe.com/asn/developer/typeforum/unicodegn.html
-#   http://partners.adobe.com/public/developer/en/opentype/glyphlist.txt
+#   https://github.com/adobe-type-tools/agl-aglfn
 #
 adobe_glyph_list = """\
 A;0041
@@ -4700,6 +4699,207 @@ zretroflexhook;0290
 zstroke;01B6
 zuhiragana;305A
 zukatakana;30BA
+a100;275E
+a101;2761
+a102;2762
+a103;2763
+a104;2764
+a105;2710
+a106;2765
+a107;2766
+a108;2767
+a109;2660
+a10;2721
+a110;2665
+a111;2666
+a112;2663
+a117;2709
+a118;2708
+a119;2707
+a11;261B
+a120;2460
+a121;2461
+a122;2462
+a123;2463
+a124;2464
+a125;2465
+a126;2466
+a127;2467
+a128;2468
+a129;2469
+a12;261E
+a130;2776
+a131;2777
+a132;2778
+a133;2779
+a134;277A
+a135;277B
+a136;277C
+a137;277D
+a138;277E
+a139;277F
+a13;270C
+a140;2780
+a141;2781
+a142;2782
+a143;2783
+a144;2784
+a145;2785
+a146;2786
+a147;2787
+a148;2788
+a149;2789
+a14;270D
+a150;278A
+a151;278B
+a152;278C
+a153;278D
+a154;278E
+a155;278F
+a156;2790
+a157;2791
+a158;2792
+a159;2793
+a15;270E
+a160;2794
+a161;2192
+a162;27A3
+a163;2194
+a164;2195
+a165;2799
+a166;279B
+a167;279C
+a168;279D
+a169;279E
+a16;270F
+a170;279F
+a171;27A0
+a172;27A1
+a173;27A2
+a174;27A4
+a175;27A5
+a176;27A6
+a177;27A7
+a178;27A8
+a179;27A9
+a17;2711
+a180;27AB
+a181;27AD
+a182;27AF
+a183;27B2
+a184;27B3
+a185;27B5
+a186;27B8
+a187;27BA
+a188;27BB
+a189;27BC
+a18;2712
+a190;27BD
+a191;27BE
+a192;279A
+a193;27AA
+a194;27B6
+a195;27B9
+a196;2798
+a197;27B4
+a198;27B7
+a199;27AC
+a19;2713
+a1;2701
+a200;27AE
+a201;27B1
+a202;2703
+a203;2750
+a204;2752
+a205;276E
+a206;2770
+a20;2714
+a21;2715
+a22;2716
+a23;2717
+a24;2718
+a25;2719
+a26;271A
+a27;271B
+a28;271C
+a29;2722
+a2;2702
+a30;2723
+a31;2724
+a32;2725
+a33;2726
+a34;2727
+a35;2605
+a36;2729
+a37;272A
+a38;272B
+a39;272C
+a3;2704
+a40;272D
+a41;272E
+a42;272F
+a43;2730
+a44;2731
+a45;2732
+a46;2733
+a47;2734
+a48;2735
+a49;2736
+a4;260E
+a50;2737
+a51;2738
+a52;2739
+a53;273A
+a54;273B
+a55;273C
+a56;273D
+a57;273E
+a58;273F
+a59;2740
+a5;2706
+a60;2741
+a61;2742
+a62;2743
+a63;2744
+a64;2745
+a65;2746
+a66;2747
+a67;2748
+a68;2749
+a69;274A
+a6;271D
+a70;274B
+a71;25CF
+a72;274D
+a73;25A0
+a74;274F
+a75;2751
+a76;25B2
+a77;25BC
+a78;25C6
+a79;2756
+a7;271E
+a81;25D7
+a82;2758
+a83;2759
+a84;275A
+a85;276F
+a86;2771
+a87;2772
+a88;2773
+a89;2768
+a8;271F
+a90;2769
+a91;276C
+a92;276D
+a93;276A
+a94;276B
+a95;2774
+a96;2775
+a97;275B
+a98;275C
+a99;275D
+a9;2720
 """
 
 
@@ -4720,8 +4920,17 @@ class StringTable:
 
   def dump( self, file ):
     write = file.write
-    write( "  static const char  " + self.master_table +
-           "[" + repr( self.total ) + "] =\n" )
+    write( "#ifndef  DEFINE_PS_TABLES_DATA\n" )
+    write( "#ifdef  __cplusplus\n" )
+    write( '  extern "C"\n' )
+    write( "#else\n" )
+    write( "  extern\n" )
+    write( "#endif\n" )
+    write( "#endif\n" )
+    write( "  const char  " + self.master_table +
+           "[" + repr( self.total ) + "]\n" )
+    write( "#ifdef  DEFINE_PS_TABLES_DATA\n" )
+    write( "  =\n" )
     write( "  {\n" )
 
     line = ""
@@ -4730,7 +4939,10 @@ class StringTable:
       line += string.join( ( re.findall( ".", name ) ), "','" )
       line += "', 0,\n"
 
-    write( line + "  };\n\n\n" )
+    write( line )
+    write( "  }\n" )
+    write( "#endif /* DEFINE_PS_TABLES_DATA */\n" )
+    write( "  ;\n\n\n" )
 
   def dump_sublist( self, file, table_name, macro_name, sublist ):
     write = file.write
@@ -4738,8 +4950,17 @@ class StringTable:
 
     write( "  /* Values are offsets into the `" +
            self.master_table + "' table */\n\n" )
-    write( "  static const short  " + table_name +
-           "[" + macro_name + "] =\n" )
+    write( "#ifndef  DEFINE_PS_TABLES_DATA\n" )
+    write( "#ifdef  __cplusplus\n" )
+    write( '  extern "C"\n' )
+    write( "#else\n" )
+    write( "  extern\n" )
+    write( "#endif\n" )
+    write( "#endif\n" )
+    write( "  const short  " + table_name +
+           "[" + macro_name + "]\n" )
+    write( "#ifdef  DEFINE_PS_TABLES_DATA\n" )
+    write( "  =\n" )
     write( "  {\n" )
 
     line  = "    "
@@ -4755,7 +4976,11 @@ class StringTable:
         col   = 0
         comma = ",\n    "
 
-    write( line + "\n  };\n\n\n" )
+    write( line )
+    write( "\n" )
+    write( "  }\n" )
+    write( "#endif /* DEFINE_PS_TABLES_DATA */\n" )
+    write( "  ;\n\n\n" )
 
 
 # We now store the Adobe Glyph List in compressed form.  The list is put
@@ -4988,8 +5213,17 @@ def dump_encoding( file, encoding_name, encoding_list ):
 
   write = file.write
   write( "  /* the following are indices into the SID name table */\n" )
-  write( "  static const unsigned short  " + encoding_name +
-         "[" + repr( len( encoding_list ) ) + "] =\n" )
+  write( "#ifndef  DEFINE_PS_TABLES_DATA\n" )
+  write( "#ifdef  __cplusplus\n" )
+  write( '  extern "C"\n' )
+  write( "#else\n" )
+  write( "  extern\n" )
+  write( "#endif\n" )
+  write( "#endif\n" )
+  write( "  const unsigned short  " + encoding_name +
+         "[" + repr( len( encoding_list ) ) + "]\n" )
+  write( "#ifdef  DEFINE_PS_TABLES_DATA\n" )
+  write( "  =\n" )
   write( "  {\n" )
 
   line  = "    "
@@ -5004,14 +5238,27 @@ def dump_encoding( file, encoding_name, encoding_list ):
       col = 0
       comma = ",\n    "
 
-  write( line + "\n  };\n\n\n" )
+  write( line )
+  write( "\n" )
+  write( "  }\n" )
+  write( "#endif /* DEFINE_PS_TABLES_DATA */\n" )
+  write( "  ;\n\n\n" )
 
 
 def dump_array( the_array, write, array_name ):
   """dumps a given encoding"""
 
-  write( "  static const unsigned char  " + array_name +
-         "[" + repr( len( the_array ) ) + "L] =\n" )
+  write( "#ifndef  DEFINE_PS_TABLES_DATA\n" )
+  write( "#ifdef  __cplusplus\n" )
+  write( '  extern "C"\n' )
+  write( "#else\n" )
+  write( "  extern\n" )
+  write( "#endif\n" )
+  write( "#endif\n" )
+  write( "  const unsigned char  " + array_name +
+         "[" + repr( len( the_array ) ) + "L]\n" )
+  write( "#ifdef  DEFINE_PS_TABLES_DATA\n" )
+  write( "  =\n" )
   write( "  {\n" )
 
   line  = ""
@@ -5032,7 +5279,11 @@ def dump_array( the_array, write, array_name ):
       write( line )
       line = ""
 
-  write( line + "\n  };\n\n\n" )
+  write( line )
+  write( "\n" )
+  write( "  }\n" )
+  write( "#endif /* DEFINE_PS_TABLES_DATA */\n" )
+  write( "  ;\n\n\n" )
 
 
 def main():
@@ -5042,7 +5293,7 @@ def main():
     print __doc__ % sys.argv[0]
     sys.exit( 1 )
 
-  file  = open( sys.argv[1], "w\n" )
+  file  = open( sys.argv[1], "wb" )
   write = file.write
 
   count_sid = len( sid_standard_names )
@@ -5059,24 +5310,24 @@ def main():
   mac_extras_count = len( mac_extras )
   base_list        = mac_extras + sid_standard_names
 
-  write( "/***************************************************************************/\n" )
-  write( "/*                                                                         */\n" )
+  write( "/****************************************************************************\n" )
+  write( " *\n" )
 
-  write( "/*  %-71s*/\n" % os.path.basename( sys.argv[1] ) )
+  write( " * %-71s\n" % os.path.basename( sys.argv[1] ) )
 
-  write( "/*                                                                         */\n" )
-  write( "/*    PostScript glyph names.                                              */\n" )
-  write( "/*                                                                         */\n" )
-  write( "/*  Copyright 2005, 2008 by                                                */\n" )
-  write( "/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */\n" )
-  write( "/*                                                                         */\n" )
-  write( "/*  This file is part of the FreeType project, and may only be used,       */\n" )
-  write( "/*  modified, and distributed under the terms of the FreeType project      */\n" )
-  write( "/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */\n" )
-  write( "/*  this file you indicate that you have read the license and              */\n" )
-  write( "/*  understand and accept it fully.                                        */\n" )
-  write( "/*                                                                         */\n" )
-  write( "/***************************************************************************/\n" )
+  write( " *\n" )
+  write( " *   PostScript glyph names.\n" )
+  write( " *\n" )
+  write( " * Copyright 2005-2019 by\n" )
+  write( " * David Turner, Robert Wilhelm, and Werner Lemberg.\n" )
+  write( " *\n" )
+  write( " * This file is part of the FreeType project, and may only be used,\n" )
+  write( " * modified, and distributed under the terms of the FreeType project\n" )
+  write( " * license, LICENSE.TXT.  By continuing to use, modify, or distribute\n" )
+  write( " * this file you indicate that you have read the license and\n" )
+  write( " * understand and accept it fully.\n" )
+  write( " *\n" )
+  write( " */\n" )
   write( "\n" )
   write( "\n" )
   write( "  /* This file has been generated automatically -- do not edit! */\n" )
@@ -5110,12 +5361,12 @@ def main():
 
   write( """\
   /*
-   *  This table is a compressed version of the Adobe Glyph List (AGL),
-   *  optimized for efficient searching.  It has been generated by the
-   *  `glnames.py' python script located in the `src/tools' directory.
+   * This table is a compressed version of the Adobe Glyph List (AGL),
+   * optimized for efficient searching.  It has been generated by the
+   * `glnames.py' python script located in the `src/tools' directory.
    *
-   *  The lookup function to get the Unicode value for a given string
-   *  is defined below the table.
+   * The lookup function to get the Unicode value for a given string
+   * is defined below the table.
    */
 
 #ifdef FT_CONFIG_OPTION_ADOBE_GLYPH_LIST
@@ -5127,8 +5378,9 @@ def main():
   # write the lookup routine now
   #
   write( """\
+#ifdef  DEFINE_PS_TABLES
   /*
-   *  This function searches the compressed table efficiently.
+   * This function searches the compressed table efficiently.
    */
   static unsigned long
   ft_get_adobe_glyph_index( const char*  name,
@@ -5221,6 +5473,7 @@ def main():
   NotFound:
     return 0;
   }
+#endif /* DEFINE_PS_TABLES */
 
 #endif /* FT_CONFIG_OPTION_ADOBE_GLYPH_LIST */
 

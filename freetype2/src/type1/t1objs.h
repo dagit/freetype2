@@ -1,23 +1,23 @@
-/***************************************************************************/
-/*                                                                         */
-/*  t1objs.h                                                               */
-/*                                                                         */
-/*    Type 1 objects manager (specification).                              */
-/*                                                                         */
-/*  Copyright 1996-2001, 2002, 2006 by                                     */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * t1objs.h
+ *
+ *   Type 1 objects manager (specification).
+ *
+ * Copyright (C) 1996-2019 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __T1OBJS_H__
-#define __T1OBJS_H__
+#ifndef T1OBJS_H_
+#define T1OBJS_H_
 
 
 #include <ft2build.h>
@@ -34,70 +34,59 @@ FT_BEGIN_HEADER
   typedef struct T1_Glyph_Hints_  T1_Glyph_Hints;
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Type>                                                                */
-  /*    T1_Driver                                                          */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    A handle to a Type 1 driver object.                                */
-  /*                                                                       */
-  typedef struct T1_DriverRec_   *T1_Driver;
-
-
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Type>                                                                */
-  /*    T1_Size                                                            */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    A handle to a Type 1 size object.                                  */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Type:
+   *   T1_Size
+   *
+   * @Description:
+   *   A handle to a Type 1 size object.
+   */
   typedef struct T1_SizeRec_*  T1_Size;
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Type>                                                                */
-  /*    T1_GlyphSlot                                                       */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    A handle to a Type 1 glyph slot object.                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Type:
+   *   T1_GlyphSlot
+   *
+   * @Description:
+   *   A handle to a Type 1 glyph slot object.
+   */
   typedef struct T1_GlyphSlotRec_*  T1_GlyphSlot;
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Type>                                                                */
-  /*    T1_CharMap                                                         */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    A handle to a Type 1 character mapping object.                     */
-  /*                                                                       */
-  /* <Note>                                                                */
-  /*    The Type 1 format doesn't use a charmap but an encoding table.     */
-  /*    The driver is responsible for making up charmap objects            */
-  /*    corresponding to these tables.                                     */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Type:
+   *   T1_CharMap
+   *
+   * @Description:
+   *   A handle to a Type 1 character mapping object.
+   *
+   * @Note:
+   *   The Type 1 format doesn't use a charmap but an encoding table.
+   *   The driver is responsible for making up charmap objects
+   *   corresponding to these tables.
+   */
   typedef struct T1_CharMapRec_*   T1_CharMap;
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /*                  HERE BEGINS THE TYPE1 SPECIFIC STUFF                 */
-  /*                                                                       */
-  /*************************************************************************/
+  /**************************************************************************
+   *
+   *                 HERE BEGINS THE TYPE1 SPECIFIC STUFF
+   *
+   */
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Type>                                                                */
-  /*    T1_SizeRec                                                         */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Type 1 size record.                                                */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Type:
+   *   T1_SizeRec
+   *
+   * @Description:
+   *   Type 1 size record.
+   */
   typedef struct  T1_SizeRec_
   {
     FT_SizeRec  root;
@@ -106,24 +95,24 @@ FT_BEGIN_HEADER
 
 
   FT_LOCAL( void )
-  T1_Size_Done( T1_Size  size );
+  T1_Size_Done( FT_Size  size );
 
   FT_LOCAL( FT_Error )
-  T1_Size_Request( T1_Size          size,
+  T1_Size_Request( FT_Size          size,
                    FT_Size_Request  req );
 
   FT_LOCAL( FT_Error )
-  T1_Size_Init( T1_Size  size );
+  T1_Size_Init( FT_Size  size );
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Type>                                                                */
-  /*    T1_GlyphSlotRec                                                    */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Type 1 glyph slot record.                                          */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Type:
+   *   T1_GlyphSlotRec
+   *
+   * @Description:
+   *   Type 1 glyph slot record.
+   */
   typedef struct  T1_GlyphSlotRec_
   {
     FT_GlyphSlotRec  root;
@@ -131,41 +120,41 @@ FT_BEGIN_HEADER
     FT_Bool          hint;
     FT_Bool          scaled;
 
-    FT_Int           max_points;
-    FT_Int           max_contours;
-
     FT_Fixed         x_scale;
     FT_Fixed         y_scale;
+
+    FT_Int           max_points;
+    FT_Int           max_contours;
 
   } T1_GlyphSlotRec;
 
 
   FT_LOCAL( FT_Error )
   T1_Face_Init( FT_Stream      stream,
-                T1_Face        face,
+                FT_Face        face,
                 FT_Int         face_index,
                 FT_Int         num_params,
                 FT_Parameter*  params );
 
   FT_LOCAL( void )
-  T1_Face_Done( T1_Face  face );
+  T1_Face_Done( FT_Face  face );
 
   FT_LOCAL( FT_Error )
-  T1_GlyphSlot_Init( T1_GlyphSlot  slot );
+  T1_GlyphSlot_Init( FT_GlyphSlot  slot );
 
   FT_LOCAL( void )
-  T1_GlyphSlot_Done( T1_GlyphSlot  slot );
+  T1_GlyphSlot_Done( FT_GlyphSlot  slot );
 
   FT_LOCAL( FT_Error )
-  T1_Driver_Init( T1_Driver  driver );
+  T1_Driver_Init( FT_Module  driver );
 
   FT_LOCAL( void )
-  T1_Driver_Done( T1_Driver  driver );
+  T1_Driver_Done( FT_Module  driver );
 
 
 FT_END_HEADER
 
-#endif /* __T1OBJS_H__ */
+#endif /* T1OBJS_H_ */
 
 
 /* END */
