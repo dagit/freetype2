@@ -1,8 +1,15 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module FreeType.Support.Module.Internal
-  ( -- ** FT_Add_Module
-    ft_Add_Module'
+  ( FT_ModuleRec
+  , FT_RendererRec
+  , FT_Renderer_RenderFunc
+  , FT_Renderer_TransformFunc
+  , FT_Renderer_GetCBoxFunc
+  , FT_Renderer_SetModeFunc
+  , FT_DriverRec
+    -- ** FT_Add_Module
+  , ft_Add_Module'
     -- ** FT_Get_Module
   , ft_Get_Module'
     -- ** FT_Remove_Module

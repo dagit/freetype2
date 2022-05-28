@@ -1,8 +1,9 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module FreeType.Core.Glyph.Internal
-  ( -- ** FT_New_Glyph
-    ft_New_Glyph'
+  ( FT_Glyph_Class
+    -- ** FT_New_Glyph
+  , ft_New_Glyph'
     -- ** FT_Get_Glyph
   , ft_Get_Glyph'
     -- ** FT_Glyph_Copy

@@ -191,7 +191,7 @@ ft_Set_MM_WeightVector =
 
 
 
--- | If 'ft_Get_MM_Weight_Vector' throws 'FT_Err_Invalid_Argument' (because
+-- | If 'ft_Get_MM_WeightVector' throws 'FT_Err_Invalid_Argument' (because
 --   @len@ provided was too small), it is automatically called again
 --   with the correct value.
 ft_Get_MM_WeightVector

@@ -2,6 +2,8 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE PatternSynonyms #-}
 
+{-# OPTIONS_HADDOCK hide #-}
+
 module FreeType.Circular.Types where
 
 import          FreeType.Core.Types.Types

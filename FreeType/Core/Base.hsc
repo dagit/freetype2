@@ -37,6 +37,7 @@ module FreeType.Core.Base
   , pattern FT_ENCODING_APPLE_ROMAN
     -- ** FT_ENC_TAG
     -- | [FT_ENC_TAG](https://www.freetype.org/freetype2/docs/reference/ft2-base_interface.html#ft_enc_tag) is the same as [FT_IMAGE_TAG](https://www.freetype.org/freetype2/docs/reference/ft2-basic_types.html#ft_image_tag). See 'FT_MAKE_TAG'
+
     -- ** FT_FaceRec
   , FT_FaceRec (..)
     -- ** FT_HAS_HORIZONTAL

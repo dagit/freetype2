@@ -1,6 +1,7 @@
 module FreeType.Miscellaneous.Incremental.Internal
-  (   -- ** FT_Incremental_GetGlyphDataFunc
-    ft_Incremental_GetGlyphDataFunc
+  ( FT_IncrementalRec
+    -- ** FT_Incremental_GetGlyphDataFunc
+  , ft_Incremental_GetGlyphDataFunc
   , ft_Incremental_GetGlyphDataFunc'
     -- ** FT_Incremental_FreeGlyphDataFunc
   , ft_Incremental_FreeGlyphDataFunc
