@@ -187,7 +187,10 @@ Library
                , storable-offset
 
   Build-tools: hsc2hs
-  ghc-options: -Wall
+  ghc-options:
+    -O1
+    -Wall
+
   include-dirs: freetype2/include
                 freetype2/include/freetype
                 freetype2/include/freetype/config

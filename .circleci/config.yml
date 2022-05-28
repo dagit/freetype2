@@ -39,7 +39,7 @@ jobs:
             - "dist-newstyle"
       - run:
           name: Test
-          command: cabal new-test --test-show-details=streaming
+          command: cabal new-test
 
   build-linux:
     machine:
@@ -65,7 +65,7 @@ jobs:
           command: cabal new-update && cabal new-install --lib
       - run:
           name: Build
-          command: cabal new-build --enable-tests
+          command: cabal new-build --enable-tests --enable-documentation
       - save_cache:
           name: Cache
           key: linux-<< parameters.version >>-{{ checksum "freetype2.cabal" }}
@@ -74,7 +74,7 @@ jobs:
             - "dist-newstyle"
       - run:
           name: Test
-          command: cabal new-test --test-show-details=streaming
+          command: cabal new-test --enable-documentation --test-show-details=streaming
 
   build-macos:
     macos:
@@ -96,13 +96,14 @@ jobs:
       - run:
           name: Build
           command: |
-            stack --resolver << parameters.resolver >> init
-            stack haddock --test --no-terminal --no-run-tests
+            stack init --resolver << parameters.resolver >> --omit-packages
+            echo -e 'resolver: << parameters.resolver >>\n\nextra-deps:\n- storable-offset-0.1.0.0' > stack.yaml
+            stack test --no-terminal --no-run-tests
       - save_cache:
           name: Cache
           key: macos-<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
           paths:
-            - "/root/.stack"
+            - "$HOME/.stack"
             - ".stack-work"
       - run:
           name: Test
@@ -135,13 +136,14 @@ jobs:
           name: Build
           shell: bash.exe
           command: |
-            stack --resolver << parameters.resolver >> init
-            stack haddock --test --no-terminal --no-run-tests
+            stack init --resolver << parameters.resolver >> --omit-packages
+            echo -e 'resolver: << parameters.resolver >>\n\nextra-deps:\n- storable-offset-0.1.0.0' > stack.yaml
+            stack test --no-run-tests --no-terminal
       - save_cache:
           name: Cache
           key: windows-<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
           paths:
-            - "/root/.stack"
+            - "$APPDATA/stack"
             - ".stack-work"
       - run:
           name: Test

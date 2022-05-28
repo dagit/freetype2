@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds
            , EmptyDataDecls
+           , FlexibleInstances
            , ForeignFunctionInterface
            , MultiParamTypeClasses
            , TypeApplications #-}
