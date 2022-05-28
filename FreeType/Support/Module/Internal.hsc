@@ -37,7 +37,11 @@ import           FreeType.Core.Types.Types
 import           FreeType.Support.Module.Types
 import           FreeType.Support.System.Types
 
+#ifdef aarch64_HOST_ARCH
+import           Data.Word
+#else
 import           Data.Int
+#endif
 import           Foreign.Ptr
 
 #include "ft2build.h"

@@ -7,7 +7,11 @@ module FreeType.Format.Font.Internal
 
 import           FreeType.Core.Base.Types
 
+#ifdef aarch64_HOST_ARCH
+import           Data.Word
+#else
 import           Data.Int
+#endif
 import           Foreign.Ptr
 
 #include "ft2build.h"

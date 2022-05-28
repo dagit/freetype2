@@ -1,0 +1,181 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.2.0
+
+jobs:
+  build-arm64:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore
+          key: arm64-{{ checksum "freetype2.cabal" }}
+      - run:
+          name: Install GHC
+          command: |
+            sudo apt-get install ghc cabal-install
+
+            # Fix for Cabal-2.4.0.0 not initializing the package DB automatically
+            if [ ! -d ~/.cabal/store/ghc-8.6.5 ]; then
+              mkdir -p ~/.cabal/store/ghc-8.6.5;
+              ghc-pkg init ~/.cabal/store/ghc-8.6.5/package.db;
+            else
+              echo 'Package directory already present';
+            fi
+      - run:
+          name: Update Dependencies
+          command: cabal new-update && cabal new-install --lib
+      - run:
+          name: Build
+          command: cabal new-build --enable-tests
+      - save_cache:
+          name: Cache
+          key: arm64-{{ checksum "freetype2.cabal" }}
+          paths:
+            - "/root/.cabal"
+            - "dist-newstyle"
+      - run:
+          name: Test
+          command: cabal new-test --test-show-details=streaming
+
+  build-linux:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: medium
+    parameters:
+      version:
+        type: string
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore
+          key: linux-<< parameters.version >>-{{ checksum "freetype2.cabal" }}
+      - run:
+          name: Install GHC
+          command: |
+            sudo add-apt-repository ppa:hvr/ghc
+            sudo apt-get install ghc-<< parameters.version >> cabal-install-3.4
+            echo 'export PATH=/opt/ghc/bin:$PATH' >> $BASH_ENV
+
+      - run:
+          name: Update Dependencies
+          command: cabal new-update && cabal new-install --lib
+      - run:
+          name: Build
+          command: cabal new-build --enable-tests
+      - save_cache:
+          name: Cache
+          key: linux-<< parameters.version >>-{{ checksum "freetype2.cabal" }}
+          paths:
+            - "/root/.cabal"
+            - "dist-newstyle"
+      - run:
+          name: Test
+          command: cabal new-test --test-show-details=streaming
+
+  build-macos:
+    macos:
+      xcode: 12.5.1
+    resource_class: medium
+    parameters:
+      resolver:
+        type: string
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore
+          key: macos-<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
+      - run:
+          name: Install Stack
+          command: |
+            curl -sSL https://get.haskellstack.org/ | sh
+
+      - run:
+          name: Build
+          command: |
+            stack --resolver << parameters.resolver >> init
+            stack haddock --test --no-terminal --no-run-tests
+      - save_cache:
+          name: Cache
+          key: macos-<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
+          paths:
+            - "/root/.stack"
+            - ".stack-work"
+      - run:
+          name: Test
+          command: stack test
+
+  build-windows:
+    executor: win/default
+    parameters:
+      resolver:
+        type: string
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore
+          key: windows--<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
+      - run:
+          name: Install Stack
+          shell: bash.exe
+          command: |
+            mkdir stack-build
+            cd stack-build
+            curl -LO --no-progress-meter https://get.haskellstack.org/stable/windows-x86_64.zip
+            unzip windows-x86_64.zip
+            mkdir -pv "$APPDATA/local/bin"
+            mv -v stack.exe "$APPDATA/local/bin"
+            cd ..
+            echo 'export PATH=$APPDATA/local/bin:$PATH' >> $BASH_ENV
+
+      - run:
+          name: Build
+          shell: bash.exe
+          command: |
+            stack --resolver << parameters.resolver >> init
+            stack haddock --test --no-terminal --no-run-tests
+      - save_cache:
+          name: Cache
+          key: windows-<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
+          paths:
+            - "/root/.stack"
+            - ".stack-work"
+      - run:
+          name: Test
+          shell: bash.exe
+          command: stack test
+
+
+
+workflows:
+  workflow:
+    jobs:
+      - build-arm64:
+          name: aarch64-8.6.5
+      - build-linux:
+          name: linux-8.2.2
+          version: 8.2.2
+      - build-linux:
+          name: linux-8.4.4
+          version: 8.4.4
+      - build-linux:
+          name: linux-8.6.5
+          version: 8.6.5
+      - build-linux:
+          name: linux-8.8.4
+          version: 8.8.4
+      - build-linux:
+          name: linux-8.10.4
+          version: 8.10.4
+      - build-linux:
+          name: linux-9.0.1
+          version: 9.0.1
+      - build-macos:
+          name: macos-lts-19.7
+          resolver: lts-19.7
+      - build-windows:
+          name: windows-lts-19.7
+          resolver: lts-19.7

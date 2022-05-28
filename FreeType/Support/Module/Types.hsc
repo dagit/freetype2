@@ -18,7 +18,11 @@ import           FreeType.Circular.Types ( FT_ModuleRec, FT_Module
 import           FreeType.Core.Types.Types
 import           FreeType.Support.Scanline.Types
 
+#ifdef aarch64_HOST_ARCH
+import           Data.Word
+#else
 import           Data.Int
+#endif
 import           Foreign.Ptr
 import           Foreign.Storable
 import           Foreign.Storable.Offset
