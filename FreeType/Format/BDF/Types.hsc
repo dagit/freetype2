@@ -1,15 +1,18 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE DataKinds
+           , ForeignFunctionInterface
+           , MultiParamTypeClasses
+           , PatternSynonyms
+           , TypeApplications #-}
 
 module FreeType.Format.BDF.Types where
 
 import           FreeType.Core.Types.Types
 
 import           Data.Int
-import           Data.Function ((&))
 import           Data.Word
 import           Foreign.Ptr
 import           Foreign.Storable
+import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_BDF_H
@@ -39,21 +42,28 @@ data BDF_PropertyRec = BDF_PropertyRec
                          , prCardinal :: FT_UInt32
                          }
 
+instance Offset "prType"     BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, type      }
+instance Offset "prAtom"     BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.atom    }
+instance Offset "prInteger"  BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.integer }
+instance Offset "prCardinal" BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.cardinal}
+
+
+
 instance Storable BDF_PropertyRec where
   sizeOf _    = #size struct BDF_PropertyRec_
   alignment _ = #size struct BDF_PropertyRec_
 
   peek ptr =
     BDF_PropertyRec
-      <$> #{peek struct BDF_PropertyRec_, type      } ptr
-      <*> #{peek struct BDF_PropertyRec_, u.atom    } ptr
-      <*> #{peek struct BDF_PropertyRec_, u.integer } ptr
-      <*> #{peek struct BDF_PropertyRec_, u.cardinal} ptr
+      <$> peek (offset @"prType"     ptr)
+      <*> peek (offset @"prAtom"     ptr)
+      <*> peek (offset @"prInteger"  ptr)
+      <*> peek (offset @"prCardinal" ptr)
 
   poke ptr val = do
-    #{poke struct BDF_PropertyRec_, type} ptr $ val & prType
+    pokeField @"prType" ptr val
     case prType val of
-      BDF_PROPERTY_TYPE_ATOM     -> #{poke struct BDF_PropertyRec_, u.atom    } ptr $ val & prAtom
-      BDF_PROPERTY_TYPE_INTEGER  -> #{poke struct BDF_PropertyRec_, u.integer } ptr $ val & prInteger
-      BDF_PROPERTY_TYPE_CARDINAL -> #{poke struct BDF_PropertyRec_, u.cardinal} ptr $ val & prCardinal
+      BDF_PROPERTY_TYPE_ATOM     -> pokeField @"prAtom"     ptr val
+      BDF_PROPERTY_TYPE_INTEGER  -> pokeField @"prInteger"  ptr val
+      BDF_PROPERTY_TYPE_CARDINAL -> pokeField @"prCardinal" ptr val
       _                          -> return ()

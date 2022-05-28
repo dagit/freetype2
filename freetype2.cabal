@@ -75,7 +75,7 @@ Flag examples
 
 Executable freetype-example
   Main-is:       Main.hs
-  Build-depends: base >= 4.10 && < 5
+  Build-depends: base >= 4.10 && < 4.17
                , freetype2
 
   Other-modules: FreeType
@@ -280,6 +280,8 @@ Library
                    FreeType.Miscellaneous.TrueTypeGX
                    FreeType.Miscellaneous.TrueTypeGX.Internal
 
+  Reexported-modules: Foreign.Storable.Offset
+
   Other-modules: FreeType.Circular.Types
                  FreeType.Exception.Types
 
@@ -308,7 +310,8 @@ Library
                  FreeType.Miscellaneous.Incremental.Types
                  FreeType.Miscellaneous.TrueType.Types
 
-  Build-depends: base >= 4.10 && < 5
+  Build-depends: base >= 4.10 && < 4.17
+               , storable-offset
 
   Build-tools: hsc2hs
   ghc-options: -Wall
@@ -393,7 +396,7 @@ test-suite dynamic-function-check
   main-is: Dynamic.hs
   hs-source-dirs: .
                 , test
-  build-depends: base >= 4.10 && < 5
+  build-depends: base >= 4.10 && < 4.17
 
   other-modules: Dynamic.Report
 
@@ -588,7 +591,7 @@ test-suite field-coherence-check
   main-is: Fields.hs
   hs-source-dirs: .
                 , test
-  build-depends: base >= 4.10 && < 5
+  build-depends: base >= 4.10 && < 4.17
                , template-haskell
 
   other-modules: Fields.Lens

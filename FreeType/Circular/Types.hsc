@@ -1,6 +1,9 @@
-{-# LANGUAGE EmptyDataDecls #-}
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE DataKinds
+           , EmptyDataDecls
+           , ForeignFunctionInterface
+           , MultiParamTypeClasses
+           , PatternSynonyms
+           , TypeApplications #-}
 
 {-# OPTIONS_HADDOCK hide #-}
 
@@ -9,10 +12,10 @@ module FreeType.Circular.Types where
 import          FreeType.Core.Types.Types
 
 import          Data.Int
-import          Data.Function ((&))
 import          Data.Word
 import          Foreign.Ptr
 import          Foreign.Storable
+import          Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -59,76 +62,108 @@ data FT_FaceRec = FT_FaceRec
                     , frInternal            :: FT_Face_Internal
                     }
 
+instance Offset "frNum_faces"           FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, num_faces          }
+instance Offset "frFace_index"          FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, face_index         }
+instance Offset "frFace_flags"          FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, face_flags         }
+instance Offset "frStyle_flags"         FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, style_flags        }
+instance Offset "frNum_glyphs"          FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, num_glyphs         }
+instance Offset "frFamily_name"         FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, family_name        }
+instance Offset "frStyle_name"          FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, style_name         }
+instance Offset "frNum_fixed_sizes"     FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, num_fixed_sizes    }
+instance Offset "frAvailable_sizes"     FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, available_sizes    }
+instance Offset "frNum_charmaps"        FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, num_charmaps       }
+instance Offset "frCharmaps"            FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, charmaps           }
+instance Offset "frGeneric"             FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, generic            }
+instance Offset "frBbox"                FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, bbox               }
+instance Offset "frUnits_per_EM"        FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, units_per_EM       }
+instance Offset "frAscender"            FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, ascender           }
+instance Offset "frDescender"           FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, descender          }
+instance Offset "frHeight"              FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, height             }
+instance Offset "frMax_advance_width"   FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, max_advance_width  }
+instance Offset "frMax_advance_height"  FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, max_advance_height }
+instance Offset "frUnderline_position"  FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, underline_position }
+instance Offset "frUnderline_thickness" FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, underline_thickness}
+instance Offset "frGlyph"               FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, glyph              }
+instance Offset "frSize"                FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, size               }
+instance Offset "frCharmap"             FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, charmap            }
+instance Offset "frDriver"              FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, driver             }
+instance Offset "frMemory"              FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, memory             }
+instance Offset "frStream"              FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, stream             }
+instance Offset "frSizes_list"          FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, sizes_list         }
+instance Offset "frAutohint"            FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, autohint           }
+instance Offset "frExtensions"          FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, extensions         }
+instance Offset "frInternal"            FT_FaceRec where rawOffset = #{offset struct FT_FaceRec_, internal           }
+
 instance Storable FT_FaceRec where
   sizeOf _    = #size      struct FT_FaceRec_
   alignment _ = #alignment struct FT_FaceRec_
 
   peek ptr =
     FT_FaceRec
-      <$> #{peek struct FT_FaceRec_, num_faces          } ptr
-      <*> #{peek struct FT_FaceRec_, face_index         } ptr
-      <*> #{peek struct FT_FaceRec_, face_flags         } ptr
-      <*> #{peek struct FT_FaceRec_, style_flags        } ptr
-      <*> #{peek struct FT_FaceRec_, num_glyphs         } ptr
-      <*> #{peek struct FT_FaceRec_, family_name        } ptr
-      <*> #{peek struct FT_FaceRec_, style_name         } ptr
-      <*> #{peek struct FT_FaceRec_, num_fixed_sizes    } ptr
-      <*> #{peek struct FT_FaceRec_, available_sizes    } ptr
-      <*> #{peek struct FT_FaceRec_, num_charmaps       } ptr
-      <*> #{peek struct FT_FaceRec_, charmaps           } ptr
-      <*> #{peek struct FT_FaceRec_, generic            } ptr
-      <*> #{peek struct FT_FaceRec_, bbox               } ptr
-      <*> #{peek struct FT_FaceRec_, units_per_EM       } ptr
-      <*> #{peek struct FT_FaceRec_, ascender           } ptr
-      <*> #{peek struct FT_FaceRec_, descender          } ptr
-      <*> #{peek struct FT_FaceRec_, height             } ptr
-      <*> #{peek struct FT_FaceRec_, max_advance_width  } ptr
-      <*> #{peek struct FT_FaceRec_, max_advance_height } ptr
-      <*> #{peek struct FT_FaceRec_, underline_position } ptr
-      <*> #{peek struct FT_FaceRec_, underline_thickness} ptr
-      <*> #{peek struct FT_FaceRec_, glyph              } ptr
-      <*> #{peek struct FT_FaceRec_, size               } ptr
-      <*> #{peek struct FT_FaceRec_, charmap            } ptr
-      <*> #{peek struct FT_FaceRec_, driver             } ptr
-      <*> #{peek struct FT_FaceRec_, memory             } ptr
-      <*> #{peek struct FT_FaceRec_, stream             } ptr
-      <*> #{peek struct FT_FaceRec_, sizes_list         } ptr
-      <*> #{peek struct FT_FaceRec_, autohint           } ptr
-      <*> #{peek struct FT_FaceRec_, extensions         } ptr
-      <*> #{peek struct FT_FaceRec_, internal           } ptr
+      <$> peek (offset @"frNum_faces"           ptr)
+      <*> peek (offset @"frFace_index"          ptr)
+      <*> peek (offset @"frFace_flags"          ptr)
+      <*> peek (offset @"frStyle_flags"         ptr)
+      <*> peek (offset @"frNum_glyphs"          ptr)
+      <*> peek (offset @"frFamily_name"         ptr)
+      <*> peek (offset @"frStyle_name"          ptr)
+      <*> peek (offset @"frNum_fixed_sizes"     ptr)
+      <*> peek (offset @"frAvailable_sizes"     ptr)
+      <*> peek (offset @"frNum_charmaps"        ptr)
+      <*> peek (offset @"frCharmaps"            ptr)
+      <*> peek (offset @"frGeneric"             ptr)
+      <*> peek (offset @"frBbox"                ptr)
+      <*> peek (offset @"frUnits_per_EM"        ptr)
+      <*> peek (offset @"frAscender"            ptr)
+      <*> peek (offset @"frDescender"           ptr)
+      <*> peek (offset @"frHeight"              ptr)
+      <*> peek (offset @"frMax_advance_width"   ptr)
+      <*> peek (offset @"frMax_advance_height"  ptr)
+      <*> peek (offset @"frUnderline_position"  ptr)
+      <*> peek (offset @"frUnderline_thickness" ptr)
+      <*> peek (offset @"frGlyph"               ptr)
+      <*> peek (offset @"frSize"                ptr)
+      <*> peek (offset @"frCharmap"             ptr)
+      <*> peek (offset @"frDriver"              ptr)
+      <*> peek (offset @"frMemory"              ptr)
+      <*> peek (offset @"frStream"              ptr)
+      <*> peek (offset @"frSizes_list"          ptr)
+      <*> peek (offset @"frAutohint"            ptr)
+      <*> peek (offset @"frExtensions"          ptr)
+      <*> peek (offset @"frInternal"            ptr)
 
   poke ptr val = do
-    #{poke struct FT_FaceRec_, num_faces          } ptr $ val & frNum_faces
-    #{poke struct FT_FaceRec_, face_index         } ptr $ val & frFace_index
-    #{poke struct FT_FaceRec_, face_flags         } ptr $ val & frFace_flags
-    #{poke struct FT_FaceRec_, style_flags        } ptr $ val & frStyle_flags
-    #{poke struct FT_FaceRec_, num_glyphs         } ptr $ val & frNum_glyphs
-    #{poke struct FT_FaceRec_, family_name        } ptr $ val & frFamily_name
-    #{poke struct FT_FaceRec_, style_name         } ptr $ val & frStyle_name
-    #{poke struct FT_FaceRec_, num_fixed_sizes    } ptr $ val & frNum_fixed_sizes
-    #{poke struct FT_FaceRec_, available_sizes    } ptr $ val & frAvailable_sizes
-    #{poke struct FT_FaceRec_, num_charmaps       } ptr $ val & frNum_charmaps
-    #{poke struct FT_FaceRec_, charmaps           } ptr $ val & frCharmaps
-    #{poke struct FT_FaceRec_, generic            } ptr $ val & frGeneric
-    #{poke struct FT_FaceRec_, bbox               } ptr $ val & frBbox
-    #{poke struct FT_FaceRec_, units_per_EM       } ptr $ val & frUnits_per_EM
-    #{poke struct FT_FaceRec_, ascender           } ptr $ val & frAscender
-    #{poke struct FT_FaceRec_, descender          } ptr $ val & frDescender
-    #{poke struct FT_FaceRec_, height             } ptr $ val & frHeight
-    #{poke struct FT_FaceRec_, max_advance_width  } ptr $ val & frMax_advance_width
-    #{poke struct FT_FaceRec_, max_advance_height } ptr $ val & frMax_advance_height
-    #{poke struct FT_FaceRec_, underline_position } ptr $ val & frUnderline_position
-    #{poke struct FT_FaceRec_, underline_thickness} ptr $ val & frUnderline_thickness
-    #{poke struct FT_FaceRec_, glyph              } ptr $ val & frGlyph
-    #{poke struct FT_FaceRec_, size               } ptr $ val & frSize
-    #{poke struct FT_FaceRec_, charmap            } ptr $ val & frCharmap
-    #{poke struct FT_FaceRec_, driver             } ptr $ val & frDriver
-    #{poke struct FT_FaceRec_, memory             } ptr $ val & frMemory
-    #{poke struct FT_FaceRec_, stream             } ptr $ val & frStream
-    #{poke struct FT_FaceRec_, sizes_list         } ptr $ val & frSizes_list
-    #{poke struct FT_FaceRec_, autohint           } ptr $ val & frAutohint
-    #{poke struct FT_FaceRec_, extensions         } ptr $ val & frExtensions
-    #{poke struct FT_FaceRec_, internal           } ptr $ val & frInternal
+    pokeField @"frNum_faces"           ptr val
+    pokeField @"frFace_index"          ptr val
+    pokeField @"frFace_flags"          ptr val
+    pokeField @"frStyle_flags"         ptr val
+    pokeField @"frNum_glyphs"          ptr val
+    pokeField @"frFamily_name"         ptr val
+    pokeField @"frStyle_name"          ptr val
+    pokeField @"frNum_fixed_sizes"     ptr val
+    pokeField @"frAvailable_sizes"     ptr val
+    pokeField @"frNum_charmaps"        ptr val
+    pokeField @"frCharmaps"            ptr val
+    pokeField @"frGeneric"             ptr val
+    pokeField @"frBbox"                ptr val
+    pokeField @"frUnits_per_EM"        ptr val
+    pokeField @"frAscender"            ptr val
+    pokeField @"frDescender"           ptr val
+    pokeField @"frHeight"              ptr val
+    pokeField @"frMax_advance_width"   ptr val
+    pokeField @"frMax_advance_height"  ptr val
+    pokeField @"frUnderline_position"  ptr val
+    pokeField @"frUnderline_thickness" ptr val
+    pokeField @"frGlyph"               ptr val
+    pokeField @"frSize"                ptr val
+    pokeField @"frCharmap"             ptr val
+    pokeField @"frDriver"              ptr val
+    pokeField @"frMemory"              ptr val
+    pokeField @"frStream"              ptr val
+    pokeField @"frSizes_list"          ptr val
+    pokeField @"frAutohint"            ptr val
+    pokeField @"frExtensions"          ptr val
+    pokeField @"frInternal"            ptr val
 
 
 
@@ -140,25 +175,30 @@ data FT_Bitmap_Size = FT_Bitmap_Size
                         , bsY_ppem :: FT_Pos
                         }
 
+instance Offset "bsHeight" FT_Bitmap_Size where rawOffset = #{offset struct FT_Bitmap_Size_, height}
+instance Offset "bsWidth"  FT_Bitmap_Size where rawOffset = #{offset struct FT_Bitmap_Size_, width }
+instance Offset "bsSize"   FT_Bitmap_Size where rawOffset = #{offset struct FT_Bitmap_Size_, size  }
+instance Offset "bsX_ppem" FT_Bitmap_Size where rawOffset = #{offset struct FT_Bitmap_Size_, x_ppem}
+instance Offset "bsY_ppem" FT_Bitmap_Size where rawOffset = #{offset struct FT_Bitmap_Size_, y_ppem}
+
 instance Storable FT_Bitmap_Size where
   sizeOf _    = #size      struct FT_Bitmap_Size_
   alignment _ = #alignment struct FT_Bitmap_Size_
 
   peek ptr =
     FT_Bitmap_Size
-      <$> #{peek struct FT_Bitmap_Size_, height} ptr
-      <*> #{peek struct FT_Bitmap_Size_, width } ptr
-      <*> #{peek struct FT_Bitmap_Size_, size  } ptr
-      <*> #{peek struct FT_Bitmap_Size_, x_ppem} ptr
-      <*> #{peek struct FT_Bitmap_Size_, y_ppem} ptr
+      <$> peek (offset @"bsHeight" ptr)
+      <*> peek (offset @"bsWidth"  ptr)
+      <*> peek (offset @"bsSize"   ptr)
+      <*> peek (offset @"bsX_ppem" ptr)
+      <*> peek (offset @"bsY_ppem" ptr)
 
   poke ptr val = do
-    #{poke struct FT_Bitmap_Size_, height} ptr $ val & bsHeight
-    #{poke struct FT_Bitmap_Size_, width } ptr $ val & bsWidth
-    #{poke struct FT_Bitmap_Size_, size  } ptr $ val & bsSize
-    #{poke struct FT_Bitmap_Size_, x_ppem} ptr $ val & bsX_ppem
-    #{poke struct FT_Bitmap_Size_, y_ppem} ptr $ val & bsY_ppem
-
+    pokeField @"bsHeight" ptr val
+    pokeField @"bsWidth"  ptr val
+    pokeField @"bsSize"   ptr val
+    pokeField @"bsX_ppem" ptr val
+    pokeField @"bsY_ppem" ptr val
 
 
 
@@ -171,22 +211,27 @@ data FT_CharMapRec = FT_CharMapRec
                        , cmrEncoding_id :: FT_UShort
                        }
 
+instance Offset "cmrFace"        FT_CharMapRec where rawOffset = #{offset struct FT_CharMapRec_, face       }
+instance Offset "cmrEncoding"    FT_CharMapRec where rawOffset = #{offset struct FT_CharMapRec_, encoding   }
+instance Offset "cmrPlatform_id" FT_CharMapRec where rawOffset = #{offset struct FT_CharMapRec_, platform_id}
+instance Offset "cmrEncoding_id" FT_CharMapRec where rawOffset = #{offset struct FT_CharMapRec_, encoding_id}
+
 instance Storable FT_CharMapRec where
   sizeOf _    = #size      struct FT_CharMapRec_
   alignment _ = #alignment struct FT_CharMapRec_
 
   peek ptr =
     FT_CharMapRec
-      <$> #{peek struct FT_CharMapRec_, face       } ptr
-      <*> #{peek struct FT_CharMapRec_, encoding   } ptr
-      <*> #{peek struct FT_CharMapRec_, platform_id} ptr
-      <*> #{peek struct FT_CharMapRec_, encoding_id} ptr
+      <$> peek (offset @"cmrFace"        ptr)
+      <*> peek (offset @"cmrEncoding"    ptr)
+      <*> peek (offset @"cmrPlatform_id" ptr)
+      <*> peek (offset @"cmrEncoding_id" ptr)
 
   poke ptr val = do
-    #{poke struct FT_CharMapRec_, face       } ptr $ val & cmrFace
-    #{poke struct FT_CharMapRec_, encoding   } ptr $ val & cmrEncoding
-    #{poke struct FT_CharMapRec_, platform_id} ptr $ val & cmrPlatform_id
-    #{poke struct FT_CharMapRec_, encoding_id} ptr $ val & cmrEncoding_id
+    pokeField @"cmrFace"        ptr val
+    pokeField @"cmrEncoding"    ptr val
+    pokeField @"cmrPlatform_id" ptr val
+    pokeField @"cmrEncoding_id" ptr val
 
 
 
@@ -263,58 +308,81 @@ data FT_GlyphSlotRec = FT_GlyphSlotRec
                          , gsrInternal          :: FT_Slot_Internal
                          }
 
+instance Offset "gsrLibrary"           FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, library          }
+instance Offset "gsrFace"              FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, face             }
+instance Offset "gsrNext"              FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, next             }
+instance Offset "gsrGlyph_index"       FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, glyph_index      }
+instance Offset "gsrGeneric"           FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, generic          }
+instance Offset "gsrMetrics"           FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, metrics          }
+instance Offset "gsrLinearHoriAdvance" FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, linearHoriAdvance}
+instance Offset "gsrLinearVertAdvance" FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, linearVertAdvance}
+instance Offset "gsrAdvance"           FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, advance          }
+instance Offset "gsrFormat"            FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, format           }
+instance Offset "gsrBitmap"            FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, bitmap           }
+instance Offset "gsrBitmap_left"       FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, bitmap_left      }
+instance Offset "gsrBitmap_top"        FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, bitmap_top       }
+instance Offset "gsrOutline"           FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, outline          }
+instance Offset "gsrNum_subglyphs"     FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, num_subglyphs    }
+instance Offset "gsrSubglyphs"         FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, subglyphs        }
+instance Offset "gsrControl_data"      FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, control_data     }
+instance Offset "gsrControl_len"       FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, control_len      }
+instance Offset "gsrLsb_delta"         FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, lsb_delta        }
+instance Offset "gsrRsb_delta"         FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, rsb_delta        }
+instance Offset "gsrOther"             FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, other            }
+instance Offset "gsrInternal"          FT_GlyphSlotRec where rawOffset = #{offset struct FT_GlyphSlotRec_, internal         }
+
 instance Storable FT_GlyphSlotRec where
   sizeOf _    = #size      struct FT_GlyphSlotRec_
   alignment _ = #alignment struct FT_GlyphSlotRec_
 
   peek ptr =
     FT_GlyphSlotRec
-      <$> #{peek struct FT_GlyphSlotRec_, library          } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, face             } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, next             } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, glyph_index      } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, generic          } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, metrics          } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, linearHoriAdvance} ptr
-      <*> #{peek struct FT_GlyphSlotRec_, linearVertAdvance} ptr
-      <*> #{peek struct FT_GlyphSlotRec_, advance          } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, format           } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, bitmap           } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, bitmap_left      } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, bitmap_top       } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, outline          } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, num_subglyphs    } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, subglyphs        } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, control_data     } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, control_len      } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, lsb_delta        } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, rsb_delta        } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, other            } ptr
-      <*> #{peek struct FT_GlyphSlotRec_, internal         } ptr
+      <$> peek (offset @"gsrLibrary"           ptr)
+      <*> peek (offset @"gsrFace"              ptr)
+      <*> peek (offset @"gsrNext"              ptr)
+      <*> peek (offset @"gsrGlyph_index"       ptr)
+      <*> peek (offset @"gsrGeneric"           ptr)
+      <*> peek (offset @"gsrMetrics"           ptr)
+      <*> peek (offset @"gsrLinearHoriAdvance" ptr)
+      <*> peek (offset @"gsrLinearVertAdvance" ptr)
+      <*> peek (offset @"gsrAdvance"           ptr)
+      <*> peek (offset @"gsrFormat"            ptr)
+      <*> peek (offset @"gsrBitmap"            ptr)
+      <*> peek (offset @"gsrBitmap_left"       ptr)
+      <*> peek (offset @"gsrBitmap_top"        ptr)
+      <*> peek (offset @"gsrOutline"           ptr)
+      <*> peek (offset @"gsrNum_subglyphs"     ptr)
+      <*> peek (offset @"gsrSubglyphs"         ptr)
+      <*> peek (offset @"gsrControl_data"      ptr)
+      <*> peek (offset @"gsrControl_len"       ptr)
+      <*> peek (offset @"gsrLsb_delta"         ptr)
+      <*> peek (offset @"gsrRsb_delta"         ptr)
+      <*> peek (offset @"gsrOther"             ptr)
+      <*> peek (offset @"gsrInternal"          ptr)
 
   poke ptr val = do
-    #{poke struct FT_GlyphSlotRec_, library          } ptr $ val & gsrLibrary
-    #{poke struct FT_GlyphSlotRec_, face             } ptr $ val & gsrFace
-    #{poke struct FT_GlyphSlotRec_, next             } ptr $ val & gsrNext
-    #{poke struct FT_GlyphSlotRec_, glyph_index      } ptr $ val & gsrGlyph_index
-    #{poke struct FT_GlyphSlotRec_, generic          } ptr $ val & gsrGeneric
-    #{poke struct FT_GlyphSlotRec_, metrics          } ptr $ val & gsrMetrics
-    #{poke struct FT_GlyphSlotRec_, linearHoriAdvance} ptr $ val & gsrLinearHoriAdvance
-    #{poke struct FT_GlyphSlotRec_, linearVertAdvance} ptr $ val & gsrLinearVertAdvance
-    #{poke struct FT_GlyphSlotRec_, advance          } ptr $ val & gsrAdvance
-    #{poke struct FT_GlyphSlotRec_, format           } ptr $ val & gsrFormat
-    #{poke struct FT_GlyphSlotRec_, bitmap           } ptr $ val & gsrBitmap
-    #{poke struct FT_GlyphSlotRec_, bitmap_left      } ptr $ val & gsrBitmap_left
-    #{poke struct FT_GlyphSlotRec_, bitmap_top       } ptr $ val & gsrBitmap_top
-    #{poke struct FT_GlyphSlotRec_, outline          } ptr $ val & gsrOutline
-    #{poke struct FT_GlyphSlotRec_, num_subglyphs    } ptr $ val & gsrNum_subglyphs
-    #{poke struct FT_GlyphSlotRec_, subglyphs        } ptr $ val & gsrSubglyphs
-    #{poke struct FT_GlyphSlotRec_, control_data     } ptr $ val & gsrControl_data
-    #{poke struct FT_GlyphSlotRec_, control_len      } ptr $ val & gsrControl_len
-    #{poke struct FT_GlyphSlotRec_, lsb_delta        } ptr $ val & gsrLsb_delta
-    #{poke struct FT_GlyphSlotRec_, rsb_delta        } ptr $ val & gsrRsb_delta
-    #{poke struct FT_GlyphSlotRec_, other            } ptr $ val & gsrOther
-    #{poke struct FT_GlyphSlotRec_, internal         } ptr $ val & gsrInternal
+    pokeField @"gsrLibrary"           ptr val
+    pokeField @"gsrFace"              ptr val
+    pokeField @"gsrNext"              ptr val
+    pokeField @"gsrGlyph_index"       ptr val
+    pokeField @"gsrGeneric"           ptr val
+    pokeField @"gsrMetrics"           ptr val
+    pokeField @"gsrLinearHoriAdvance" ptr val
+    pokeField @"gsrLinearVertAdvance" ptr val
+    pokeField @"gsrAdvance"           ptr val
+    pokeField @"gsrFormat"            ptr val
+    pokeField @"gsrBitmap"            ptr val
+    pokeField @"gsrBitmap_left"       ptr val
+    pokeField @"gsrBitmap_top"        ptr val
+    pokeField @"gsrOutline"           ptr val
+    pokeField @"gsrNum_subglyphs"     ptr val
+    pokeField @"gsrSubglyphs"         ptr val
+    pokeField @"gsrControl_data"      ptr val
+    pokeField @"gsrControl_len"       ptr val
+    pokeField @"gsrLsb_delta"         ptr val
+    pokeField @"gsrRsb_delta"         ptr val
+    pokeField @"gsrOther"             ptr val
+    pokeField @"gsrInternal"          ptr val
 
 
 
@@ -327,22 +395,27 @@ data FT_SizeRec = FT_SizeRec
                     , srInternal :: FT_Size_Internal
                     }
 
+instance Offset "srFace"     FT_SizeRec where rawOffset = #{offset struct FT_SizeRec_, face    }
+instance Offset "srGeneric"  FT_SizeRec where rawOffset = #{offset struct FT_SizeRec_, generic }
+instance Offset "srMetrics"  FT_SizeRec where rawOffset = #{offset struct FT_SizeRec_, metrics }
+instance Offset "srInternal" FT_SizeRec where rawOffset = #{offset struct FT_SizeRec_, internal}
+
 instance Storable FT_SizeRec where
   sizeOf _    = #size      struct FT_SizeRec_
   alignment _ = #alignment struct FT_SizeRec_
 
   peek ptr =
     FT_SizeRec
-      <$> #{peek struct FT_SizeRec_, face    } ptr
-      <*> #{peek struct FT_SizeRec_, generic } ptr
-      <*> #{peek struct FT_SizeRec_, metrics } ptr
-      <*> #{peek struct FT_SizeRec_, internal} ptr
+      <$> peek (offset @"srFace"     ptr)
+      <*> peek (offset @"srGeneric"  ptr)
+      <*> peek (offset @"srMetrics"  ptr)
+      <*> peek (offset @"srInternal" ptr)
 
   poke ptr val = do
-    #{poke struct FT_SizeRec_, face    } ptr $ val & srFace
-    #{poke struct FT_SizeRec_, generic } ptr $ val & srGeneric
-    #{poke struct FT_SizeRec_, metrics } ptr $ val & srMetrics
-    #{poke struct FT_SizeRec_, internal} ptr $ val & srInternal
+    pokeField @"srFace"     ptr val
+    pokeField @"srGeneric"  ptr val
+    pokeField @"srMetrics"  ptr val
+    pokeField @"srInternal" ptr val
 
 
 
@@ -372,30 +445,39 @@ data FT_Glyph_Metrics = FT_Glyph_Metrics
                           , gmVertAdvance  :: FT_Pos
                           }
 
+instance Offset "gmWidth"        FT_Glyph_Metrics where rawOffset = #{offset struct FT_Glyph_Metrics_, width       }
+instance Offset "gmHeight"       FT_Glyph_Metrics where rawOffset = #{offset struct FT_Glyph_Metrics_, height      }
+instance Offset "gmHoriBearingX" FT_Glyph_Metrics where rawOffset = #{offset struct FT_Glyph_Metrics_, horiBearingX}
+instance Offset "gmHoriBearingY" FT_Glyph_Metrics where rawOffset = #{offset struct FT_Glyph_Metrics_, horiBearingY}
+instance Offset "gmHoriAdvance"  FT_Glyph_Metrics where rawOffset = #{offset struct FT_Glyph_Metrics_, horiAdvance }
+instance Offset "gmVertBearingX" FT_Glyph_Metrics where rawOffset = #{offset struct FT_Glyph_Metrics_, vertBearingX}
+instance Offset "gmVertBearingY" FT_Glyph_Metrics where rawOffset = #{offset struct FT_Glyph_Metrics_, vertBearingY}
+instance Offset "gmVertAdvance"  FT_Glyph_Metrics where rawOffset = #{offset struct FT_Glyph_Metrics_, vertAdvance }
+
 instance Storable FT_Glyph_Metrics where
   sizeOf _    = #size      struct FT_Glyph_Metrics_
   alignment _ = #alignment struct FT_Glyph_Metrics_
 
   peek ptr =
     FT_Glyph_Metrics
-      <$> #{peek struct FT_Glyph_Metrics_, width       } ptr
-      <*> #{peek struct FT_Glyph_Metrics_, height      } ptr
-      <*> #{peek struct FT_Glyph_Metrics_, horiBearingX} ptr
-      <*> #{peek struct FT_Glyph_Metrics_, horiBearingY} ptr
-      <*> #{peek struct FT_Glyph_Metrics_, horiAdvance } ptr
-      <*> #{peek struct FT_Glyph_Metrics_, vertBearingX} ptr
-      <*> #{peek struct FT_Glyph_Metrics_, vertBearingY} ptr
-      <*> #{peek struct FT_Glyph_Metrics_, vertAdvance } ptr
+      <$> peek (offset @"gmWidth"        ptr)
+      <*> peek (offset @"gmHeight"       ptr)
+      <*> peek (offset @"gmHoriBearingX" ptr)
+      <*> peek (offset @"gmHoriBearingY" ptr)
+      <*> peek (offset @"gmHoriAdvance"  ptr)
+      <*> peek (offset @"gmVertBearingX" ptr)
+      <*> peek (offset @"gmVertBearingY" ptr)
+      <*> peek (offset @"gmVertAdvance"  ptr)
 
   poke ptr val = do
-    #{poke struct FT_Glyph_Metrics_, width       } ptr $ val & gmWidth
-    #{poke struct FT_Glyph_Metrics_, height      } ptr $ val & gmHeight
-    #{poke struct FT_Glyph_Metrics_, horiBearingX} ptr $ val & gmHoriBearingX
-    #{poke struct FT_Glyph_Metrics_, horiBearingY} ptr $ val & gmHoriBearingY
-    #{poke struct FT_Glyph_Metrics_, horiAdvance } ptr $ val & gmHoriAdvance
-    #{poke struct FT_Glyph_Metrics_, vertBearingX} ptr $ val & gmVertBearingX
-    #{poke struct FT_Glyph_Metrics_, vertBearingY} ptr $ val & gmVertBearingY
-    #{poke struct FT_Glyph_Metrics_, vertAdvance } ptr $ val & gmVertAdvance
+    pokeField @"gmWidth"        ptr val
+    pokeField @"gmHeight"       ptr val
+    pokeField @"gmHoriBearingX" ptr val
+    pokeField @"gmHoriBearingY" ptr val
+    pokeField @"gmHoriAdvance"  ptr val
+    pokeField @"gmVertBearingX" ptr val
+    pokeField @"gmVertBearingY" ptr val
+    pokeField @"gmVertAdvance"  ptr val
 
 
 
@@ -415,30 +497,40 @@ data FT_Size_Metrics = FT_Size_Metrics
                          , smMax_advance :: FT_Pos
                          }
 
+instance Offset "smX_ppem"      FT_Size_Metrics where rawOffset = #{offset struct FT_Size_Metrics_, x_ppem     }
+instance Offset "smY_ppem"      FT_Size_Metrics where rawOffset = #{offset struct FT_Size_Metrics_, y_ppem     }
+instance Offset "smX_scale"     FT_Size_Metrics where rawOffset = #{offset struct FT_Size_Metrics_, x_scale    }
+instance Offset "smY_scale"     FT_Size_Metrics where rawOffset = #{offset struct FT_Size_Metrics_, y_scale    }
+instance Offset "smAscender"    FT_Size_Metrics where rawOffset = #{offset struct FT_Size_Metrics_, ascender   }
+instance Offset "smDescender"   FT_Size_Metrics where rawOffset = #{offset struct FT_Size_Metrics_, descender  }
+instance Offset "smHeight"      FT_Size_Metrics where rawOffset = #{offset struct FT_Size_Metrics_, height     }
+instance Offset "smMax_advance" FT_Size_Metrics where rawOffset = #{offset struct FT_Size_Metrics_, max_advance}
+
 instance Storable FT_Size_Metrics where
   sizeOf _    = #size      struct FT_Size_Metrics_
   alignment _ = #alignment struct FT_Size_Metrics_
 
   peek ptr =
     FT_Size_Metrics
-      <$> #{peek struct FT_Size_Metrics_, x_ppem     } ptr
-      <*> #{peek struct FT_Size_Metrics_, y_ppem     } ptr
-      <*> #{peek struct FT_Size_Metrics_, x_scale    } ptr
-      <*> #{peek struct FT_Size_Metrics_, y_scale    } ptr
-      <*> #{peek struct FT_Size_Metrics_, ascender   } ptr
-      <*> #{peek struct FT_Size_Metrics_, descender  } ptr
-      <*> #{peek struct FT_Size_Metrics_, height     } ptr
-      <*> #{peek struct FT_Size_Metrics_, max_advance} ptr
+      <$> peek (offset @"smX_ppem"      ptr)
+      <*> peek (offset @"smY_ppem"      ptr)
+      <*> peek (offset @"smX_scale"     ptr)
+      <*> peek (offset @"smY_scale"     ptr)
+      <*> peek (offset @"smAscender"    ptr)
+      <*> peek (offset @"smDescender"   ptr)
+      <*> peek (offset @"smHeight"      ptr)
+      <*> peek (offset @"smMax_advance" ptr)
 
   poke ptr val = do
-    #{poke struct FT_Size_Metrics_, x_ppem     } ptr $ val & smX_ppem
-    #{poke struct FT_Size_Metrics_, y_ppem     } ptr $ val & smY_ppem
-    #{poke struct FT_Size_Metrics_, x_scale    } ptr $ val & smX_scale
-    #{poke struct FT_Size_Metrics_, y_scale    } ptr $ val & smY_scale
-    #{poke struct FT_Size_Metrics_, ascender   } ptr $ val & smAscender
-    #{poke struct FT_Size_Metrics_, descender  } ptr $ val & smDescender
-    #{poke struct FT_Size_Metrics_, height     } ptr $ val & smHeight
-    #{poke struct FT_Size_Metrics_, max_advance} ptr $ val & smMax_advance
+    pokeField @"smX_ppem"      ptr val
+    pokeField @"smY_ppem"      ptr val
+    pokeField @"smX_scale"     ptr val
+    pokeField @"smY_scale"     ptr val
+    pokeField @"smAscender"    ptr val
+    pokeField @"smDescender"   ptr val
+    pokeField @"smHeight"      ptr val
+    pokeField @"smMax_advance" ptr val
+
 
 
 data FT_ModuleRec
@@ -460,22 +552,27 @@ data FT_MemoryRec = FT_MemoryRec
                       , mrRealloc :: FunPtr FT_Realloc_Func
                       }
 
+instance Offset "mrUser"    FT_MemoryRec where rawOffset = #{offset struct FT_MemoryRec_, user   }
+instance Offset "mrAlloc"   FT_MemoryRec where rawOffset = #{offset struct FT_MemoryRec_, alloc  }
+instance Offset "mrFree"    FT_MemoryRec where rawOffset = #{offset struct FT_MemoryRec_, free   }
+instance Offset "mrRealloc" FT_MemoryRec where rawOffset = #{offset struct FT_MemoryRec_, realloc}
+
 instance Storable FT_MemoryRec where
   sizeOf _    = #size      struct FT_MemoryRec_
   alignment _ = #alignment struct FT_MemoryRec_
 
   peek ptr =
     FT_MemoryRec
-      <$> #{peek struct FT_MemoryRec_, user   } ptr
-      <*> #{peek struct FT_MemoryRec_, alloc  } ptr
-      <*> #{peek struct FT_MemoryRec_, free   } ptr
-      <*> #{peek struct FT_MemoryRec_, realloc} ptr
+      <$> peek (offset @"mrUser"    ptr)
+      <*> peek (offset @"mrAlloc"   ptr)
+      <*> peek (offset @"mrFree"    ptr)
+      <*> peek (offset @"mrRealloc" ptr)
 
   poke ptr val = do
-    #{poke struct FT_MemoryRec_, user   } ptr $ val & mrUser
-    #{poke struct FT_MemoryRec_, alloc  } ptr $ val & mrAlloc
-    #{poke struct FT_MemoryRec_, free   } ptr $ val & mrFree
-    #{poke struct FT_MemoryRec_, realloc} ptr $ val & mrRealloc
+    pokeField @"mrUser"    ptr val
+    pokeField @"mrAlloc"   ptr val
+    pokeField @"mrFree"    ptr val
+    pokeField @"mrRealloc" ptr val
 
 
 
@@ -532,34 +629,45 @@ data FT_StreamRec = FT_StreamRec
                       , srLimit      :: Ptr #type unsigned char
                       }
 
+instance Offset "srBase"       FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, base      }
+instance Offset "srSize"       FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, size      }
+instance Offset "srPos"        FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, pos       }
+instance Offset "srDescriptor" FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, descriptor}
+instance Offset "srPathname"   FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, pathname  }
+instance Offset "srRead"       FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, read      }
+instance Offset "srClose"      FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, close     }
+instance Offset "srMemory"     FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, memory    }
+instance Offset "srCursor"     FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, cursor    }
+instance Offset "srLimit"      FT_StreamRec where rawOffset = #{offset struct FT_StreamRec_, limit     }
+
 instance Storable FT_StreamRec where
   sizeOf _    = #size struct FT_StreamRec_
   alignment _ = #alignment struct FT_StreamRec_
 
   peek ptr =
     FT_StreamRec
-      <$> #{peek struct FT_StreamRec_, base      } ptr
-      <*> #{peek struct FT_StreamRec_, size      } ptr
-      <*> #{peek struct FT_StreamRec_, pos       } ptr
-      <*> #{peek struct FT_StreamRec_, descriptor} ptr
-      <*> #{peek struct FT_StreamRec_, pathname  } ptr
-      <*> #{peek struct FT_StreamRec_, read      } ptr
-      <*> #{peek struct FT_StreamRec_, close     } ptr
-      <*> #{peek struct FT_StreamRec_, memory    } ptr
-      <*> #{peek struct FT_StreamRec_, cursor    } ptr
-      <*> #{peek struct FT_StreamRec_, limit     } ptr
+      <$> peek (offset @"srBase"       ptr)
+      <*> peek (offset @"srSize"       ptr)
+      <*> peek (offset @"srPos"        ptr)
+      <*> peek (offset @"srDescriptor" ptr)
+      <*> peek (offset @"srPathname"   ptr)
+      <*> peek (offset @"srRead"       ptr)
+      <*> peek (offset @"srClose"      ptr)
+      <*> peek (offset @"srMemory"     ptr)
+      <*> peek (offset @"srCursor"     ptr)
+      <*> peek (offset @"srLimit"      ptr)
 
   poke ptr val = do
-    #{poke struct FT_StreamRec_, base      } ptr $ val & srBase
-    #{poke struct FT_StreamRec_, size      } ptr $ val & srSize
-    #{poke struct FT_StreamRec_, pos       } ptr $ val & srPos
-    #{poke struct FT_StreamRec_, descriptor} ptr $ val & srDescriptor
-    #{poke struct FT_StreamRec_, pathname  } ptr $ val & srPathname
-    #{poke struct FT_StreamRec_, read      } ptr $ val & srRead
-    #{poke struct FT_StreamRec_, close     } ptr $ val & srClose
-    #{poke struct FT_StreamRec_, memory    } ptr $ val & srMemory
-    #{poke struct FT_StreamRec_, cursor    } ptr $ val & srCursor
-    #{poke struct FT_StreamRec_, limit     } ptr $ val & srLimit
+    pokeField @"srBase"       ptr val
+    pokeField @"srSize"       ptr val
+    pokeField @"srPos"        ptr val
+    pokeField @"srDescriptor" ptr val
+    pokeField @"srPathname"   ptr val
+    pokeField @"srRead"       ptr val
+    pokeField @"srClose"      ptr val
+    pokeField @"srMemory"     ptr val
+    pokeField @"srCursor"     ptr val
+    pokeField @"srLimit"      ptr val
 
 
 
@@ -593,19 +701,21 @@ data FT_StreamDesc = FT_StreamDesc
                        , sdPointer :: Ptr ()
                        }
 
+instance Offset "sdValue"   FT_StreamDesc where rawOffset = #{offset union FT_StreamDesc_, value  }
+instance Offset "sdPointer" FT_StreamDesc where rawOffset = #{offset union FT_StreamDesc_, pointer}
+
 instance Storable FT_StreamDesc where
   sizeOf _    = #size      union FT_StreamDesc_
   alignment _ = #alignment union FT_StreamDesc_
 
   peek ptr =
     FT_StreamDesc
-      <$> #{peek union FT_StreamDesc_, value  } ptr
-      <*> #{peek union FT_StreamDesc_, pointer} ptr
+      <$> peek (offset @"sdValue"   ptr)
+      <*> peek (offset @"sdPointer" ptr)
 
   poke ptr val = do
-    #{poke union FT_StreamDesc_, value  } ptr $ val & sdValue
-    #{poke union FT_StreamDesc_, pointer} ptr $ val & sdPointer
-
+    pokeField @"sdValue"   ptr val
+    pokeField @"sdPointer" ptr val
 
 
 
@@ -618,26 +728,33 @@ data FT_Outline = FT_Outline
                     , oFlags      :: #type int
                     }
 
+instance Offset "oN_contours" FT_Outline where rawOffset = #{offset struct FT_Outline_, n_contours}
+instance Offset "oN_points"   FT_Outline where rawOffset = #{offset struct FT_Outline_, n_points  }
+instance Offset "oPoints"     FT_Outline where rawOffset = #{offset struct FT_Outline_, points    }
+instance Offset "oTags"       FT_Outline where rawOffset = #{offset struct FT_Outline_, tags      }
+instance Offset "oContours"   FT_Outline where rawOffset = #{offset struct FT_Outline_, contours  }
+instance Offset "oFlags"      FT_Outline where rawOffset = #{offset struct FT_Outline_, flags     }
+
 instance Storable FT_Outline where
   sizeOf _    = #size      struct FT_Outline_
   alignment _ = #alignment struct FT_Outline_
 
   peek ptr =
     FT_Outline
-      <$> #{peek struct FT_Outline_, n_contours} ptr
-      <*> #{peek struct FT_Outline_, n_points  } ptr
-      <*> #{peek struct FT_Outline_, points    } ptr
-      <*> #{peek struct FT_Outline_, tags      } ptr
-      <*> #{peek struct FT_Outline_, contours  } ptr
-      <*> #{peek struct FT_Outline_, flags     } ptr
+      <$> peek (offset @"oN_contours" ptr)
+      <*> peek (offset @"oN_points"   ptr)
+      <*> peek (offset @"oPoints"     ptr)
+      <*> peek (offset @"oTags"       ptr)
+      <*> peek (offset @"oContours"   ptr)
+      <*> peek (offset @"oFlags"      ptr)
 
   poke ptr val = do
-    #{poke struct FT_Outline_, n_contours} ptr $ val & oN_contours
-    #{poke struct FT_Outline_, n_points  } ptr $ val & oN_points
-    #{poke struct FT_Outline_, points    } ptr $ val & oPoints
-    #{poke struct FT_Outline_, tags      } ptr $ val & oTags
-    #{poke struct FT_Outline_, contours  } ptr $ val & oContours
-    #{poke struct FT_Outline_, flags     } ptr $ val & oFlags
+    pokeField @"oN_contours" ptr val
+    pokeField @"oN_points"   ptr val
+    pokeField @"oPoints"     ptr val
+    pokeField @"oTags"       ptr val
+    pokeField @"oContours"   ptr val
+    pokeField @"oFlags"      ptr val
 
 
 
@@ -648,18 +765,21 @@ data FT_ListRec = FT_ListRec
                     , lrTail :: FT_ListNode
                     }
 
+instance Offset "lrHead" FT_ListRec where rawOffset = #{offset struct FT_ListRec_, head}
+instance Offset "lrTail" FT_ListRec where rawOffset = #{offset struct FT_ListRec_, tail}
+
 instance Storable FT_ListRec where
   sizeOf _    = #size      struct FT_ListRec_
   alignment _ = #alignment struct FT_ListRec_
 
   peek ptr =
     FT_ListRec
-      <$> #{peek struct FT_ListRec_, head} ptr
-      <*> #{peek struct FT_ListRec_, tail} ptr
+      <$> peek (offset @"lrHead" ptr)
+      <*> peek (offset @"lrTail" ptr)
 
   poke ptr val = do
-    #{poke struct FT_ListRec_, head} ptr $ val & lrHead
-    #{poke struct FT_ListRec_, tail} ptr $ val & lrTail
+    pokeField @"lrHead" ptr val
+    pokeField @"lrTail" ptr val
 
 
 
@@ -671,17 +791,21 @@ data FT_ListNodeRec = FT_ListNodeRec
                         , lnrData :: Ptr ()
                         }
 
+instance Offset "lnrPrev" FT_ListNodeRec where rawOffset = #{offset struct FT_ListNodeRec_, prev}
+instance Offset "lnrNext" FT_ListNodeRec where rawOffset = #{offset struct FT_ListNodeRec_, next}
+instance Offset "lnrData" FT_ListNodeRec where rawOffset = #{offset struct FT_ListNodeRec_, data}
+
 instance Storable FT_ListNodeRec where
   sizeOf _    = #size      struct FT_ListNodeRec_
   alignment _ = #alignment struct FT_ListNodeRec_
 
   peek ptr =
     FT_ListNodeRec
-      <$> #{peek struct FT_ListNodeRec_, prev} ptr
-      <*> #{peek struct FT_ListNodeRec_, next} ptr
-      <*> #{peek struct FT_ListNodeRec_, data} ptr
+      <$> peek (offset @"lnrPrev" ptr)
+      <*> peek (offset @"lnrNext" ptr)
+      <*> peek (offset @"lnrData" ptr)
 
   poke ptr val = do
-    #{poke struct FT_ListNodeRec_, prev} ptr $ val & lnrPrev
-    #{poke struct FT_ListNodeRec_, next} ptr $ val & lnrNext
-    #{poke struct FT_ListNodeRec_, data} ptr $ val & lnrData
+    pokeField @"lnrPrev" ptr val
+    pokeField @"lnrNext" ptr val
+    pokeField @"lnrData" ptr val

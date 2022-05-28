@@ -1,6 +1,9 @@
-{-# LANGUAGE EmptyDataDecls #-}
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE DataKinds
+           , EmptyDataDecls
+           , ForeignFunctionInterface
+           , MultiParamTypeClasses
+           , PatternSynonyms
+           , TypeApplications #-}
 
 module FreeType.Core.Glyph.Types where
 
@@ -8,9 +11,9 @@ import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Support.Outline.Types
 
-import           Data.Function ((&))
 import           Foreign.Ptr
 import           Foreign.Storable
+import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_GLYPH_H
@@ -28,22 +31,27 @@ data FT_GlyphRec = FT_GlyphRec
                      , grAdvance :: FT_Vector
                      }
 
-instance Storable FT_GlyphRec where    
-  sizeOf _    = #size      struct FT_GlyphRec_    
-  alignment _ = #alignment struct FT_GlyphRec_    
-    
-  peek ptr =    
-    FT_GlyphRec    
-      <$> #{peek struct FT_GlyphRec_, library} ptr    
-      <*> #{peek struct FT_GlyphRec_, clazz  } ptr    
-      <*> #{peek struct FT_GlyphRec_, format } ptr    
-      <*> #{peek struct FT_GlyphRec_, advance} ptr    
-    
-  poke ptr val = do    
-    #{poke struct FT_GlyphRec_, library} ptr $ val & grLibrary    
-    #{poke struct FT_GlyphRec_, clazz  } ptr $ val & grClazz    
-    #{poke struct FT_GlyphRec_, format } ptr $ val & grFormat    
-    #{poke struct FT_GlyphRec_, advance} ptr $ val & grAdvance
+instance Offset "grLibrary" FT_GlyphRec where rawOffset = #{offset struct FT_GlyphRec_, library}
+instance Offset "grClazz"   FT_GlyphRec where rawOffset = #{offset struct FT_GlyphRec_, clazz  }
+instance Offset "grFormat"  FT_GlyphRec where rawOffset = #{offset struct FT_GlyphRec_, format }
+instance Offset "grAdvance" FT_GlyphRec where rawOffset = #{offset struct FT_GlyphRec_, advance}
+
+instance Storable FT_GlyphRec where
+  sizeOf _    = #size      struct FT_GlyphRec_
+  alignment _ = #alignment struct FT_GlyphRec_
+
+  peek ptr =
+    FT_GlyphRec
+      <$> peek (offset @"grLibrary" ptr)
+      <*> peek (offset @"grClazz"   ptr)
+      <*> peek (offset @"grFormat"  ptr)
+      <*> peek (offset @"grAdvance" ptr)
+
+  poke ptr val = do
+    pokeField @"grLibrary" ptr val
+    pokeField @"grClazz"   ptr val
+    pokeField @"grFormat"  ptr val
+    pokeField @"grAdvance" ptr val
 
 
 
@@ -56,22 +64,27 @@ data FT_BitmapGlyphRec = FT_BitmapGlyphRec
                            , bgrBitmap :: FT_Bitmap
                            }
 
-instance Storable FT_BitmapGlyphRec where    
-  sizeOf _    = #size      struct FT_BitmapGlyphRec_    
-  alignment _ = #alignment struct FT_BitmapGlyphRec_    
-    
-  peek ptr =    
-    FT_BitmapGlyphRec    
-      <$> #{peek struct FT_BitmapGlyphRec_, root  } ptr    
-      <*> #{peek struct FT_BitmapGlyphRec_, left  } ptr    
-      <*> #{peek struct FT_BitmapGlyphRec_, top   } ptr    
-      <*> #{peek struct FT_BitmapGlyphRec_, bitmap} ptr    
-    
-  poke ptr val = do    
-    #{poke struct FT_BitmapGlyphRec_, root  } ptr $ val & bgrRoot    
-    #{poke struct FT_BitmapGlyphRec_, left  } ptr $ val & bgrLeft    
-    #{poke struct FT_BitmapGlyphRec_, top   } ptr $ val & bgrTop    
-    #{poke struct FT_BitmapGlyphRec_, bitmap} ptr $ val & bgrBitmap
+instance Offset "bgrRoot"   FT_BitmapGlyphRec where rawOffset = #{offset struct FT_BitmapGlyphRec_, root  }
+instance Offset "bgrLeft"   FT_BitmapGlyphRec where rawOffset = #{offset struct FT_BitmapGlyphRec_, left  }
+instance Offset "bgrTop"    FT_BitmapGlyphRec where rawOffset = #{offset struct FT_BitmapGlyphRec_, top   }
+instance Offset "bgrBitmap" FT_BitmapGlyphRec where rawOffset = #{offset struct FT_BitmapGlyphRec_, bitmap}
+
+instance Storable FT_BitmapGlyphRec where
+  sizeOf _    = #size      struct FT_BitmapGlyphRec_
+  alignment _ = #alignment struct FT_BitmapGlyphRec_
+
+  peek ptr =
+    FT_BitmapGlyphRec
+      <$> peek (offset @"bgrRoot"   ptr)
+      <*> peek (offset @"bgrLeft"   ptr)
+      <*> peek (offset @"bgrTop"    ptr)
+      <*> peek (offset @"bgrBitmap" ptr)
+
+  poke ptr val = do
+    pokeField @"bgrRoot"   ptr val
+    pokeField @"bgrLeft"   ptr val
+    pokeField @"bgrTop"    ptr val
+    pokeField @"bgrBitmap" ptr val
 
 
 
@@ -82,15 +95,18 @@ data FT_OutlineGlyphRec = FT_OutlineGlyphRec
                             , ogrOutline :: FT_Outline
                             }
 
-instance Storable FT_OutlineGlyphRec where    
-  sizeOf _    = #size      struct FT_OutlineGlyphRec_    
-  alignment _ = #alignment struct FT_OutlineGlyphRec_    
+instance Offset "ogrRoot"    FT_OutlineGlyphRec where rawOffset = #{offset struct FT_OutlineGlyphRec_, root   }
+instance Offset "ogrOutline" FT_OutlineGlyphRec where rawOffset = #{offset struct FT_OutlineGlyphRec_, outline}
+
+instance Storable FT_OutlineGlyphRec where
+  sizeOf _    = #size      struct FT_OutlineGlyphRec_
+  alignment _ = #alignment struct FT_OutlineGlyphRec_
 
   peek ptr =
     FT_OutlineGlyphRec
-      <$> #{peek struct FT_OutlineGlyphRec_, root   } ptr
-      <*> #{peek struct FT_OutlineGlyphRec_, outline} ptr
+      <$> peek (offset @"ogrRoot"    ptr)
+      <*> peek (offset @"ogrOutline" ptr)
 
   poke ptr val = do
-    #{poke struct FT_OutlineGlyphRec_, root   } ptr $ val & ogrRoot
-    #{poke struct FT_OutlineGlyphRec_, outline} ptr $ val & ogrOutline
+    pokeField @"ogrRoot"    ptr val
+    pokeField @"ogrOutline" ptr val

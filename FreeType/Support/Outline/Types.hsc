@@ -1,4 +1,7 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE DataKinds
+           , ForeignFunctionInterface
+           , MultiParamTypeClasses
+           , TypeApplications #-}
 
 module FreeType.Support.Outline.Types
   ( module FreeType.Support.Outline.Types
@@ -9,9 +12,9 @@ import           FreeType.Circular.Types
 import           FreeType.Core.Types.Types
 
 import           Data.Int
-import           Data.Function ((&))
 import           Data.Word
 import           Foreign.Storable
+import           Foreign.Storable.Offset
 import           Foreign.Ptr
 
 #include "ft2build.h"
@@ -75,26 +78,33 @@ data FT_Outline_Funcs' = FT_Outline_Funcs'
                            , oftDelta    :: FT_Pos
                            }
 
+instance Offset "oftMove_to"  FT_Outline_Funcs' where rawOffset = #{offset struct FT_Outline_Funcs_, move_to }
+instance Offset "oftLine_to"  FT_Outline_Funcs' where rawOffset = #{offset struct FT_Outline_Funcs_, line_to }
+instance Offset "oftConic_to" FT_Outline_Funcs' where rawOffset = #{offset struct FT_Outline_Funcs_, conic_to}
+instance Offset "oftCubic_to" FT_Outline_Funcs' where rawOffset = #{offset struct FT_Outline_Funcs_, cubic_to}
+instance Offset "oftShift"    FT_Outline_Funcs' where rawOffset = #{offset struct FT_Outline_Funcs_, shift   }
+instance Offset "oftDelta"    FT_Outline_Funcs' where rawOffset = #{offset struct FT_Outline_Funcs_, delta   }
+
 instance Storable FT_Outline_Funcs' where
   sizeOf _    = #size      struct FT_Outline_Funcs_
   alignment _ = #alignment struct FT_Outline_Funcs_
 
   peek ptr =
     FT_Outline_Funcs'
-      <$> #{peek struct FT_Outline_Funcs_, move_to } ptr
-      <*> #{peek struct FT_Outline_Funcs_, line_to } ptr
-      <*> #{peek struct FT_Outline_Funcs_, conic_to} ptr
-      <*> #{peek struct FT_Outline_Funcs_, cubic_to} ptr
-      <*> #{peek struct FT_Outline_Funcs_, shift   } ptr
-      <*> #{peek struct FT_Outline_Funcs_, delta   } ptr
+      <$> peek (offset @"oftMove_to"  ptr)
+      <*> peek (offset @"oftLine_to"  ptr)
+      <*> peek (offset @"oftConic_to" ptr)
+      <*> peek (offset @"oftCubic_to" ptr)
+      <*> peek (offset @"oftShift"    ptr)
+      <*> peek (offset @"oftDelta"    ptr)
 
   poke ptr val = do
-    #{poke struct FT_Outline_Funcs_, move_to } ptr $ val & oftMove_to
-    #{poke struct FT_Outline_Funcs_, line_to } ptr $ val & oftLine_to
-    #{poke struct FT_Outline_Funcs_, conic_to} ptr $ val & oftConic_to
-    #{poke struct FT_Outline_Funcs_, cubic_to} ptr $ val & oftCubic_to
-    #{poke struct FT_Outline_Funcs_, shift   } ptr $ val & oftShift
-    #{poke struct FT_Outline_Funcs_, delta   } ptr $ val & oftDelta
+    pokeField @"oftMove_to"  ptr val
+    pokeField @"oftLine_to"  ptr val
+    pokeField @"oftConic_to" ptr val
+    pokeField @"oftCubic_to" ptr val
+    pokeField @"oftShift"    ptr val
+    pokeField @"oftDelta"    ptr val
 
 
 

@@ -1,5 +1,9 @@
-{-# LANGUAGE EmptyDataDecls #-}
-{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE DataKinds
+           , EmptyDataDecls
+           , ForeignFunctionInterface
+           , MultiParamTypeClasses
+           , TypeApplications #-}
+
 {-# OPTIONS_HADDOCK hide #-}
 
 module FreeType.Cache.Types where
@@ -7,9 +11,9 @@ module FreeType.Cache.Types where
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 
-import           Data.Function ((&))
 import           Foreign.Ptr
 import           Foreign.Storable
+import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_CACHE_H
@@ -60,26 +64,33 @@ data FTC_ScalerRec = FTC_ScalerRec
                        , srY_res   :: FT_UInt
                        }
 
+instance Offset "srFace_id" FTC_ScalerRec where rawOffset = #{offset struct FTC_ScalerRec_, face_id}
+instance Offset "srWidth"   FTC_ScalerRec where rawOffset = #{offset struct FTC_ScalerRec_, width  }
+instance Offset "srHeight"  FTC_ScalerRec where rawOffset = #{offset struct FTC_ScalerRec_, height }
+instance Offset "srPixel"   FTC_ScalerRec where rawOffset = #{offset struct FTC_ScalerRec_, pixel  }
+instance Offset "srX_res"   FTC_ScalerRec where rawOffset = #{offset struct FTC_ScalerRec_, x_res  }
+instance Offset "srY_res"   FTC_ScalerRec where rawOffset = #{offset struct FTC_ScalerRec_, y_res  }
+
 instance Storable FTC_ScalerRec where
   sizeOf _    = #size      struct FTC_ScalerRec_
   alignment _ = #alignment struct FTC_ScalerRec_
 
   peek ptr =
     FTC_ScalerRec
-      <$> #{peek struct FTC_ScalerRec_, face_id} ptr
-      <*> #{peek struct FTC_ScalerRec_, width  } ptr
-      <*> #{peek struct FTC_ScalerRec_, height } ptr
-      <*> #{peek struct FTC_ScalerRec_, pixel  } ptr
-      <*> #{peek struct FTC_ScalerRec_, x_res  } ptr
-      <*> #{peek struct FTC_ScalerRec_, y_res  } ptr
+      <$> peek (offset @"srFace_id" ptr)
+      <*> peek (offset @"srWidth"   ptr)
+      <*> peek (offset @"srHeight"  ptr)
+      <*> peek (offset @"srPixel"   ptr)
+      <*> peek (offset @"srX_res"   ptr)
+      <*> peek (offset @"srY_res"   ptr)
 
   poke ptr val = do
-    #{poke struct FTC_ScalerRec_, face_id} ptr $ val & srFace_id
-    #{poke struct FTC_ScalerRec_, width  } ptr $ val & srWidth
-    #{poke struct FTC_ScalerRec_, height } ptr $ val & srHeight
-    #{poke struct FTC_ScalerRec_, pixel  } ptr $ val & srPixel
-    #{poke struct FTC_ScalerRec_, x_res  } ptr $ val & srX_res
-    #{poke struct FTC_ScalerRec_, y_res  } ptr $ val & srY_res
+    pokeField @"srFace_id" ptr val
+    pokeField @"srWidth"   ptr val
+    pokeField @"srHeight"  ptr val
+    pokeField @"srPixel"   ptr val
+    pokeField @"srX_res"   ptr val
+    pokeField @"srY_res"   ptr val
 
 
 
@@ -94,22 +105,28 @@ data FTC_ImageTypeRec = FTC_ImageTypeRec
                            , itrFlags   :: FT_Int32
                            }
 
+instance Offset "itrFace_id" FTC_ImageTypeRec where rawOffset = #{offset struct FTC_ImageTypeRec_, face_id}
+instance Offset "itrWidth"   FTC_ImageTypeRec where rawOffset = #{offset struct FTC_ImageTypeRec_, width  }
+instance Offset "itrHeight"  FTC_ImageTypeRec where rawOffset = #{offset struct FTC_ImageTypeRec_, height }
+instance Offset "itrFlags"   FTC_ImageTypeRec where rawOffset = #{offset struct FTC_ImageTypeRec_, flags  }
+
 instance Storable FTC_ImageTypeRec where
   sizeOf _    = #size      struct FTC_ImageTypeRec_
   alignment _ = #alignment struct FTC_ImageTypeRec_
 
   peek ptr =
     FTC_ImageTypeRec
-      <$> #{peek struct FTC_ImageTypeRec_, face_id} ptr
-      <*> #{peek struct FTC_ImageTypeRec_, width  } ptr
-      <*> #{peek struct FTC_ImageTypeRec_, height } ptr
-      <*> #{peek struct FTC_ImageTypeRec_, flags  } ptr
+      <$> peek (offset @"itrFace_id" ptr)
+      <*> peek (offset @"itrWidth"   ptr)
+      <*> peek (offset @"itrHeight"  ptr)
+      <*> peek (offset @"itrFlags"   ptr)
 
   poke ptr val = do
-    #{poke struct FTC_ImageTypeRec_, face_id} ptr $ val & itrFace_id
-    #{poke struct FTC_ImageTypeRec_, width  } ptr $ val & itrWidth
-    #{poke struct FTC_ImageTypeRec_, height } ptr $ val & itrHeight
-    #{poke struct FTC_ImageTypeRec_, flags  } ptr $ val & itrFlags
+    pokeField @"itrFace_id" ptr val
+    pokeField @"itrWidth"   ptr val
+    pokeField @"itrHeight"  ptr val
+    pokeField @"itrFlags"   ptr val
+
 
 
 type FTC_ImageType = Ptr FTC_ImageTypeRec
@@ -128,31 +145,42 @@ data FTC_SBitRec = FTC_SBitRec
                      , sbrBuffer    :: Ptr FT_Byte
                      }
 
+instance Offset "sbrWidth"     FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, width    }
+instance Offset "sbrHeight"    FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, height   }
+instance Offset "sbrLeft"      FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, left     }
+instance Offset "sbrTop"       FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, top      }
+instance Offset "sbrFormat"    FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, format   }
+instance Offset "sbrMax_grays" FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, max_grays}
+instance Offset "sbrPitch"     FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, pitch    }
+instance Offset "sbrXadvance"  FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, xadvance }
+instance Offset "sbrYadvance"  FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, yadvance }
+instance Offset "sbrBuffer"    FTC_SBitRec where rawOffset = #{offset struct FTC_SBitRec_, buffer   }
+
 instance Storable FTC_SBitRec where
   sizeOf _    = #size      struct FTC_SBitRec_
   alignment _ = #alignment struct FTC_SBitRec_
 
   peek ptr =
     FTC_SBitRec
-      <$> #{peek struct FTC_SBitRec_, width    } ptr
-      <*> #{peek struct FTC_SBitRec_, height   } ptr
-      <*> #{peek struct FTC_SBitRec_, left     } ptr
-      <*> #{peek struct FTC_SBitRec_, top      } ptr
-      <*> #{peek struct FTC_SBitRec_, format   } ptr
-      <*> #{peek struct FTC_SBitRec_, max_grays} ptr
-      <*> #{peek struct FTC_SBitRec_, pitch    } ptr
-      <*> #{peek struct FTC_SBitRec_, xadvance } ptr
-      <*> #{peek struct FTC_SBitRec_, yadvance } ptr
-      <*> #{peek struct FTC_SBitRec_, buffer   } ptr
+      <$> peek (offset @"sbrWidth"     ptr)
+      <*> peek (offset @"sbrHeight"    ptr)
+      <*> peek (offset @"sbrLeft"      ptr)
+      <*> peek (offset @"sbrTop"       ptr)
+      <*> peek (offset @"sbrFormat"    ptr)
+      <*> peek (offset @"sbrMax_grays" ptr)
+      <*> peek (offset @"sbrPitch"     ptr)
+      <*> peek (offset @"sbrXadvance"  ptr)
+      <*> peek (offset @"sbrYadvance"  ptr)
+      <*> peek (offset @"sbrBuffer"    ptr)
 
   poke ptr val = do
-    #{poke struct FTC_SBitRec_, width    } ptr $ val & sbrWidth
-    #{poke struct FTC_SBitRec_, height   } ptr $ val & sbrHeight
-    #{poke struct FTC_SBitRec_, left     } ptr $ val & sbrLeft
-    #{poke struct FTC_SBitRec_, top      } ptr $ val & sbrTop
-    #{poke struct FTC_SBitRec_, format   } ptr $ val & sbrFormat
-    #{poke struct FTC_SBitRec_, max_grays} ptr $ val & sbrMax_grays
-    #{poke struct FTC_SBitRec_, pitch    } ptr $ val & sbrPitch
-    #{poke struct FTC_SBitRec_, xadvance } ptr $ val & sbrXadvance
-    #{poke struct FTC_SBitRec_, yadvance } ptr $ val & sbrYadvance
-    #{poke struct FTC_SBitRec_, buffer   } ptr $ val & sbrBuffer
+    pokeField @"sbrWidth"     ptr val
+    pokeField @"sbrHeight"    ptr val
+    pokeField @"sbrLeft"      ptr val
+    pokeField @"sbrTop"       ptr val
+    pokeField @"sbrFormat"    ptr val
+    pokeField @"sbrMax_grays" ptr val
+    pokeField @"sbrPitch"     ptr val
+    pokeField @"sbrXadvance"  ptr val
+    pokeField @"sbrYadvance"  ptr val
+    pokeField @"sbrBuffer"    ptr val

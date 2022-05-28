@@ -1,5 +1,7 @@
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE DataKinds
+           , MultiParamTypeClasses
+           , PatternSynonyms
+           , TypeApplications #-}
 
 module FreeType.Core.Types.Types
   ( module FreeType.Core.Types.Types
@@ -8,8 +10,12 @@ module FreeType.Core.Types.Types
 
 import           FreeType.Exception.Types (FT_Error)
 
-import           Data.Function ((&))
-import           Foreign
+import           Data.Bits
+import           Data.Int
+import           Data.Word
+import           Foreign.Ptr
+import           Foreign.Storable
+import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -72,18 +78,21 @@ data FT_Vector = FT_Vector
                    , vY :: FT_Pos
                    }
 
+instance Offset "vX" FT_Vector where rawOffset = #{offset struct FT_Vector_, x}
+instance Offset "vY" FT_Vector where rawOffset = #{offset struct FT_Vector_, y}
+
 instance Storable FT_Vector where
   sizeOf _    = #size      struct FT_Vector_
   alignment _ = #alignment struct FT_Vector_
 
   peek ptr =
     FT_Vector
-      <$> #{peek struct FT_Vector_, x} ptr
-      <*> #{peek struct FT_Vector_, y} ptr
+      <$> peek (offset @"vX" ptr)
+      <*> peek (offset @"vY" ptr)
 
   poke ptr val = do
-    #{poke struct FT_Vector_, x} ptr $ val & vX
-    #{poke struct FT_Vector_, y} ptr $ val & vY
+    pokeField @"vX" ptr val
+    pokeField @"vY" ptr val
 
 
 
@@ -94,22 +103,27 @@ data FT_BBox = FT_BBox
                  , bbYMax :: FT_Pos
                  }
 
+instance Offset "bbXMin" FT_BBox where rawOffset = #{offset struct FT_BBox_, xMin}
+instance Offset "bbYMin" FT_BBox where rawOffset = #{offset struct FT_BBox_, yMin}
+instance Offset "bbXMax" FT_BBox where rawOffset = #{offset struct FT_BBox_, xMax}
+instance Offset "bbYMax" FT_BBox where rawOffset = #{offset struct FT_BBox_, yMax}
+
 instance Storable FT_BBox where
   sizeOf    _ = #size      struct FT_BBox_
   alignment _ = #alignment struct FT_BBox_
 
   peek ptr =
     FT_BBox
-      <$> #{peek struct FT_BBox_, xMin} ptr
-      <*> #{peek struct FT_BBox_, yMin} ptr
-      <*> #{peek struct FT_BBox_, xMax} ptr
-      <*> #{peek struct FT_BBox_, yMax} ptr
+      <$> peek (offset @"bbXMin" ptr)
+      <*> peek (offset @"bbYMin" ptr)
+      <*> peek (offset @"bbXMax" ptr)
+      <*> peek (offset @"bbYMax" ptr)
 
   poke ptr val = do
-    #{poke struct FT_BBox_, xMin} ptr $ val & bbXMin
-    #{poke struct FT_BBox_, yMin} ptr $ val & bbYMin
-    #{poke struct FT_BBox_, xMax} ptr $ val & bbXMax
-    #{poke struct FT_BBox_, yMax} ptr $ val & bbYMax
+    pokeField @"bbXMin" ptr val
+    pokeField @"bbYMin" ptr val
+    pokeField @"bbXMax" ptr val
+    pokeField @"bbYMax" ptr val
 
 
 
@@ -120,22 +134,27 @@ data FT_Matrix = FT_Matrix
                    , mYy :: FT_Fixed
                    }
 
+instance Offset "mXx" FT_Matrix where rawOffset = #{offset struct FT_Matrix_, xx}
+instance Offset "mXy" FT_Matrix where rawOffset = #{offset struct FT_Matrix_, xy}
+instance Offset "mYx" FT_Matrix where rawOffset = #{offset struct FT_Matrix_, yx}
+instance Offset "mYy" FT_Matrix where rawOffset = #{offset struct FT_Matrix_, yy}
+
 instance Storable FT_Matrix where
   sizeOf _    = #size      struct FT_Matrix_
   alignment _ = #alignment struct FT_Matrix_
 
   peek ptr =
     FT_Matrix
-      <$> #{peek struct FT_Matrix_, xx} ptr
-      <*> #{peek struct FT_Matrix_, xy} ptr
-      <*> #{peek struct FT_Matrix_, yx} ptr
-      <*> #{peek struct FT_Matrix_, yy} ptr
+      <$> peek (offset @"mXx" ptr)
+      <*> peek (offset @"mXy" ptr)
+      <*> peek (offset @"mYx" ptr)
+      <*> peek (offset @"mYy" ptr)
 
   poke ptr val = do
-    #{poke struct FT_Matrix_, xx} ptr $ val & mXx
-    #{poke struct FT_Matrix_, xy} ptr $ val & mXy
-    #{poke struct FT_Matrix_, yx} ptr $ val & mYx
-    #{poke struct FT_Matrix_, yy} ptr $ val & mYy
+    pokeField @"mXx" ptr val
+    pokeField @"mXy" ptr val
+    pokeField @"mYx" ptr val
+    pokeField @"mYy" ptr val
 
 
 
@@ -152,18 +171,22 @@ data FT_UnitVector = FT_UnitVector
                        , uvY :: FT_F2Dot14
                        }
 
+instance Offset "uvX" FT_UnitVector where rawOffset = #{offset struct FT_UnitVector_, x}
+instance Offset "uvY" FT_UnitVector where rawOffset = #{offset struct FT_UnitVector_, y}
+
 instance Storable FT_UnitVector where
   sizeOf _    = #size      struct FT_UnitVector_
   alignment _ = #alignment struct FT_UnitVector_
 
   peek ptr =
     FT_UnitVector
-      <$> #{peek struct FT_UnitVector_, x} ptr
-      <*> #{peek struct FT_UnitVector_, y} ptr
+      <$> peek (offset @"uvX" ptr)
+      <*> peek (offset @"uvY" ptr)
 
   poke ptr val = do
-    #{poke struct FT_UnitVector_, x} ptr $ val & uvX
-    #{poke struct FT_UnitVector_, y} ptr $ val & uvY
+    pokeField @"uvX" ptr val
+    pokeField @"uvY" ptr val
+
 
 
 type FT_F26Dot6 = #type FT_F26Dot6
@@ -175,18 +198,21 @@ data FT_Data = FT_Data
                  , dLength  :: FT_Int
                  }
 
+instance Offset "dPointer" FT_Data where rawOffset = #{offset struct FT_Data_, pointer}
+instance Offset "dLength"  FT_Data where rawOffset = #{offset struct FT_Data_, length }
+
 instance Storable FT_Data where
   sizeOf _    = #size      struct FT_Data_
   alignment _ = #alignment struct FT_Data_
 
   peek ptr =
     FT_Data
-      <$> #{peek struct FT_Data_, pointer} ptr
-      <*> #{peek struct FT_Data_, length } ptr
+      <$> peek (offset @"dPointer" ptr)
+      <*> peek (offset @"dLength"  ptr)
 
   poke ptr val = do
-    #{poke struct FT_Data_, pointer} ptr $ val & dPointer
-    #{poke struct FT_Data_, length } ptr $ val & dLength
+    pokeField @"dPointer" ptr val
+    pokeField @"dLength"  ptr val
 
 
 
@@ -206,18 +232,21 @@ data FT_Generic = FT_Generic
                     , gFinalizer :: FT_Generic_Finalizer
                     }
 
+instance Offset "gData"      FT_Generic where rawOffset = #{offset struct FT_Generic_, data     }
+instance Offset "gFinalizer" FT_Generic where rawOffset = #{offset struct FT_Generic_, finalizer}
+
 instance Storable FT_Generic where
   sizeOf    _ = #size      struct FT_Generic_
   alignment _ = #alignment struct FT_Generic_
 
   peek ptr = do
     FT_Generic
-      <$> #{peek struct FT_Generic_, data     } ptr
-      <*> #{peek struct FT_Generic_, finalizer} ptr
+      <$> peek (offset @"gData"      ptr)
+      <*> peek (offset @"gFinalizer" ptr)
 
   poke ptr val = do
-    #{poke struct FT_Generic_, data     } ptr $ val & gData
-    #{poke struct FT_Generic_, finalizer} ptr $ val & gFinalizer
+    pokeField @"gData"      ptr val
+    pokeField @"gFinalizer" ptr val
 
 
 
@@ -236,30 +265,39 @@ data FT_Bitmap = FT_Bitmap
                    , bPalette      :: Ptr ()
                    }
 
+instance Offset "bRows"         FT_Bitmap where rawOffset = #{offset struct FT_Bitmap_, rows        }
+instance Offset "bWidth"        FT_Bitmap where rawOffset = #{offset struct FT_Bitmap_, width       }
+instance Offset "bPitch"        FT_Bitmap where rawOffset = #{offset struct FT_Bitmap_, pitch       }
+instance Offset "bBuffer"       FT_Bitmap where rawOffset = #{offset struct FT_Bitmap_, buffer      }
+instance Offset "bNum_grays"    FT_Bitmap where rawOffset = #{offset struct FT_Bitmap_, num_grays   }
+instance Offset "bPixel_mode"   FT_Bitmap where rawOffset = #{offset struct FT_Bitmap_, pixel_mode  }
+instance Offset "bPalette_mode" FT_Bitmap where rawOffset = #{offset struct FT_Bitmap_, palette_mode}
+instance Offset "bPalette"      FT_Bitmap where rawOffset = #{offset struct FT_Bitmap_, palette     }
+
 instance Storable FT_Bitmap where
   sizeOf _    = #size      struct FT_Bitmap_
   alignment _ = #alignment struct FT_Bitmap_
 
   peek ptr =
     FT_Bitmap
-      <$> #{peek struct FT_Bitmap_, rows        } ptr
-      <*> #{peek struct FT_Bitmap_, width       } ptr
-      <*> #{peek struct FT_Bitmap_, pitch       } ptr
-      <*> #{peek struct FT_Bitmap_, buffer      } ptr
-      <*> #{peek struct FT_Bitmap_, num_grays   } ptr
-      <*> #{peek struct FT_Bitmap_, pixel_mode  } ptr
-      <*> #{peek struct FT_Bitmap_, palette_mode} ptr
-      <*> #{peek struct FT_Bitmap_, palette     } ptr
+      <$> peek (offset @"bRows"         ptr)
+      <*> peek (offset @"bWidth"        ptr)
+      <*> peek (offset @"bPitch"        ptr)
+      <*> peek (offset @"bBuffer"       ptr)
+      <*> peek (offset @"bNum_grays"    ptr)
+      <*> peek (offset @"bPixel_mode"   ptr)
+      <*> peek (offset @"bPalette_mode" ptr)
+      <*> peek (offset @"bPalette"      ptr)
 
   poke ptr val = do
-    #{poke struct FT_Bitmap_, rows        } ptr $ val & bRows
-    #{poke struct FT_Bitmap_, width       } ptr $ val & bWidth
-    #{poke struct FT_Bitmap_, pitch       } ptr $ val & bPitch
-    #{poke struct FT_Bitmap_, buffer      } ptr $ val & bBuffer
-    #{poke struct FT_Bitmap_, num_grays   } ptr $ val & bNum_grays
-    #{poke struct FT_Bitmap_, pixel_mode  } ptr $ val & bPixel_mode
-    #{poke struct FT_Bitmap_, palette_mode} ptr $ val & bPalette_mode
-    #{poke struct FT_Bitmap_, palette     } ptr $ val & bPalette
+    pokeField @"bRows"         ptr val
+    pokeField @"bWidth"        ptr val
+    pokeField @"bPitch"        ptr val
+    pokeField @"bBuffer"       ptr val
+    pokeField @"bNum_grays"    ptr val
+    pokeField @"bPixel_mode"   ptr val
+    pokeField @"bPalette_mode" ptr val
+    pokeField @"bPalette"      ptr val
 
 
 
