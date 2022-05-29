@@ -3,8 +3,13 @@
 {-# LANGUAGE PatternSynonyms #-}
 
 module FreeType.Core.Base.Internal
-  ( -- ** FT_Init_FreeType
-    ft_Init_FreeType'
+  ( FT_LibraryRec
+  , FT_SubGlyphRec
+  , FT_Face_InternalRec
+  , FT_Size_InternalRec
+  , FT_Slot_InternalRec
+    -- ** FT_Init_FreeType
+  , ft_Init_FreeType'
     -- ** FT_Done_FreeType
   , ft_Done_FreeType'
     -- ** FT_New_Face
@@ -65,7 +70,11 @@ import           FreeType.Circular.Types
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 
+#ifdef aarch64_HOST_ARCH
+import           Data.Word
+#else
 import           Data.Int
+#endif
 import           Foreign.Ptr
 
 #include "ft2build.h"

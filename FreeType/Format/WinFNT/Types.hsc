@@ -1,12 +1,16 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE DataKinds
+           , FlexibleInstances
+           , ForeignFunctionInterface
+           , MultiParamTypeClasses
+           , TypeApplications #-}
 
 module FreeType.Format.WinFNT.Types where
 
 import           FreeType.Core.Types.Types
 
-import           Data.Function ((&))
 import           Foreign.Ptr
 import           Foreign.Storable
+import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_WINFONTS_H
@@ -50,86 +54,125 @@ data FT_WinFNT_HeaderRec = FT_WinFNT_HeaderRec
                              , wfnthrReserved1             :: FT_ULong
                              }
 
+instance Offset "wfnthrVersion"               FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, version              }
+instance Offset "wfnthrFile_size"             FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, file_size            }
+instance Offset "wfnthrCopyright"             FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, copyright            }
+instance Offset "wfnthrFile_type"             FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, file_type            }
+instance Offset "wfnthrNominal_point_size"    FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, nominal_point_size   }
+instance Offset "wfnthrVertical_resolution"   FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, vertical_resolution  }
+instance Offset "wfnthrHorizontal_resolution" FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, horizontal_resolution}
+instance Offset "wfnthrAscent"                FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, ascent               }
+instance Offset "wfnthrInternal_leading"      FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, internal_leading     }
+instance Offset "wfnthrExternal_leading"      FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, external_leading     }
+instance Offset "wfnthrItalic"                FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, italic               }
+instance Offset "wfnthrUnderline"             FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, underline            }
+instance Offset "wfnthrStrike_out"            FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, strike_out           }
+instance Offset "wfnthrWeight"                FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, weight               }
+instance Offset "wfnthrCharset"               FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, charset              }
+instance Offset "wfnthrPixel_width"           FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, pixel_width          }
+instance Offset "wfnthrPixel_height"          FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, pixel_height         }
+instance Offset "wfnthrPitch_and_family"      FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, pitch_and_family     }
+instance Offset "wfnthrAvg_width"             FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, avg_width            }
+instance Offset "wfnthrMax_width"             FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, max_width            }
+instance Offset "wfnthrFirst_char"            FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, first_char           }
+instance Offset "wfnthrLast_char"             FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, last_char            }
+instance Offset "wfnthrDefault_char"          FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, default_char         }
+instance Offset "wfnthrBreak_char"            FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, break_char           }
+instance Offset "wfnthrBytes_per_row"         FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, bytes_per_row        }
+instance Offset "wfnthrDevice_offset"         FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, device_offset        }
+instance Offset "wfnthrFace_name_offset"      FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, face_name_offset     }
+instance Offset "wfnthrBits_pointer"          FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, bits_pointer         }
+instance Offset "wfnthrBits_offset"           FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, bits_offset          }
+instance Offset "wfnthrReserved"              FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, reserved             }
+instance Offset "wfnthrFlags"                 FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, flags                }
+instance Offset "wfnthrA_space"               FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, A_space              }
+instance Offset "wfnthrB_space"               FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, B_space              }
+instance Offset "wfnthrC_space"               FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, C_space              }
+instance Offset "wfnthrColor_table_offset"    FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, color_table_offset   }
+instance Offset "wfnthrReserved1"             FT_WinFNT_HeaderRec where rawOffset = #{offset struct FT_WinFNT_HeaderRec_, reserved1            }
+
+
+
 instance Storable FT_WinFNT_HeaderRec where
   sizeOf _    = #size      struct FT_WinFNT_HeaderRec_
   alignment _ = #alignment struct FT_WinFNT_HeaderRec_
 
   peek ptr =
     FT_WinFNT_HeaderRec
-      <$> #{peek struct FT_WinFNT_HeaderRec_, version              } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, file_size            } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, copyright            } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, file_type            } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, nominal_point_size   } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, vertical_resolution  } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, horizontal_resolution} ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, ascent               } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, internal_leading     } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, external_leading     } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, italic               } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, underline            } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, strike_out           } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, weight               } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, charset              } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, pixel_width          } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, pixel_height         } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, pitch_and_family     } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, avg_width            } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, max_width            } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, first_char           } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, last_char            } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, default_char         } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, break_char           } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, bytes_per_row        } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, device_offset        } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, face_name_offset     } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, bits_pointer         } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, bits_offset          } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, reserved             } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, flags                } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, A_space              } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, B_space              } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, C_space              } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, color_table_offset   } ptr
-      <*> #{peek struct FT_WinFNT_HeaderRec_, reserved1            } ptr
+      <$> peek (offset @"wfnthrVersion"               ptr)
+      <*> peek (offset @"wfnthrFile_size"             ptr)
+      <*> peek (offset @"wfnthrCopyright"             ptr)
+      <*> peek (offset @"wfnthrFile_type"             ptr)
+      <*> peek (offset @"wfnthrNominal_point_size"    ptr)
+      <*> peek (offset @"wfnthrVertical_resolution"   ptr)
+      <*> peek (offset @"wfnthrHorizontal_resolution" ptr)
+      <*> peek (offset @"wfnthrAscent"                ptr)
+      <*> peek (offset @"wfnthrInternal_leading"      ptr)
+      <*> peek (offset @"wfnthrExternal_leading"      ptr)
+      <*> peek (offset @"wfnthrItalic"                ptr)
+      <*> peek (offset @"wfnthrUnderline"             ptr)
+      <*> peek (offset @"wfnthrStrike_out"            ptr)
+      <*> peek (offset @"wfnthrWeight"                ptr)
+      <*> peek (offset @"wfnthrCharset"               ptr)
+      <*> peek (offset @"wfnthrPixel_width"           ptr)
+      <*> peek (offset @"wfnthrPixel_height"          ptr)
+      <*> peek (offset @"wfnthrPitch_and_family"      ptr)
+      <*> peek (offset @"wfnthrAvg_width"             ptr)
+      <*> peek (offset @"wfnthrMax_width"             ptr)
+      <*> peek (offset @"wfnthrFirst_char"            ptr)
+      <*> peek (offset @"wfnthrLast_char"             ptr)
+      <*> peek (offset @"wfnthrDefault_char"          ptr)
+      <*> peek (offset @"wfnthrBreak_char"            ptr)
+      <*> peek (offset @"wfnthrBytes_per_row"         ptr)
+      <*> peek (offset @"wfnthrDevice_offset"         ptr)
+      <*> peek (offset @"wfnthrFace_name_offset"      ptr)
+      <*> peek (offset @"wfnthrBits_pointer"          ptr)
+      <*> peek (offset @"wfnthrBits_offset"           ptr)
+      <*> peek (offset @"wfnthrReserved"              ptr)
+      <*> peek (offset @"wfnthrFlags"                 ptr)
+      <*> peek (offset @"wfnthrA_space"               ptr)
+      <*> peek (offset @"wfnthrB_space"               ptr)
+      <*> peek (offset @"wfnthrC_space"               ptr)
+      <*> peek (offset @"wfnthrColor_table_offset"    ptr)
+      <*> peek (offset @"wfnthrReserved1"             ptr)
 
   poke ptr val = do
-    #{poke struct FT_WinFNT_HeaderRec_, version              } ptr $ val & wfnthrVersion
-    #{poke struct FT_WinFNT_HeaderRec_, file_size            } ptr $ val & wfnthrFile_size
-    #{poke struct FT_WinFNT_HeaderRec_, copyright            } ptr $ val & wfnthrCopyright
-    #{poke struct FT_WinFNT_HeaderRec_, file_type            } ptr $ val & wfnthrFile_type
-    #{poke struct FT_WinFNT_HeaderRec_, nominal_point_size   } ptr $ val & wfnthrNominal_point_size
-    #{poke struct FT_WinFNT_HeaderRec_, vertical_resolution  } ptr $ val & wfnthrVertical_resolution
-    #{poke struct FT_WinFNT_HeaderRec_, horizontal_resolution} ptr $ val & wfnthrHorizontal_resolution
-    #{poke struct FT_WinFNT_HeaderRec_, ascent               } ptr $ val & wfnthrAscent
-    #{poke struct FT_WinFNT_HeaderRec_, internal_leading     } ptr $ val & wfnthrInternal_leading
-    #{poke struct FT_WinFNT_HeaderRec_, external_leading     } ptr $ val & wfnthrExternal_leading
-    #{poke struct FT_WinFNT_HeaderRec_, italic               } ptr $ val & wfnthrItalic
-    #{poke struct FT_WinFNT_HeaderRec_, underline            } ptr $ val & wfnthrUnderline
-    #{poke struct FT_WinFNT_HeaderRec_, strike_out           } ptr $ val & wfnthrStrike_out
-    #{poke struct FT_WinFNT_HeaderRec_, weight               } ptr $ val & wfnthrWeight
-    #{poke struct FT_WinFNT_HeaderRec_, charset              } ptr $ val & wfnthrCharset
-    #{poke struct FT_WinFNT_HeaderRec_, pixel_width          } ptr $ val & wfnthrPixel_width
-    #{poke struct FT_WinFNT_HeaderRec_, pixel_height         } ptr $ val & wfnthrPixel_height
-    #{poke struct FT_WinFNT_HeaderRec_, pitch_and_family     } ptr $ val & wfnthrPitch_and_family
-    #{poke struct FT_WinFNT_HeaderRec_, avg_width            } ptr $ val & wfnthrAvg_width
-    #{poke struct FT_WinFNT_HeaderRec_, max_width            } ptr $ val & wfnthrMax_width
-    #{poke struct FT_WinFNT_HeaderRec_, first_char           } ptr $ val & wfnthrFirst_char
-    #{poke struct FT_WinFNT_HeaderRec_, last_char            } ptr $ val & wfnthrLast_char
-    #{poke struct FT_WinFNT_HeaderRec_, default_char         } ptr $ val & wfnthrDefault_char
-    #{poke struct FT_WinFNT_HeaderRec_, break_char           } ptr $ val & wfnthrBreak_char
-    #{poke struct FT_WinFNT_HeaderRec_, bytes_per_row        } ptr $ val & wfnthrBytes_per_row
-    #{poke struct FT_WinFNT_HeaderRec_, device_offset        } ptr $ val & wfnthrDevice_offset
-    #{poke struct FT_WinFNT_HeaderRec_, face_name_offset     } ptr $ val & wfnthrFace_name_offset
-    #{poke struct FT_WinFNT_HeaderRec_, bits_pointer         } ptr $ val & wfnthrBits_pointer
-    #{poke struct FT_WinFNT_HeaderRec_, bits_offset          } ptr $ val & wfnthrBits_offset
-    #{poke struct FT_WinFNT_HeaderRec_, reserved             } ptr $ val & wfnthrReserved
-    #{poke struct FT_WinFNT_HeaderRec_, flags                } ptr $ val & wfnthrFlags
-    #{poke struct FT_WinFNT_HeaderRec_, A_space              } ptr $ val & wfnthrA_space
-    #{poke struct FT_WinFNT_HeaderRec_, B_space              } ptr $ val & wfnthrB_space
-    #{poke struct FT_WinFNT_HeaderRec_, C_space              } ptr $ val & wfnthrC_space
-    #{poke struct FT_WinFNT_HeaderRec_, color_table_offset   } ptr $ val & wfnthrColor_table_offset
-    #{poke struct FT_WinFNT_HeaderRec_, reserved1            } ptr $ val & wfnthrReserved1
+    pokeField @"wfnthrVersion"               ptr val
+    pokeField @"wfnthrFile_size"             ptr val
+    pokeField @"wfnthrCopyright"             ptr val
+    pokeField @"wfnthrFile_type"             ptr val
+    pokeField @"wfnthrNominal_point_size"    ptr val
+    pokeField @"wfnthrVertical_resolution"   ptr val
+    pokeField @"wfnthrHorizontal_resolution" ptr val
+    pokeField @"wfnthrAscent"                ptr val
+    pokeField @"wfnthrInternal_leading"      ptr val
+    pokeField @"wfnthrExternal_leading"      ptr val
+    pokeField @"wfnthrItalic"                ptr val
+    pokeField @"wfnthrUnderline"             ptr val
+    pokeField @"wfnthrStrike_out"            ptr val
+    pokeField @"wfnthrWeight"                ptr val
+    pokeField @"wfnthrCharset"               ptr val
+    pokeField @"wfnthrPixel_width"           ptr val
+    pokeField @"wfnthrPixel_height"          ptr val
+    pokeField @"wfnthrPitch_and_family"      ptr val
+    pokeField @"wfnthrAvg_width"             ptr val
+    pokeField @"wfnthrMax_width"             ptr val
+    pokeField @"wfnthrFirst_char"            ptr val
+    pokeField @"wfnthrLast_char"             ptr val
+    pokeField @"wfnthrDefault_char"          ptr val
+    pokeField @"wfnthrBreak_char"            ptr val
+    pokeField @"wfnthrBytes_per_row"         ptr val
+    pokeField @"wfnthrDevice_offset"         ptr val
+    pokeField @"wfnthrFace_name_offset"      ptr val
+    pokeField @"wfnthrBits_pointer"          ptr val
+    pokeField @"wfnthrBits_offset"           ptr val
+    pokeField @"wfnthrReserved"              ptr val
+    pokeField @"wfnthrFlags"                 ptr val
+    pokeField @"wfnthrA_space"               ptr val
+    pokeField @"wfnthrB_space"               ptr val
+    pokeField @"wfnthrC_space"               ptr val
+    pokeField @"wfnthrColor_table_offset"    ptr val
+    pokeField @"wfnthrReserved1"             ptr val
 
 
 

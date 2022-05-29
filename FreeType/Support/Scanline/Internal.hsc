@@ -1,6 +1,7 @@
 module FreeType.Support.Scanline.Internal
-  ( -- ** FT_SpanFunc
-    ft_SpanFunc
+  ( FT_RasterRec
+    -- ** FT_SpanFunc
+  , ft_SpanFunc
   , ft_SpanFunc'
     -- ** FT_Raster_NewFunc
   , ft_Raster_NewFunc

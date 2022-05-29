@@ -1,5 +1,9 @@
-{-# LANGUAGE EmptyDataDecls #-}
-{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE DataKinds
+           , EmptyDataDecls
+           , FlexibleInstances
+           , ForeignFunctionInterface
+           , MultiParamTypeClasses
+           , TypeApplications #-}
 
 module FreeType.Support.Module.Types
   ( module FreeType.Support.Module.Types
@@ -15,10 +19,14 @@ import           FreeType.Circular.Types ( FT_ModuleRec, FT_Module
 import           FreeType.Core.Types.Types
 import           FreeType.Support.Scanline.Types
 
+#ifdef aarch64_HOST_ARCH
+import           Data.Word
+#else
 import           Data.Int
-import           Data.Function ((&))
+#endif
 import           Foreign.Ptr
 import           Foreign.Storable
+import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_MODULE_H
@@ -74,32 +82,42 @@ data FT_Module_Class = FT_Module_Class
                          , mcGet_interface    :: FunPtr FT_Module_Requester
                          }
 
+instance Offset "mcModule_flags"     FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_flags    }
+instance Offset "mcModule_size"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_size     }
+instance Offset "mcModule_name"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_name     }
+instance Offset "mcModule_version"   FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_version  }
+instance Offset "mcModule_requires"  FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_requires }
+instance Offset "mcModule_interface" FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_interface}
+instance Offset "mcModule_init"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_init     }
+instance Offset "mcModule_done"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_done     }
+instance Offset "mcGet_interface"    FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, get_interface   }
+
 instance Storable FT_Module_Class where
   sizeOf _    = #size      struct FT_Module_Class_
   alignment _ = #alignment struct FT_Module_Class_
 
   peek ptr =
     FT_Module_Class
-      <$> #{peek struct FT_Module_Class_, module_flags    } ptr
-      <*> #{peek struct FT_Module_Class_, module_size     } ptr
-      <*> #{peek struct FT_Module_Class_, module_name     } ptr
-      <*> #{peek struct FT_Module_Class_, module_version  } ptr
-      <*> #{peek struct FT_Module_Class_, module_requires } ptr
-      <*> #{peek struct FT_Module_Class_, module_interface} ptr
-      <*> #{peek struct FT_Module_Class_, module_init     } ptr
-      <*> #{peek struct FT_Module_Class_, module_done     } ptr
-      <*> #{peek struct FT_Module_Class_, get_interface   } ptr
+      <$> peek (offset @"mcModule_flags"     ptr)
+      <*> peek (offset @"mcModule_size"      ptr)
+      <*> peek (offset @"mcModule_name"      ptr)
+      <*> peek (offset @"mcModule_version"   ptr)
+      <*> peek (offset @"mcModule_requires"  ptr)
+      <*> peek (offset @"mcModule_interface" ptr)
+      <*> peek (offset @"mcModule_init"      ptr)
+      <*> peek (offset @"mcModule_done"      ptr)
+      <*> peek (offset @"mcGet_interface"    ptr)
 
   poke ptr val = do
-    #{poke struct FT_Module_Class_, module_flags    } ptr $ val & mcModule_flags
-    #{poke struct FT_Module_Class_, module_size     } ptr $ val & mcModule_size
-    #{poke struct FT_Module_Class_, module_name     } ptr $ val & mcModule_name
-    #{poke struct FT_Module_Class_, module_version  } ptr $ val & mcModule_version
-    #{poke struct FT_Module_Class_, module_requires } ptr $ val & mcModule_requires
-    #{poke struct FT_Module_Class_, module_interface} ptr $ val & mcModule_interface
-    #{poke struct FT_Module_Class_, module_init     } ptr $ val & mcModule_init
-    #{poke struct FT_Module_Class_, module_done     } ptr $ val & mcModule_done
-    #{poke struct FT_Module_Class_, get_interface   } ptr $ val & mcGet_interface
+    pokeField @"mcModule_flags"     ptr val
+    pokeField @"mcModule_size"      ptr val
+    pokeField @"mcModule_name"      ptr val
+    pokeField @"mcModule_version"   ptr val
+    pokeField @"mcModule_requires"  ptr val
+    pokeField @"mcModule_interface" ptr val
+    pokeField @"mcModule_init"      ptr val
+    pokeField @"mcModule_done"      ptr val
+    pokeField @"mcGet_interface"    ptr val
 
 
 
@@ -126,28 +144,37 @@ data FT_Renderer_Class = FT_Renderer_Class
                            , rcRaster_class    :: Ptr FT_Raster_Funcs
                            }
 
+instance Offset "rcRoot"            FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, root           }
+instance Offset "rcGlyph_format"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, glyph_format   }
+instance Offset "rcRender_glyph"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, render_glyph   }
+instance Offset "rcTransform_glyph" FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, transform_glyph}
+instance Offset "rcGet_glyph_cbox"  FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, get_glyph_cbox }
+instance Offset "rcSet_mode"        FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, set_mode       }
+instance Offset "rcRaster_class"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, raster_class   }
+
+
 instance Storable FT_Renderer_Class where
   sizeOf _    = #size      struct FT_Renderer_Class_
   alignment _ = #alignment struct FT_Renderer_Class_
 
   peek ptr =
     FT_Renderer_Class
-      <$> #{peek struct FT_Renderer_Class_, root           } ptr
-      <*> #{peek struct FT_Renderer_Class_, glyph_format   } ptr
-      <*> #{peek struct FT_Renderer_Class_, render_glyph   } ptr
-      <*> #{peek struct FT_Renderer_Class_, transform_glyph} ptr
-      <*> #{peek struct FT_Renderer_Class_, get_glyph_cbox } ptr
-      <*> #{peek struct FT_Renderer_Class_, set_mode       } ptr
-      <*> #{peek struct FT_Renderer_Class_, raster_class   } ptr
+      <$> peek (offset @"rcRoot"            ptr)
+      <*> peek (offset @"rcGlyph_format"    ptr)
+      <*> peek (offset @"rcRender_glyph"    ptr)
+      <*> peek (offset @"rcTransform_glyph" ptr)
+      <*> peek (offset @"rcGet_glyph_cbox"  ptr)
+      <*> peek (offset @"rcSet_mode"        ptr)
+      <*> peek (offset @"rcRaster_class"    ptr)
 
   poke ptr val = do
-    #{poke struct FT_Renderer_Class_, root           } ptr $ val & rcRoot
-    #{poke struct FT_Renderer_Class_, glyph_format   } ptr $ val & rcGlyph_format
-    #{poke struct FT_Renderer_Class_, render_glyph   } ptr $ val & rcRender_glyph
-    #{poke struct FT_Renderer_Class_, transform_glyph} ptr $ val & rcTransform_glyph
-    #{poke struct FT_Renderer_Class_, get_glyph_cbox } ptr $ val & rcGet_glyph_cbox
-    #{poke struct FT_Renderer_Class_, set_mode       } ptr $ val & rcSet_mode
-    #{poke struct FT_Renderer_Class_, raster_class   } ptr $ val & rcRaster_class
+    pokeField @"rcRoot"            ptr val
+    pokeField @"rcGlyph_format"    ptr val
+    pokeField @"rcRender_glyph"    ptr val
+    pokeField @"rcTransform_glyph" ptr val
+    pokeField @"rcGet_glyph_cbox"  ptr val
+    pokeField @"rcSet_mode"        ptr val
+    pokeField @"rcRaster_class"    ptr val
 
 
 

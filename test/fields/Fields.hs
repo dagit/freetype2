@@ -6,11 +6,15 @@ import           FreeType
 import           FreeType.Internal
 import           Fields.Lens
 
+import           GHC.IO.Encoding
+
 
 
 -- | Checks that field prefixes match the datatype names.
 main :: IO ()
 main = do
+  setLocaleEncoding utf8
+
   putStrLn "FreeType.Cache"
 
   putStrLn $(testFieldsFT ''FTC_ScalerRec)

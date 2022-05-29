@@ -3,8 +3,9 @@
 {-# LANGUAGE PatternSynonyms #-}
 
 module FreeType.Support.Glyph.Internal
-  ( -- ** FT_Glyph_Stroke
-    ft_Glyph_Stroke'
+  ( FT_StrokerRec
+    -- ** FT_Glyph_Stroke
+  , ft_Glyph_Stroke'
     -- ** FT_Glyph_StrokeBorder
   , ft_Glyph_StrokeBorder'
     -- ** FT_Stroker_New

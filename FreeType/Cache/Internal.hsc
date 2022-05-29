@@ -1,8 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module FreeType.Cache.Internal
-  ( -- ** FTC_Manager_New
-    ftc_Manager_New'
+  ( FTC_ManagerRec
+  , FTC_NodeRec
+  , FTC_ImageCacheRec
+  , FTC_SBitCacheRec
+  , FTC_CMapCacheRec
+  -- ** FTC_Manager_New
+  , ftc_Manager_New'
     -- ** FTC_Manager_LookupFace
   , ftc_Manager_LookupFace'
     -- ** FTC_Manager_LookupSize

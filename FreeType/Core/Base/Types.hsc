@@ -1,6 +1,10 @@
-{-# LANGUAGE EmptyDataDecls #-}
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE DataKinds
+           , EmptyDataDecls
+           , FlexibleInstances
+           , ForeignFunctionInterface
+           , MultiParamTypeClasses
+           , PatternSynonyms
+           , TypeApplications #-}
 
 module FreeType.Core.Base.Types
   ( FT_Library
@@ -51,10 +55,10 @@ module FreeType.Core.Base.Types
 import           FreeType.Circular.Types
 import           FreeType.Core.Types.Types
 
-import           Data.Function ((&))
 import           Data.Word
 import           Foreign.Ptr
 import           Foreign.Storable
+import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -70,30 +74,39 @@ data FT_Open_Args = FT_Open_Args
                       , oaParams      :: Ptr FT_Parameter
                       }
 
+instance Offset "oaFlags"       FT_Open_Args where rawOffset = #{offset struct FT_Open_Args_, flags      }
+instance Offset "oaMemory_base" FT_Open_Args where rawOffset = #{offset struct FT_Open_Args_, memory_base}
+instance Offset "oaMemory_size" FT_Open_Args where rawOffset = #{offset struct FT_Open_Args_, memory_size}
+instance Offset "oaPathname"    FT_Open_Args where rawOffset = #{offset struct FT_Open_Args_, pathname   }
+instance Offset "oaStream"      FT_Open_Args where rawOffset = #{offset struct FT_Open_Args_, stream     }
+instance Offset "oaDriver"      FT_Open_Args where rawOffset = #{offset struct FT_Open_Args_, driver     }
+instance Offset "oaNum_params"  FT_Open_Args where rawOffset = #{offset struct FT_Open_Args_, num_params }
+instance Offset "oaParams"      FT_Open_Args where rawOffset = #{offset struct FT_Open_Args_, params     }
+
 instance Storable FT_Open_Args where
   sizeOf _    = #size      struct FT_Open_Args_
   alignment _ = #alignment struct FT_Open_Args_
 
   peek ptr =
     FT_Open_Args
-      <$> #{peek struct FT_Open_Args_, flags      } ptr
-      <*> #{peek struct FT_Open_Args_, memory_base} ptr
-      <*> #{peek struct FT_Open_Args_, memory_size} ptr
-      <*> #{peek struct FT_Open_Args_, pathname   } ptr
-      <*> #{peek struct FT_Open_Args_, stream     } ptr
-      <*> #{peek struct FT_Open_Args_, driver     } ptr
-      <*> #{peek struct FT_Open_Args_, num_params } ptr
-      <*> #{peek struct FT_Open_Args_, params     } ptr
+      <$> peek (offset @"oaFlags"       ptr)
+      <*> peek (offset @"oaMemory_base" ptr)
+      <*> peek (offset @"oaMemory_size" ptr)
+      <*> peek (offset @"oaPathname"    ptr)
+      <*> peek (offset @"oaStream"      ptr)
+      <*> peek (offset @"oaDriver"      ptr)
+      <*> peek (offset @"oaNum_params"  ptr)
+      <*> peek (offset @"oaParams"      ptr)
 
   poke ptr val = do
-    #{poke struct FT_Open_Args_, flags      } ptr $ val & oaFlags
-    #{poke struct FT_Open_Args_, memory_base} ptr $ val & oaMemory_base
-    #{poke struct FT_Open_Args_, memory_size} ptr $ val & oaMemory_size
-    #{poke struct FT_Open_Args_, pathname   } ptr $ val & oaPathname
-    #{poke struct FT_Open_Args_, stream     } ptr $ val & oaStream
-    #{poke struct FT_Open_Args_, driver     } ptr $ val & oaDriver
-    #{poke struct FT_Open_Args_, num_params } ptr $ val & oaNum_params
-    #{poke struct FT_Open_Args_, params     } ptr $ val & oaParams
+    pokeField @"oaFlags"       ptr val
+    pokeField @"oaMemory_base" ptr val
+    pokeField @"oaMemory_size" ptr val
+    pokeField @"oaPathname"    ptr val
+    pokeField @"oaStream"      ptr val
+    pokeField @"oaDriver"      ptr val
+    pokeField @"oaNum_params"  ptr val
+    pokeField @"oaParams"      ptr val
 
 
 
@@ -102,18 +115,21 @@ data FT_Parameter = FT_Parameter
                       , pData :: FT_Pointer
                       }
 
+instance Offset "pTag"  FT_Parameter where rawOffset = #{offset struct FT_Parameter_, tag }
+instance Offset "pData" FT_Parameter where rawOffset = #{offset struct FT_Parameter_, data}
+
 instance Storable FT_Parameter where
   sizeOf _    = #size      struct FT_Parameter_
   alignment _ = #alignment struct FT_Parameter_
 
   peek ptr =
     FT_Parameter
-      <$> #{peek struct FT_Parameter_, tag } ptr
-      <*> #{peek struct FT_Parameter_, data} ptr
+      <$> peek (offset @"pTag"  ptr)
+      <*> peek (offset @"pData" ptr)
 
   poke ptr val = do
-    #{poke struct FT_Parameter_, tag } ptr $ val & pTag
-    #{poke struct FT_Parameter_, data} ptr $ val & pData
+    pokeField @"pTag"  ptr val
+    pokeField @"pData" ptr val
 
 
 
@@ -129,24 +145,31 @@ data FT_Size_RequestRec = FT_Size_RequestRec
                             , srrVertResolution :: FT_UInt
                             }
 
+instance Offset "srrType"           FT_Size_RequestRec where rawOffset = #{offset struct FT_Size_RequestRec_, type          }
+instance Offset "srrWidth"          FT_Size_RequestRec where rawOffset = #{offset struct FT_Size_RequestRec_, width         }
+instance Offset "srrHeight"         FT_Size_RequestRec where rawOffset = #{offset struct FT_Size_RequestRec_, height        }
+instance Offset "srrHoriResolution" FT_Size_RequestRec where rawOffset = #{offset struct FT_Size_RequestRec_, horiResolution}
+instance Offset "srrVertResolution" FT_Size_RequestRec where rawOffset = #{offset struct FT_Size_RequestRec_, vertResolution}
+
 instance Storable FT_Size_RequestRec where
   sizeOf _    = #size      struct FT_Size_RequestRec_
   alignment _ = #alignment struct FT_Size_RequestRec_
 
   peek ptr =
     FT_Size_RequestRec
-      <$> #{peek struct FT_Size_RequestRec_, type          } ptr
-      <*> #{peek struct FT_Size_RequestRec_, width         } ptr
-      <*> #{peek struct FT_Size_RequestRec_, height        } ptr
-      <*> #{peek struct FT_Size_RequestRec_, horiResolution} ptr
-      <*> #{peek struct FT_Size_RequestRec_, vertResolution} ptr
+      <$> peek (offset @"srrType"           ptr)
+      <*> peek (offset @"srrWidth"          ptr)
+      <*> peek (offset @"srrHeight"         ptr)
+      <*> peek (offset @"srrHoriResolution" ptr)
+      <*> peek (offset @"srrVertResolution" ptr)
 
   poke ptr val = do
-    #{poke struct FT_Size_RequestRec_, type          } ptr $ val & srrType
-    #{poke struct FT_Size_RequestRec_, width         } ptr $ val & srrWidth
-    #{poke struct FT_Size_RequestRec_, height        } ptr $ val & srrHeight
-    #{poke struct FT_Size_RequestRec_, horiResolution} ptr $ val & srrHoriResolution
-    #{poke struct FT_Size_RequestRec_, vertResolution} ptr $ val & srrVertResolution
+    pokeField @"srrType"           ptr val
+    pokeField @"srrWidth"          ptr val
+    pokeField @"srrHeight"         ptr val
+    pokeField @"srrHoriResolution" ptr val
+    pokeField @"srrVertResolution" ptr val
+
 
 
 type FT_Size_Request = Ptr FT_Size_RequestRec

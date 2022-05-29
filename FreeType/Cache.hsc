@@ -95,7 +95,7 @@ ftc_Manager_New =
 
 
 
--- | 'bracket' over 'ft_Manager_With' and 'ft_Manager_Done'.
+-- | 'bracket' over 'ftc_Manager_With' and 'ftc_Manager_Done'.
 --
 --   The provided 'FTC_Manager' should not be used after this function terminates.
 ftc_Manager_With

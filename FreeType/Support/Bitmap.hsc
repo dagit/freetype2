@@ -47,7 +47,7 @@ ft_Bitmap_Init = do
 
 
 
--- | 'bracket' over 'ft_Outline_Init' and 'ft_Bitmap_Done'.
+-- | 'bracket' over 'ft_Bitmap_Init' and 'ft_Bitmap_Done'.
 --
 --   The provided 'Ptr' 'FT_Bitmap' should not be used after this function terminates.
 ft_Bitmap_With

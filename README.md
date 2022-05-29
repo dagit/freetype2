@@ -13,7 +13,10 @@ These are _mostly_ raw with a few key changes:
 - Every function that was modified by this library has a raw counterpart
   in a matching `*.Internal` module;
 
-There is also a separate [freetype2-lens](https://github.com/BurningWitness/freetype2-lens) library.
+This package reexports the
+[Foreign.Storable.Offset](https://hackage.haskell.org/package/storable-offset-0.1.0.0/docs/Foreign-Storable-Offset.html)
+module and implements the `Offset` instance for all the datatypes.
+Alas Haddock currently does not show this (as per [haddock#563](https://github.com/haskell/haddock/issues/563)).
 
 ## Module structure
 
