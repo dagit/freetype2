@@ -1,183 +1,26 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-orbs:
-  win: circleci/windows@2.2.0
-
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build-arm64:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: arm.medium
+  say-hello:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      - restore_cache:
-          name: Restore
-          key: arm64-{{ checksum "freetype2.cabal" }}
       - run:
-          name: Install GHC
-          command: |
-            sudo apt-get install ghc cabal-install
+          name: "Say hello"
+          command: "echo Hello, World!"
 
-            # Fix for Cabal-2.4.0.0 not initializing the package DB automatically
-            if [ ! -d ~/.cabal/store/ghc-8.6.5 ]; then
-              mkdir -p ~/.cabal/store/ghc-8.6.5;
-              ghc-pkg init ~/.cabal/store/ghc-8.6.5/package.db;
-            else
-              echo 'Package directory already present';
-            fi
-      - run:
-          name: Update Dependencies
-          command: cabal new-update && cabal new-install --lib
-      - run:
-          name: Build
-          command: cabal new-build --enable-tests
-      - save_cache:
-          name: Cache
-          key: arm64-{{ checksum "freetype2.cabal" }}
-          paths:
-            - "/root/.cabal"
-            - "dist-newstyle"
-      - run:
-          name: Test
-          command: cabal new-test
-
-  build-linux:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: medium
-    parameters:
-      version:
-        type: string
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore
-          key: linux-<< parameters.version >>-{{ checksum "freetype2.cabal" }}
-      - run:
-          name: Install GHC
-          command: |
-            sudo add-apt-repository ppa:hvr/ghc
-            sudo apt-get install ghc-<< parameters.version >> cabal-install-3.4
-            echo 'export PATH=/opt/ghc/bin:$PATH' >> $BASH_ENV
-
-      - run:
-          name: Update Dependencies
-          command: cabal new-update && cabal new-install --lib
-      - run:
-          name: Build
-          command: cabal new-build --enable-tests --enable-documentation
-      - save_cache:
-          name: Cache
-          key: linux-<< parameters.version >>-{{ checksum "freetype2.cabal" }}
-          paths:
-            - "/root/.cabal"
-            - "dist-newstyle"
-      - run:
-          name: Test
-          command: cabal new-test --enable-documentation --test-show-details=streaming
-
-  build-macos:
-    macos:
-      xcode: 12.5.1
-    resource_class: medium
-    parameters:
-      resolver:
-        type: string
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore
-          key: macos-<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
-      - run:
-          name: Install Stack
-          command: |
-            curl -sSL https://get.haskellstack.org/ | sh
-
-      - run:
-          name: Build
-          command: |
-            stack init --resolver << parameters.resolver >> --omit-packages
-            echo -e 'resolver: << parameters.resolver >>\n\nextra-deps:\n- storable-offset-0.1.0.0' > stack.yaml
-            stack test --no-terminal --no-run-tests
-      - save_cache:
-          name: Cache
-          key: macos-<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
-          paths:
-            - "$HOME/.stack"
-            - ".stack-work"
-      - run:
-          name: Test
-          command: stack test
-
-  build-windows:
-    executor: win/default
-    parameters:
-      resolver:
-        type: string
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore
-          key: windows--<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
-      - run:
-          name: Install Stack
-          shell: bash.exe
-          command: |
-            mkdir stack-build
-            cd stack-build
-            curl -LO --no-progress-meter https://get.haskellstack.org/stable/windows-x86_64.zip
-            unzip windows-x86_64.zip
-            mkdir -pv "$APPDATA/local/bin"
-            mv -v stack.exe "$APPDATA/local/bin"
-            cd ..
-            echo 'export PATH=$APPDATA/local/bin:$PATH' >> $BASH_ENV
-
-      - run:
-          name: Build
-          shell: bash.exe
-          command: |
-            stack init --resolver << parameters.resolver >> --omit-packages
-            echo -e 'resolver: << parameters.resolver >>\n\nextra-deps:\n- storable-offset-0.1.0.0' > stack.yaml
-            stack test --no-run-tests --no-terminal
-      - save_cache:
-          name: Cache
-          key: windows-<< parameters.resolver >>-{{ checksum "freetype2.cabal" }}
-          paths:
-            - "$APPDATA/stack"
-            - ".stack-work"
-      - run:
-          name: Test
-          shell: bash.exe
-          command: stack test
-
-
-
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  workflow:
+  say-hello-workflow:
     jobs:
-      - build-arm64:
-          name: aarch64-8.6.5
-      - build-linux:
-          name: linux-8.2.2
-          version: 8.2.2
-      - build-linux:
-          name: linux-8.4.4
-          version: 8.4.4
-      - build-linux:
-          name: linux-8.6.5
-          version: 8.6.5
-      - build-linux:
-          name: linux-8.8.4
-          version: 8.8.4
-      - build-linux:
-          name: linux-8.10.4
-          version: 8.10.4
-      - build-linux:
-          name: linux-9.0.1
-          version: 9.0.1
-      - build-macos:
-          name: macos-lts-19.7
-          resolver: lts-19.7
-      - build-windows:
-          name: windows-lts-19.7
-          resolver: lts-19.7
+      - say-hello
