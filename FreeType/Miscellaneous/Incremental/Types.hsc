@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds
+           , DuplicateRecordFields
            , EmptyDataDecls
            , FlexibleInstances
            , ForeignFunctionInterface

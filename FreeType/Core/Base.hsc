@@ -273,8 +273,8 @@ pattern FT_HAS_HORIZONTAL :: FT_Face -> IO Bool
 pattern FT_HAS_HORIZONTAL <- _
   where
     FT_HAS_HORIZONTAL fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_HORIZONTAL .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_HORIZONTAL .&. flgs) /= 0
 
 
 
@@ -282,8 +282,8 @@ pattern FT_HAS_VERTICAL :: FT_Face -> IO Bool
 pattern FT_HAS_VERTICAL <- _
   where
     FT_HAS_VERTICAL fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_VERTICAL .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_VERTICAL .&. flgs) /= 0
 
 
 
@@ -291,8 +291,8 @@ pattern FT_HAS_KERNING :: FT_Face -> IO Bool
 pattern FT_HAS_KERNING <- _
   where
     FT_HAS_KERNING fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_KERNING .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_KERNING .&. flgs) /= 0
 
 
 
@@ -300,8 +300,8 @@ pattern FT_HAS_FIXED_SIZES :: FT_Face -> IO Bool
 pattern FT_HAS_FIXED_SIZES <- _
   where
     FT_HAS_FIXED_SIZES fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_FIXED_SIZES .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_FIXED_SIZES .&. flgs) /= 0
 
 
 
@@ -309,8 +309,8 @@ pattern FT_HAS_GLYPH_NAMES :: FT_Face -> IO Bool
 pattern FT_HAS_GLYPH_NAMES <- _
   where
     FT_HAS_GLYPH_NAMES fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_GLYPH_NAMES .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_GLYPH_NAMES .&. flgs) /= 0
 
 
 
@@ -318,8 +318,8 @@ pattern FT_HAS_COLOR :: FT_Face -> IO Bool
 pattern FT_HAS_COLOR <- _
   where
     FT_HAS_COLOR fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_COLOR .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_COLOR .&. flgs) /= 0
 
 
 
@@ -327,8 +327,8 @@ pattern FT_HAS_MULTIPLE_MASTERS :: FT_Face -> IO Bool
 pattern FT_HAS_MULTIPLE_MASTERS <- _
   where
     FT_HAS_MULTIPLE_MASTERS fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_MULTIPLE_MASTERS .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_MULTIPLE_MASTERS .&. flgs) /= 0
 
 
 
@@ -336,8 +336,8 @@ pattern FT_IS_SFNT :: FT_Face -> IO Bool
 pattern FT_IS_SFNT <- _
   where
     FT_IS_SFNT fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_SFNT .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_SFNT .&. flgs) /= 0
 
 
 
@@ -345,8 +345,8 @@ pattern FT_IS_SCALABLE :: FT_Face -> IO Bool
 pattern FT_IS_SCALABLE <- _
   where
     FT_IS_SCALABLE fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_SCALABLE .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_SCALABLE .&. flgs) /= 0
 
 
 
@@ -354,8 +354,8 @@ pattern FT_IS_FIXED_WIDTH :: FT_Face -> IO Bool
 pattern FT_IS_FIXED_WIDTH <- _
   where
     FT_IS_FIXED_WIDTH fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_FIXED_WIDTH .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_FIXED_WIDTH .&. flgs) /= 0
 
 
 
@@ -363,8 +363,8 @@ pattern FT_IS_CID_KEYED :: FT_Face -> IO Bool
 pattern FT_IS_CID_KEYED <- _
   where
     FT_IS_CID_KEYED fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_CID_KEYED .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_CID_KEYED .&. flgs) /= 0
 
 
 
@@ -372,8 +372,8 @@ pattern FT_IS_TRICKY :: FT_Face -> IO Bool
 pattern FT_IS_TRICKY <- _
   where
     FT_IS_TRICKY fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_TRICKY .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_TRICKY .&. flgs) /= 0
 
 
 
@@ -381,8 +381,8 @@ pattern FT_IS_NAMED_INSTANCE :: FT_Face -> IO Bool
 pattern FT_IS_NAMED_INSTANCE <- _
   where
     FT_IS_NAMED_INSTANCE fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (0x7FFF0000 .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (0x7FFF0000 .&. flgs) /= 0
 
 
 
@@ -390,8 +390,8 @@ pattern FT_IS_VARIATION :: FT_Face -> IO Bool
 pattern FT_IS_VARIATION <- _
   where
     FT_IS_VARIATION fac = do
-      flags <- peek $ offset @"face_flags" fac
-      return $ (FT_FACE_FLAG_VARIATION .&. flags) /= 0
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_VARIATION .&. flgs) /= 0
 
 
 
@@ -591,7 +591,7 @@ foreign import ccall "FT_Load_Char"
 pattern FT_LOAD_TARGET_MODE :: (Bits a, Num a) => a -> a
 pattern FT_LOAD_TARGET_MODE <- _
   where
-    FT_LOAD_TARGET_MODE x = (x `shiftR` 16) .&. 15
+    FT_LOAD_TARGET_MODE a = (a `shiftR` 16) .&. 15
 
 
 

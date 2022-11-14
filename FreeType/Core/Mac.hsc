@@ -12,6 +12,7 @@
  -}
 
 module FreeType.Core.Mac where
+{-
 #ifdef darwin_HOST_OS
   ( -- ** FT_New_Face_From_FOND
     ft_New_Face_From_FOND
@@ -95,3 +96,4 @@ foreign import ccall "FT_New_Face_From_FSRef"
     -> Ptr FT_Face -- ^ aface
     -> IO FT_Error
 #endif
+-}
