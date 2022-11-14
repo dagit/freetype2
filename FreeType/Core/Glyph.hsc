@@ -1,11 +1,9 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ForeignFunctionInterface
+           , PatternSynonyms #-}
 
 {- | Please refer to the
      [Core API > Glyph Management](https://www.freetype.org/freetype2/docs/reference/ft2-glyph_management.html)
      chapter of the reference.
-
-     Internal: "FreeType.Core.Glyph.Internal".
 -}
 
 module FreeType.Core.Glyph
@@ -23,7 +21,6 @@ module FreeType.Core.Glyph
   , FT_OutlineGlyphRec (..)
     -- ** FT_New_Glyph
   , ft_New_Glyph
-  , ft_With_Glyph
     -- ** FT_Get_Glyph
   , ft_Get_Glyph
     -- ** FT_Glyph_Copy
@@ -45,67 +42,45 @@ module FreeType.Core.Glyph
   ) where
 
 import           FreeType.Core.Base.Types
-import           FreeType.Core.Glyph.Internal
 import           FreeType.Core.Glyph.Types
 import           FreeType.Core.Types.Types
-import           FreeType.Exception.Internal
 
-import           Control.Exception
-import           Data.Bool (bool)
-import           Foreign.Marshal.Alloc
-import           Foreign.Marshal.Utils
 import           Foreign.Ptr
-import           Foreign.Storable
 
 #include "ft2build.h"
 #include FT_GLYPH_H
 
-ft_New_Glyph
-  :: FT_Library      -- ^ library
-  -> FT_Glyph_Format -- ^ format
-  -> IO FT_Glyph     -- ^ glyph
-ft_New_Glyph =
-  autoAllocaError "ft_New_Glyph" ft_New_Glyph'
-
-
--- | 'bracket' over 'ft_New_Glyph' and 'ft_With_Glyph'.
---
---   The provided 'FT_Glyph' should not be used after this function terminates.
-ft_With_Glyph
-  :: FT_Library         -- ^ library
-  -> FT_Glyph_Format    -- ^ format
-  -> (FT_Glyph -> IO a)
-  -> IO a
-ft_With_Glyph lib format = bracket (ft_New_Glyph lib format) ft_Done_Glyph
+foreign import ccall "FT_New_Glyph"
+  ft_New_Glyph
+    :: FT_Library      -- ^ library
+    -> FT_Glyph_Format -- ^ format
+    -> Ptr FT_Glyph    -- ^ aglyph
+    -> IO FT_Error
 
 
 
-ft_Get_Glyph
-  :: FT_GlyphSlot -- ^ slot
-  -> IO FT_Glyph  -- ^ glyph
-ft_Get_Glyph =
-  autoAllocaError "ft_Get_Glyph" ft_Get_Glyph'
+foreign import ccall "FT_Get_Glyph"
+  ft_Get_Glyph
+    :: FT_GlyphSlot -- ^ slot
+    -> Ptr FT_Glyph -- ^ aglyph
+    -> IO FT_Error
 
 
 
-ft_Glyph_Copy
-  :: FT_Glyph     -- ^ source
-  -> Ptr FT_Glyph -- ^ target
-  -> IO ()
-ft_Glyph_Copy glyph =
-  ftError "ft_Glyph_Copy" . ft_Glyph_Copy' glyph
+foreign import ccall "FT_Glyph_Copy"
+  ft_Glyph_Copy
+    :: FT_Glyph     -- ^ source
+    -> Ptr FT_Glyph -- ^ target
+    -> IO FT_Error
 
 
 
-ft_Glyph_Transform
-  :: FT_Glyph  -- ^ glyph
-  -> FT_Matrix -- ^ matrix
-  -> FT_Vector -- ^ delta
-  -> IO ()
-ft_Glyph_Transform glyph mat vec =
-  with mat $ \matPtr ->
-    with vec $ \vecPtr ->
-      ftError "ft_Glyph_Transform" $ ft_Glyph_Transform' glyph matPtr vecPtr
+foreign import ccall "FT_Glyph_Transform"
+  ft_Glyph_Transform
+    :: FT_Glyph      -- ^ glyph
+    -> Ptr FT_Matrix -- ^ matrix
+    -> Ptr FT_Vector -- ^ delta
+    -> IO FT_Error
 
 
 
@@ -123,26 +98,22 @@ pattern FT_GLYPH_BBOX_PIXELS    = #const FT_GLYPH_BBOX_PIXELS
 
 
 
-ft_Glyph_Get_CBox
-  :: FT_Glyph   -- ^ glyph
-  -> FT_UInt    -- ^ bbox_mode
-  -> IO FT_BBox -- ^ cbox
-ft_Glyph_Get_CBox glyph bbox_mode =
-  alloca $ \ptr -> do
-    ft_Glyph_Get_CBox' glyph bbox_mode ptr
-    peek ptr
+foreign import ccall "FT_Glyph_Get_CBox"
+  ft_Glyph_Get_CBox
+    :: FT_Glyph    -- ^ glyph
+    -> FT_UInt     -- ^ bbox_mode
+    -> Ptr FT_BBox -- ^ acbox
+    -> IO ()
 
 
 
-ft_Glyph_To_Bitmap
-  :: Ptr FT_Glyph   -- ^ the_glyph
-  -> FT_Render_Mode -- ^ render_mode
-  -> Ptr FT_Vector  -- ^ origin
-  -> Bool           -- ^ destroy
-  -> IO ()
-ft_Glyph_To_Bitmap glyph mode origin destroy =
-  ftError "ft_Glyph_To_Bitmap"
-    . ft_Glyph_To_Bitmap' glyph mode origin $ bool 0 1 destroy
+foreign import ccall "FT_Glyph_To_Bitmap"
+  ft_Glyph_To_Bitmap
+    :: Ptr FT_Glyph   -- ^ the_glyph
+    -> FT_Render_Mode -- ^ render_mode
+    -> Ptr FT_Vector  -- ^ origin
+    -> FT_Bool        -- ^ destroy
+    -> IO FT_Error
 
 
 

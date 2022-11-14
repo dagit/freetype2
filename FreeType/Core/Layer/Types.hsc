@@ -1,7 +1,10 @@
 {-# LANGUAGE DataKinds
            , FlexibleInstances
-           , MultiParamTypeClasses
-           , TypeApplications #-}
+           , MultiParamTypeClasses #-}
+#if __GLASGOW_HASKELL__ >= 902
+{-# LANGUAGE NoFieldSelectors #-}
+#endif
+{-# LANGUAGE TypeApplications #-}
 
 module FreeType.Core.Layer.Types where
 
@@ -15,14 +18,14 @@ import           Foreign.Storable.Offset
 #include FT_FREETYPE_H
 
 data FT_LayerIterator = FT_LayerIterator
-                          { liNum_layers :: FT_UInt
-                          , liLayer      :: FT_UInt
-                          , liP          :: Ptr FT_Byte
+                          { num_layers :: FT_UInt
+                          , layer      :: FT_UInt
+                          , p          :: Ptr FT_Byte
                           }
 
-instance Offset "liNum_layers" FT_LayerIterator where rawOffset = #{offset struct FT_LayerIterator_, num_layers}
-instance Offset "liLayer"      FT_LayerIterator where rawOffset = #{offset struct FT_LayerIterator_, layer     }
-instance Offset "liP"          FT_LayerIterator where rawOffset = #{offset struct FT_LayerIterator_, p         }
+instance Offset "num_layers" FT_LayerIterator where rawOffset = #{offset struct FT_LayerIterator_, num_layers}
+instance Offset "layer"      FT_LayerIterator where rawOffset = #{offset struct FT_LayerIterator_, layer     }
+instance Offset "p"          FT_LayerIterator where rawOffset = #{offset struct FT_LayerIterator_, p         }
 
 instance Storable FT_LayerIterator where
   sizeOf _    = #size      struct FT_LayerIterator_
@@ -30,11 +33,11 @@ instance Storable FT_LayerIterator where
 
   peek ptr =
     FT_LayerIterator
-      <$> peek (offset @"liNum_layers" ptr)
-      <*> peek (offset @"liLayer"      ptr)
-      <*> peek (offset @"liP"          ptr)
+      <$> peek (offset @"num_layers" ptr)
+      <*> peek (offset @"layer"      ptr)
+      <*> peek (offset @"p"          ptr)
 
   poke ptr val = do
-    pokeField @"liNum_layers" ptr val
-    pokeField @"liLayer"      ptr val
-    pokeField @"liP"          ptr val
+    pokeField @"num_layers" ptr val
+    pokeField @"layer"      ptr val
+    pokeField @"p"          ptr val

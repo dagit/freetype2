@@ -1,9 +1,11 @@
 {-# LANGUAGE DataKinds
-           , FlexibleInstances
            , EmptyDataDecls
            , ForeignFunctionInterface
-           , MultiParamTypeClasses
-           , TypeApplications #-}
+           , MultiParamTypeClasses #-}
+#if __GLASGOW_HASKELL__ >= 902
+{-# LANGUAGE NoFieldSelectors #-}
+#endif
+{-# LANGUAGE TypeApplications #-}
 
 module FreeType.Support.Scanline.Types where
 
@@ -25,14 +27,14 @@ type FT_Raster = Ptr FT_RasterRec
 
 
 data FT_Span = FT_Span
-                 { sX        :: CShort
-                 , sLen      :: CUShort
-                 , sCoverage :: CUChar
+                 { x        :: CShort
+                 , len      :: CUShort
+                 , coverage :: CUChar
                  }
 
-instance Offset "sX"        FT_Span where rawOffset = #{offset struct FT_Span_, x       }
-instance Offset "sLen"      FT_Span where rawOffset = #{offset struct FT_Span_, len     }
-instance Offset "sCoverage" FT_Span where rawOffset = #{offset struct FT_Span_, coverage}
+instance Offset "x"        FT_Span where rawOffset = #{offset struct FT_Span_, x       }
+instance Offset "len"      FT_Span where rawOffset = #{offset struct FT_Span_, len     }
+instance Offset "coverage" FT_Span where rawOffset = #{offset struct FT_Span_, coverage}
 
 instance Storable FT_Span where
   sizeOf    _ = #size      struct FT_Span_
@@ -40,14 +42,14 @@ instance Storable FT_Span where
 
   peek ptr =
     FT_Span
-      <$> peek (offset @"sX"        ptr)
-      <*> peek (offset @"sLen"      ptr)
-      <*> peek (offset @"sCoverage" ptr)
+      <$> peek (offset @"x"        ptr)
+      <*> peek (offset @"len"      ptr)
+      <*> peek (offset @"coverage" ptr)
 
   poke ptr val = do
-    pokeField @"sX"        ptr val
-    pokeField @"sLen"      ptr val
-    pokeField @"sCoverage" ptr val
+    pokeField @"x"        ptr val
+    pokeField @"len"      ptr val
+    pokeField @"coverage" ptr val
 
 
 
@@ -57,35 +59,29 @@ type FT_SpanFunc = #{type int} -- ^ y
                 -> Ptr ()      -- ^ user
                 -> IO ()
 
-foreign import ccall "wrapper"
-  ft_SpanFunc :: FT_SpanFunc -> IO (FunPtr FT_SpanFunc)
-
-foreign import ccall "dynamic"
-  ft_SpanFunc' :: FunPtr FT_SpanFunc -> FT_SpanFunc
-
 
 
 data FT_Raster_Params = FT_Raster_Params
-                          { rpTarget      :: Ptr FT_Bitmap
-                          , rpSource      :: Ptr ()
-                          , rpFlags       :: #type int
-                          , rpGray_spans  :: FunPtr FT_SpanFunc
-                          , rpBlack_spans :: FunPtr FT_SpanFunc
-                          , rpBit_test    :: FunPtr FT_Raster_BitTest_Func
-                          , rpBit_set     :: FunPtr FT_Raster_BitSet_Func
-                          , rpUser        :: Ptr ()
-                          , rpClip_box    :: FT_BBox
+                          { target      :: Ptr FT_Bitmap
+                          , source      :: Ptr ()
+                          , flags       :: #type int
+                          , gray_spans  :: FunPtr FT_SpanFunc
+                          , black_spans :: FunPtr FT_SpanFunc
+                          , bit_test    :: FunPtr FT_Raster_BitTest_Func
+                          , bit_set     :: FunPtr FT_Raster_BitSet_Func
+                          , user        :: Ptr ()
+                          , clip_box    :: FT_BBox
                           }
 
-instance Offset "rpTarget"      FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, target     }
-instance Offset "rpSource"      FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, source     }
-instance Offset "rpFlags"       FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, flags      }
-instance Offset "rpGray_spans"  FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, gray_spans }
-instance Offset "rpBlack_spans" FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, black_spans}
-instance Offset "rpBit_test"    FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, bit_test   }
-instance Offset "rpBit_set"     FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, bit_set    }
-instance Offset "rpUser"        FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, user       }
-instance Offset "rpClip_box"    FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, clip_box   }
+instance Offset "target"      FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, target     }
+instance Offset "source"      FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, source     }
+instance Offset "flags"       FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, flags      }
+instance Offset "gray_spans"  FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, gray_spans }
+instance Offset "black_spans" FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, black_spans}
+instance Offset "bit_test"    FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, bit_test   }
+instance Offset "bit_set"     FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, bit_set    }
+instance Offset "user"        FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, user       }
+instance Offset "clip_box"    FT_Raster_Params where rawOffset = #{offset struct FT_Raster_Params_, clip_box   }
 
 instance Storable FT_Raster_Params where
   sizeOf    _ = #size      struct FT_Raster_Params_
@@ -93,26 +89,26 @@ instance Storable FT_Raster_Params where
 
   peek ptr =
     FT_Raster_Params
-      <$> peek (offset @"rpTarget"      ptr)
-      <*> peek (offset @"rpSource"      ptr)
-      <*> peek (offset @"rpFlags"       ptr)
-      <*> peek (offset @"rpGray_spans"  ptr)
-      <*> peek (offset @"rpBlack_spans" ptr)
-      <*> peek (offset @"rpBit_test"    ptr)
-      <*> peek (offset @"rpBit_set"     ptr)
-      <*> peek (offset @"rpUser"        ptr)
-      <*> peek (offset @"rpClip_box"    ptr)
+      <$> peek (offset @"target"      ptr)
+      <*> peek (offset @"source"      ptr)
+      <*> peek (offset @"flags"       ptr)
+      <*> peek (offset @"gray_spans"  ptr)
+      <*> peek (offset @"black_spans" ptr)
+      <*> peek (offset @"bit_test"    ptr)
+      <*> peek (offset @"bit_set"     ptr)
+      <*> peek (offset @"user"        ptr)
+      <*> peek (offset @"clip_box"    ptr)
 
   poke ptr val = do
-    pokeField @"rpTarget"      ptr val
-    pokeField @"rpSource"      ptr val
-    pokeField @"rpFlags"       ptr val
-    pokeField @"rpGray_spans"  ptr val
-    pokeField @"rpBlack_spans" ptr val
-    pokeField @"rpBit_test"    ptr val
-    pokeField @"rpBit_set"     ptr val
-    pokeField @"rpUser"        ptr val
-    pokeField @"rpClip_box"    ptr val
+    pokeField @"target"      ptr val
+    pokeField @"source"      ptr val
+    pokeField @"flags"       ptr val
+    pokeField @"gray_spans"  ptr val
+    pokeField @"black_spans" ptr val
+    pokeField @"bit_test"    ptr val
+    pokeField @"bit_set"     ptr val
+    pokeField @"user"        ptr val
+    pokeField @"clip_box"    ptr val
 
 
 
@@ -120,22 +116,10 @@ type FT_Raster_NewFunc = Ptr ()        -- ^ raster
                       -> Ptr FT_Raster -- ^ memory
                       -> IO #type int
 
-foreign import ccall "wrapper"
-  ft_Raster_NewFunc :: FT_Raster_NewFunc -> IO (FunPtr FT_Raster_NewFunc)
-
-foreign import ccall "dynamic"
-  ft_Raster_NewFunc' :: FunPtr FT_Raster_NewFunc -> FT_Raster_NewFunc
-
 
 
 type FT_Raster_DoneFunc = FT_Raster -- ^ raster
                        -> IO ()
-
-foreign import ccall "wrapper"
-  ft_Raster_DoneFunc :: FT_Raster_DoneFunc -> IO (FunPtr FT_Raster_DoneFunc)
-
-foreign import ccall "dynamic"
-  ft_Raster_DoneFunc' :: FunPtr FT_Raster_DoneFunc -> FT_Raster_DoneFunc
 
 
 
@@ -144,12 +128,6 @@ type FT_Raster_ResetFunc = FT_Raster                 -- ^ raster
                         -> Ptr #{type unsigned long} -- ^ pool_size
                         -> IO ()
 
-foreign import ccall "wrapper"
-  ft_Raster_ResetFunc :: FT_Raster_ResetFunc -> IO (FunPtr FT_Raster_ResetFunc)
-
-foreign import ccall "dynamic"
-  ft_Raster_ResetFunc' :: FunPtr FT_Raster_ResetFunc -> FT_Raster_ResetFunc
-
 
 
 type FT_Raster_SetModeFunc = FT_Raster             -- ^ raster
@@ -157,41 +135,29 @@ type FT_Raster_SetModeFunc = FT_Raster             -- ^ raster
                           -> Ptr ()                -- ^ args
                           -> IO #type int
 
-foreign import ccall "wrapper"
-  ft_Raster_SetModeFunc :: FT_Raster_SetModeFunc -> IO (FunPtr FT_Raster_SetModeFunc)
-
-foreign import ccall "dynamic"
-  ft_Raster_SetModeFunc' :: FunPtr FT_Raster_SetModeFunc -> FT_Raster_SetModeFunc
-
 
 
 type FT_Raster_RenderFunc = FT_Raster            -- ^ raster
                          -> Ptr FT_Raster_Params -- ^ params
                          -> IO #type int
 
-foreign import ccall "wrapper"
-  ft_Raster_RenderFunc :: FT_Raster_RenderFunc -> IO (FunPtr FT_Raster_RenderFunc)
-
-foreign import ccall "dynamic"
-  ft_Raster_RenderFunc' :: FunPtr FT_Raster_RenderFunc -> FT_Raster_RenderFunc
-
 
 
 data FT_Raster_Funcs = FT_Raster_Funcs
-                         { rfGlyph_format    :: FT_Glyph_Format
-                         , rfRaster_new      :: FunPtr FT_Raster_NewFunc
-                         , rfRaster_reset    :: FunPtr FT_Raster_ResetFunc
-                         , rfRaster_set_mode :: FunPtr FT_Raster_SetModeFunc
-                         , rfRaster_render   :: FunPtr FT_Raster_RenderFunc
-                         , rfRaster_done     :: FunPtr FT_Raster_DoneFunc
+                         { glyph_format    :: FT_Glyph_Format
+                         , raster_new      :: FunPtr FT_Raster_NewFunc
+                         , raster_reset    :: FunPtr FT_Raster_ResetFunc
+                         , raster_set_mode :: FunPtr FT_Raster_SetModeFunc
+                         , raster_render   :: FunPtr FT_Raster_RenderFunc
+                         , raster_done     :: FunPtr FT_Raster_DoneFunc
                          }
 
-instance Offset "rfGlyph_format"    FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, glyph_format   }
-instance Offset "rfRaster_new"      FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_new     }
-instance Offset "rfRaster_reset"    FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_reset   }
-instance Offset "rfRaster_set_mode" FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_set_mode}
-instance Offset "rfRaster_render"   FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_render  }
-instance Offset "rfRaster_done"     FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_done    }
+instance Offset "glyph_format"    FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, glyph_format   }
+instance Offset "raster_new"      FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_new     }
+instance Offset "raster_reset"    FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_reset   }
+instance Offset "raster_set_mode" FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_set_mode}
+instance Offset "raster_render"   FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_render  }
+instance Offset "raster_done"     FT_Raster_Funcs where rawOffset = #{offset struct FT_Raster_Funcs_, raster_done    }
 
 instance Storable FT_Raster_Funcs where
   sizeOf    _ = #size      struct FT_Raster_Funcs_
@@ -199,20 +165,20 @@ instance Storable FT_Raster_Funcs where
 
   peek ptr =
     FT_Raster_Funcs
-      <$> peek (offset @"rfGlyph_format"    ptr)
-      <*> peek (offset @"rfRaster_new"      ptr)
-      <*> peek (offset @"rfRaster_reset"    ptr)
-      <*> peek (offset @"rfRaster_set_mode" ptr)
-      <*> peek (offset @"rfRaster_render"   ptr)
-      <*> peek (offset @"rfRaster_done"     ptr)
+      <$> peek (offset @"glyph_format"    ptr)
+      <*> peek (offset @"raster_new"      ptr)
+      <*> peek (offset @"raster_reset"    ptr)
+      <*> peek (offset @"raster_set_mode" ptr)
+      <*> peek (offset @"raster_render"   ptr)
+      <*> peek (offset @"raster_done"     ptr)
 
   poke ptr val = do
-    pokeField @"rfGlyph_format"    ptr val
-    pokeField @"rfRaster_new"      ptr val
-    pokeField @"rfRaster_reset"    ptr val
-    pokeField @"rfRaster_set_mode" ptr val
-    pokeField @"rfRaster_render"   ptr val
-    pokeField @"rfRaster_done"     ptr val
+    pokeField @"glyph_format"    ptr val
+    pokeField @"raster_new"      ptr val
+    pokeField @"raster_reset"    ptr val
+    pokeField @"raster_set_mode" ptr val
+    pokeField @"raster_render"   ptr val
+    pokeField @"raster_done"     ptr val
 
 
 
@@ -221,21 +187,9 @@ type FT_Raster_BitTest_Func = #{type int} -- ^ y
                            -> Ptr ()      -- ^ user
                            -> IO #type int
 
-foreign import ccall "wrapper"
-  ft_Raster_BitTest_Func :: FT_Raster_BitTest_Func -> IO (FunPtr FT_Raster_BitTest_Func)
-
-foreign import ccall "dynamic"
-  ft_Raster_BitTest_Func' :: FunPtr FT_Raster_BitTest_Func -> FT_Raster_BitTest_Func
-
 
 
 type FT_Raster_BitSet_Func = #{type int} -- ^ y
                           -> #{type int} -- ^ x
                           -> Ptr ()      -- ^ user
                           -> IO ()
-
-foreign import ccall "wrapper"
-  ft_Raster_BitSet_Func :: FT_Raster_BitSet_Func -> IO (FunPtr FT_Raster_BitSet_Func)
-
-foreign import ccall "dynamic"
-  ft_Raster_BitSet_Func' :: FunPtr FT_Raster_BitSet_Func -> FT_Raster_BitSet_Func

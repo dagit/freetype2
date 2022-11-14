@@ -1,9 +1,11 @@
 {-# LANGUAGE DataKinds
            , EmptyDataDecls
-           , FlexibleInstances
            , ForeignFunctionInterface
-           , MultiParamTypeClasses
-           , TypeApplications #-}
+           , MultiParamTypeClasses #-}
+#if __GLASGOW_HASKELL__ >= 902
+{-# LANGUAGE NoFieldSelectors #-}
+#endif
+{-# LANGUAGE TypeApplications #-}
 
 module FreeType.Support.Module.Types
   ( module FreeType.Support.Module.Types
@@ -13,9 +15,7 @@ module FreeType.Support.Module.Types
   , FT_DriverRec
   ) where
 
-import           FreeType.Circular.Types ( FT_ModuleRec, FT_Module
-                                         , FT_DriverRec, FT_Driver
-                                         )
+import           FreeType.Circular.Types
 import           FreeType.Core.Types.Types
 import           FreeType.Support.Scanline.Types
 
@@ -35,23 +35,10 @@ import           Foreign.Storable.Offset
 type FT_Module_Constructor = FT_Module   -- ^ module
                           -> IO FT_Error
 
-foreign import ccall "wrapper"
-  ft_Module_Constructor :: FT_Module_Constructor -> IO (FunPtr FT_Module_Constructor)
-
-foreign import ccall "dynamic"
-  ft_Module_Constructor' :: FunPtr FT_Module_Constructor -> FT_Module_Constructor
-
 
 
 type FT_Module_Destructor = FT_Module -- ^ module
                          -> IO ()
-
-foreign import ccall "wrapper"
-  ft_Module_Destructor :: FT_Module_Destructor -> IO (FunPtr FT_Module_Destructor)
-
-foreign import ccall "dynamic"
-  ft_Module_Destructor' :: FunPtr FT_Module_Destructor -> FT_Module_Destructor
-
 
 
 
@@ -61,36 +48,30 @@ type FT_Module_Requester = FT_Module              -- ^ module
                         -> Ptr #{type char}       -- ^ name
                         -> IO FT_Module_Interface
 
-foreign import ccall "wrapper"
-  ft_Module_Requester :: FT_Module_Requester -> IO (FunPtr FT_Module_Requester)
-
-foreign import ccall "dynamic"
-  ft_Module_Requester' :: FunPtr FT_Module_Requester -> FT_Module_Requester
-
 
 
 
 data FT_Module_Class = FT_Module_Class
-                         { mcModule_flags     :: FT_ULong
-                         , mcModule_size      :: FT_Long
-                         , mcModule_name      :: Ptr FT_String
-                         , mcModule_version   :: FT_Fixed
-                         , mcModule_requires  :: FT_Fixed
-                         , mcModule_interface :: Ptr ()
-                         , mcModule_init      :: FunPtr FT_Module_Constructor
-                         , mcModule_done      :: FunPtr FT_Module_Destructor
-                         , mcGet_interface    :: FunPtr FT_Module_Requester
+                         { module_flags     :: FT_ULong
+                         , module_size      :: FT_Long
+                         , module_name      :: Ptr FT_String
+                         , module_version   :: FT_Fixed
+                         , module_requires  :: FT_Fixed
+                         , module_interface :: Ptr ()
+                         , module_init      :: FunPtr FT_Module_Constructor
+                         , module_done      :: FunPtr FT_Module_Destructor
+                         , get_interface    :: FunPtr FT_Module_Requester
                          }
 
-instance Offset "mcModule_flags"     FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_flags    }
-instance Offset "mcModule_size"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_size     }
-instance Offset "mcModule_name"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_name     }
-instance Offset "mcModule_version"   FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_version  }
-instance Offset "mcModule_requires"  FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_requires }
-instance Offset "mcModule_interface" FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_interface}
-instance Offset "mcModule_init"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_init     }
-instance Offset "mcModule_done"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_done     }
-instance Offset "mcGet_interface"    FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, get_interface   }
+instance Offset "module_flags"     FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_flags    }
+instance Offset "module_size"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_size     }
+instance Offset "module_name"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_name     }
+instance Offset "module_version"   FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_version  }
+instance Offset "module_requires"  FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_requires }
+instance Offset "module_interface" FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_interface}
+instance Offset "module_init"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_init     }
+instance Offset "module_done"      FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, module_done     }
+instance Offset "get_interface"    FT_Module_Class where rawOffset = #{offset struct FT_Module_Class_, get_interface   }
 
 instance Storable FT_Module_Class where
   sizeOf _    = #size      struct FT_Module_Class_
@@ -98,26 +79,26 @@ instance Storable FT_Module_Class where
 
   peek ptr =
     FT_Module_Class
-      <$> peek (offset @"mcModule_flags"     ptr)
-      <*> peek (offset @"mcModule_size"      ptr)
-      <*> peek (offset @"mcModule_name"      ptr)
-      <*> peek (offset @"mcModule_version"   ptr)
-      <*> peek (offset @"mcModule_requires"  ptr)
-      <*> peek (offset @"mcModule_interface" ptr)
-      <*> peek (offset @"mcModule_init"      ptr)
-      <*> peek (offset @"mcModule_done"      ptr)
-      <*> peek (offset @"mcGet_interface"    ptr)
+      <$> peek (offset @"module_flags"     ptr)
+      <*> peek (offset @"module_size"      ptr)
+      <*> peek (offset @"module_name"      ptr)
+      <*> peek (offset @"module_version"   ptr)
+      <*> peek (offset @"module_requires"  ptr)
+      <*> peek (offset @"module_interface" ptr)
+      <*> peek (offset @"module_init"      ptr)
+      <*> peek (offset @"module_done"      ptr)
+      <*> peek (offset @"get_interface"    ptr)
 
   poke ptr val = do
-    pokeField @"mcModule_flags"     ptr val
-    pokeField @"mcModule_size"      ptr val
-    pokeField @"mcModule_name"      ptr val
-    pokeField @"mcModule_version"   ptr val
-    pokeField @"mcModule_requires"  ptr val
-    pokeField @"mcModule_interface" ptr val
-    pokeField @"mcModule_init"      ptr val
-    pokeField @"mcModule_done"      ptr val
-    pokeField @"mcGet_interface"    ptr val
+    pokeField @"module_flags"     ptr val
+    pokeField @"module_size"      ptr val
+    pokeField @"module_name"      ptr val
+    pokeField @"module_version"   ptr val
+    pokeField @"module_requires"  ptr val
+    pokeField @"module_interface" ptr val
+    pokeField @"module_init"      ptr val
+    pokeField @"module_done"      ptr val
+    pokeField @"get_interface"    ptr val
 
 
 
@@ -135,22 +116,22 @@ data FT_Renderer_GetCBoxFunc
 data FT_Renderer_SetModeFunc
 
 data FT_Renderer_Class = FT_Renderer_Class
-                           { rcRoot            :: FT_Module_Class
-                           , rcGlyph_format    :: FT_Glyph_Format
-                           , rcRender_glyph    :: FunPtr FT_Renderer_RenderFunc
-                           , rcTransform_glyph :: FunPtr FT_Renderer_TransformFunc
-                           , rcGet_glyph_cbox  :: FunPtr FT_Renderer_GetCBoxFunc
-                           , rcSet_mode        :: FunPtr FT_Renderer_SetModeFunc
-                           , rcRaster_class    :: Ptr FT_Raster_Funcs
+                           { root            :: FT_Module_Class
+                           , glyph_format    :: FT_Glyph_Format
+                           , render_glyph    :: FunPtr FT_Renderer_RenderFunc
+                           , transform_glyph :: FunPtr FT_Renderer_TransformFunc
+                           , get_glyph_cbox  :: FunPtr FT_Renderer_GetCBoxFunc
+                           , set_mode        :: FunPtr FT_Renderer_SetModeFunc
+                           , raster_class    :: Ptr FT_Raster_Funcs
                            }
 
-instance Offset "rcRoot"            FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, root           }
-instance Offset "rcGlyph_format"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, glyph_format   }
-instance Offset "rcRender_glyph"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, render_glyph   }
-instance Offset "rcTransform_glyph" FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, transform_glyph}
-instance Offset "rcGet_glyph_cbox"  FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, get_glyph_cbox }
-instance Offset "rcSet_mode"        FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, set_mode       }
-instance Offset "rcRaster_class"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, raster_class   }
+instance Offset "root"            FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, root           }
+instance Offset "glyph_format"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, glyph_format   }
+instance Offset "render_glyph"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, render_glyph   }
+instance Offset "transform_glyph" FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, transform_glyph}
+instance Offset "get_glyph_cbox"  FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, get_glyph_cbox }
+instance Offset "set_mode"        FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, set_mode       }
+instance Offset "raster_class"    FT_Renderer_Class where rawOffset = #{offset struct FT_Renderer_Class_, raster_class   }
 
 
 instance Storable FT_Renderer_Class where
@@ -159,30 +140,24 @@ instance Storable FT_Renderer_Class where
 
   peek ptr =
     FT_Renderer_Class
-      <$> peek (offset @"rcRoot"            ptr)
-      <*> peek (offset @"rcGlyph_format"    ptr)
-      <*> peek (offset @"rcRender_glyph"    ptr)
-      <*> peek (offset @"rcTransform_glyph" ptr)
-      <*> peek (offset @"rcGet_glyph_cbox"  ptr)
-      <*> peek (offset @"rcSet_mode"        ptr)
-      <*> peek (offset @"rcRaster_class"    ptr)
+      <$> peek (offset @"root"            ptr)
+      <*> peek (offset @"glyph_format"    ptr)
+      <*> peek (offset @"render_glyph"    ptr)
+      <*> peek (offset @"transform_glyph" ptr)
+      <*> peek (offset @"get_glyph_cbox"  ptr)
+      <*> peek (offset @"set_mode"        ptr)
+      <*> peek (offset @"raster_class"    ptr)
 
   poke ptr val = do
-    pokeField @"rcRoot"            ptr val
-    pokeField @"rcGlyph_format"    ptr val
-    pokeField @"rcRender_glyph"    ptr val
-    pokeField @"rcTransform_glyph" ptr val
-    pokeField @"rcGet_glyph_cbox"  ptr val
-    pokeField @"rcSet_mode"        ptr val
-    pokeField @"rcRaster_class"    ptr val
+    pokeField @"root"            ptr val
+    pokeField @"glyph_format"    ptr val
+    pokeField @"render_glyph"    ptr val
+    pokeField @"transform_glyph" ptr val
+    pokeField @"get_glyph_cbox"  ptr val
+    pokeField @"set_mode"        ptr val
+    pokeField @"raster_class"    ptr val
 
 
 
 type FT_DebugHook_Func = Ptr ()      -- ^ arg
                       -> IO FT_Error
-
-foreign import ccall "wrapper"
-  ft_DebugHook_Func :: FT_DebugHook_Func -> IO (FunPtr FT_DebugHook_Func)
-
-foreign import ccall "dynamic"
-  ft_DebugHook_Func' :: FunPtr FT_DebugHook_Func -> FT_DebugHook_Func

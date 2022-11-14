@@ -1,8 +1,12 @@
 {-# LANGUAGE DataKinds
+           , DuplicateRecordFields
            , FlexibleInstances
            , ForeignFunctionInterface
-           , MultiParamTypeClasses
-           , TypeApplications #-}
+           , MultiParamTypeClasses #-}
+#if __GLASGOW_HASKELL__ >= 902
+{-# LANGUAGE NoFieldSelectors #-}
+#endif
+{-# LANGUAGE TypeApplications #-}
 
 module FreeType.Format.Type1.Types where
 
@@ -17,26 +21,26 @@ import           Foreign.Storable.Offset
 #include FT_TYPE1_TABLES_H
 
 data PS_FontInfoRec = PS_FontInfoRec
-                        { firVersion             :: Ptr FT_String
-                        , firNotice              :: Ptr FT_String
-                        , firFull_name           :: Ptr FT_String
-                        , firFamily_name         :: Ptr FT_String
-                        , firWeight              :: Ptr FT_String
-                        , firItalic_angle        :: FT_Long
-                        , firIs_fixed_pitch      :: FT_Bool
-                        , firUnderline_position  :: FT_Short
-                        , firUnderline_thickness :: FT_UShort
+                        { version             :: Ptr FT_String
+                        , notice              :: Ptr FT_String
+                        , full_name           :: Ptr FT_String
+                        , family_name         :: Ptr FT_String
+                        , weight              :: Ptr FT_String
+                        , italic_angle        :: FT_Long
+                        , is_fixed_pitch      :: FT_Bool
+                        , underline_position  :: FT_Short
+                        , underline_thickness :: FT_UShort
                         }
 
-instance Offset "firVersion"             PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, version            }
-instance Offset "firNotice"              PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, notice             }
-instance Offset "firFull_name"           PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, full_name          }
-instance Offset "firFamily_name"         PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, family_name        }
-instance Offset "firWeight"              PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, weight             }
-instance Offset "firItalic_angle"        PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, italic_angle       }
-instance Offset "firIs_fixed_pitch"      PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, is_fixed_pitch     }
-instance Offset "firUnderline_position"  PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, underline_position }
-instance Offset "firUnderline_thickness" PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, underline_thickness}
+instance Offset "version"             PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, version            }
+instance Offset "notice"              PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, notice             }
+instance Offset "full_name"           PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, full_name          }
+instance Offset "family_name"         PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, family_name        }
+instance Offset "weight"              PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, weight             }
+instance Offset "italic_angle"        PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, italic_angle       }
+instance Offset "is_fixed_pitch"      PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, is_fixed_pitch     }
+instance Offset "underline_position"  PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, underline_position }
+instance Offset "underline_thickness" PS_FontInfoRec where rawOffset = #{offset struct PS_FontInfoRec_, underline_thickness}
 
 instance Storable PS_FontInfoRec where
   sizeOf _    = #size      struct PS_FontInfoRec_
@@ -44,26 +48,26 @@ instance Storable PS_FontInfoRec where
 
   peek ptr =
     PS_FontInfoRec
-      <$> peek (offset @"firVersion"             ptr)
-      <*> peek (offset @"firNotice"              ptr)
-      <*> peek (offset @"firFull_name"           ptr)
-      <*> peek (offset @"firFamily_name"         ptr)
-      <*> peek (offset @"firWeight"              ptr)
-      <*> peek (offset @"firItalic_angle"        ptr)
-      <*> peek (offset @"firIs_fixed_pitch"      ptr)
-      <*> peek (offset @"firUnderline_position"  ptr)
-      <*> peek (offset @"firUnderline_thickness" ptr)
+      <$> peek (offset @"version"             ptr)
+      <*> peek (offset @"notice"              ptr)
+      <*> peek (offset @"full_name"           ptr)
+      <*> peek (offset @"family_name"         ptr)
+      <*> peek (offset @"weight"              ptr)
+      <*> peek (offset @"italic_angle"        ptr)
+      <*> peek (offset @"is_fixed_pitch"      ptr)
+      <*> peek (offset @"underline_position"  ptr)
+      <*> peek (offset @"underline_thickness" ptr)
 
   poke ptr val = do
-    pokeField @"firVersion"             ptr val
-    pokeField @"firNotice"              ptr val
-    pokeField @"firFull_name"           ptr val
-    pokeField @"firFamily_name"         ptr val
-    pokeField @"firWeight"              ptr val
-    pokeField @"firItalic_angle"        ptr val
-    pokeField @"firIs_fixed_pitch"      ptr val
-    pokeField @"firUnderline_position"  ptr val
-    pokeField @"firUnderline_thickness" ptr val
+    pokeField @"version"             ptr val
+    pokeField @"notice"              ptr val
+    pokeField @"full_name"           ptr val
+    pokeField @"family_name"         ptr val
+    pokeField @"weight"              ptr val
+    pokeField @"italic_angle"        ptr val
+    pokeField @"is_fixed_pitch"      ptr val
+    pokeField @"underline_position"  ptr val
+    pokeField @"underline_thickness" ptr val
 
 
 
@@ -72,58 +76,58 @@ type PS_FontInfo = Ptr PS_FontInfoRec
 
 
 data PS_PrivateRec = PS_PrivateRec
-                       { prUnique_id              :: FT_Int
-                       , prLenIV                  :: FT_Int
-                       , prNum_blue_values        :: FT_Byte
-                       , prNum_other_blues        :: FT_Byte
-                       , prNum_family_blues       :: FT_Byte
-                       , prNum_family_other_blues :: FT_Byte
-                       , prBlue_values            :: FT_Short
-                       , prOther_blues            :: FT_Short
-                       , prFamily_blues           :: FT_Short
-                       , prFamily_other_blues     :: FT_Short
-                       , prBlue_scale             :: FT_Fixed
-                       , prBlue_shift             :: FT_Int
-                       , prBlue_fuzz              :: FT_Int
-                       , prStandard_width         :: FT_UShort
-                       , prStandard_height        :: FT_UShort
-                       , prNum_snap_widths        :: FT_Byte
-                       , prNum_snap_heights       :: FT_Byte
-                       , prForce_bold             :: FT_Bool
-                       , prRound_stem_up          :: FT_Bool
-                       , prSnap_widths            :: FT_Short
-                       , prSnap_heights           :: FT_Short
-                       , prExpansion_factor       :: FT_Fixed
-                       , prLanguage_group         :: FT_Long
-                       , prPassword               :: FT_Long
-                       , prMin_feature            :: FT_Short
+                       { unique_id              :: FT_Int
+                       , lenIV                  :: FT_Int
+                       , num_blue_values        :: FT_Byte
+                       , num_other_blues        :: FT_Byte
+                       , num_family_blues       :: FT_Byte
+                       , num_family_other_blues :: FT_Byte
+                       , blue_values            :: FT_Short
+                       , other_blues            :: FT_Short
+                       , family_blues           :: FT_Short
+                       , family_other_blues     :: FT_Short
+                       , blue_scale             :: FT_Fixed
+                       , blue_shift             :: FT_Int
+                       , blue_fuzz              :: FT_Int
+                       , standard_width         :: FT_UShort
+                       , standard_height        :: FT_UShort
+                       , num_snap_widths        :: FT_Byte
+                       , num_snap_heights       :: FT_Byte
+                       , force_bold             :: FT_Bool
+                       , round_stem_up          :: FT_Bool
+                       , snap_widths            :: FT_Short
+                       , snap_heights           :: FT_Short
+                       , expansion_factor       :: FT_Fixed
+                       , language_group         :: FT_Long
+                       , password               :: FT_Long
+                       , min_feature            :: FT_Short
                        }
 
-instance Offset "prUnique_id"              PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, unique_id             }
-instance Offset "prLenIV"                  PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, lenIV                 }
-instance Offset "prNum_blue_values"        PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_blue_values       }
-instance Offset "prNum_other_blues"        PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_other_blues       }
-instance Offset "prNum_family_blues"       PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_family_blues      }
-instance Offset "prNum_family_other_blues" PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_family_other_blues}
-instance Offset "prBlue_values"            PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, blue_values           }
-instance Offset "prOther_blues"            PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, other_blues           }
-instance Offset "prFamily_blues"           PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, family_blues          }
-instance Offset "prFamily_other_blues"     PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, family_other_blues    }
-instance Offset "prBlue_scale"             PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, blue_scale            }
-instance Offset "prBlue_shift"             PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, blue_shift            }
-instance Offset "prBlue_fuzz"              PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, blue_fuzz             }
-instance Offset "prStandard_width"         PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, standard_width        }
-instance Offset "prStandard_height"        PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, standard_height       }
-instance Offset "prNum_snap_widths"        PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_snap_widths       }
-instance Offset "prNum_snap_heights"       PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_snap_heights      }
-instance Offset "prForce_bold"             PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, force_bold            }
-instance Offset "prRound_stem_up"          PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, round_stem_up         }
-instance Offset "prSnap_widths"            PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, snap_widths           }
-instance Offset "prSnap_heights"           PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, snap_heights          }
-instance Offset "prExpansion_factor"       PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, expansion_factor      }
-instance Offset "prLanguage_group"         PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, language_group        }
-instance Offset "prPassword"               PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, password              }
-instance Offset "prMin_feature"            PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, min_feature           }
+instance Offset "unique_id"              PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, unique_id             }
+instance Offset "lenIV"                  PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, lenIV                 }
+instance Offset "num_blue_values"        PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_blue_values       }
+instance Offset "num_other_blues"        PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_other_blues       }
+instance Offset "num_family_blues"       PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_family_blues      }
+instance Offset "num_family_other_blues" PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_family_other_blues}
+instance Offset "blue_values"            PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, blue_values           }
+instance Offset "other_blues"            PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, other_blues           }
+instance Offset "family_blues"           PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, family_blues          }
+instance Offset "family_other_blues"     PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, family_other_blues    }
+instance Offset "blue_scale"             PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, blue_scale            }
+instance Offset "blue_shift"             PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, blue_shift            }
+instance Offset "blue_fuzz"              PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, blue_fuzz             }
+instance Offset "standard_width"         PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, standard_width        }
+instance Offset "standard_height"        PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, standard_height       }
+instance Offset "num_snap_widths"        PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_snap_widths       }
+instance Offset "num_snap_heights"       PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, num_snap_heights      }
+instance Offset "force_bold"             PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, force_bold            }
+instance Offset "round_stem_up"          PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, round_stem_up         }
+instance Offset "snap_widths"            PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, snap_widths           }
+instance Offset "snap_heights"           PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, snap_heights          }
+instance Offset "expansion_factor"       PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, expansion_factor      }
+instance Offset "language_group"         PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, language_group        }
+instance Offset "password"               PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, password              }
+instance Offset "min_feature"            PS_PrivateRec where rawOffset = #{offset struct PS_PrivateRec_, min_feature           }
 
 
 instance Storable PS_PrivateRec where
@@ -132,58 +136,58 @@ instance Storable PS_PrivateRec where
 
   peek ptr =
     PS_PrivateRec
-      <$> peek (offset @"prUnique_id"              ptr)
-      <*> peek (offset @"prLenIV"                  ptr)
-      <*> peek (offset @"prNum_blue_values"        ptr)
-      <*> peek (offset @"prNum_other_blues"        ptr)
-      <*> peek (offset @"prNum_family_blues"       ptr)
-      <*> peek (offset @"prNum_family_other_blues" ptr)
-      <*> peek (offset @"prBlue_values"            ptr)
-      <*> peek (offset @"prOther_blues"            ptr)
-      <*> peek (offset @"prFamily_blues"           ptr)
-      <*> peek (offset @"prFamily_other_blues"     ptr)
-      <*> peek (offset @"prBlue_scale"             ptr)
-      <*> peek (offset @"prBlue_shift"             ptr)
-      <*> peek (offset @"prBlue_fuzz"              ptr)
-      <*> peek (offset @"prStandard_width"         ptr)
-      <*> peek (offset @"prStandard_height"        ptr)
-      <*> peek (offset @"prNum_snap_widths"        ptr)
-      <*> peek (offset @"prNum_snap_heights"       ptr)
-      <*> peek (offset @"prForce_bold"             ptr)
-      <*> peek (offset @"prRound_stem_up"          ptr)
-      <*> peek (offset @"prSnap_widths"            ptr)
-      <*> peek (offset @"prSnap_heights"           ptr)
-      <*> peek (offset @"prExpansion_factor"       ptr)
-      <*> peek (offset @"prLanguage_group"         ptr)
-      <*> peek (offset @"prPassword"               ptr)
-      <*> peek (offset @"prMin_feature"            ptr)
+      <$> peek (offset @"unique_id"              ptr)
+      <*> peek (offset @"lenIV"                  ptr)
+      <*> peek (offset @"num_blue_values"        ptr)
+      <*> peek (offset @"num_other_blues"        ptr)
+      <*> peek (offset @"num_family_blues"       ptr)
+      <*> peek (offset @"num_family_other_blues" ptr)
+      <*> peek (offset @"blue_values"            ptr)
+      <*> peek (offset @"other_blues"            ptr)
+      <*> peek (offset @"family_blues"           ptr)
+      <*> peek (offset @"family_other_blues"     ptr)
+      <*> peek (offset @"blue_scale"             ptr)
+      <*> peek (offset @"blue_shift"             ptr)
+      <*> peek (offset @"blue_fuzz"              ptr)
+      <*> peek (offset @"standard_width"         ptr)
+      <*> peek (offset @"standard_height"        ptr)
+      <*> peek (offset @"num_snap_widths"        ptr)
+      <*> peek (offset @"num_snap_heights"       ptr)
+      <*> peek (offset @"force_bold"             ptr)
+      <*> peek (offset @"round_stem_up"          ptr)
+      <*> peek (offset @"snap_widths"            ptr)
+      <*> peek (offset @"snap_heights"           ptr)
+      <*> peek (offset @"expansion_factor"       ptr)
+      <*> peek (offset @"language_group"         ptr)
+      <*> peek (offset @"password"               ptr)
+      <*> peek (offset @"min_feature"            ptr)
 
   poke ptr val = do
-    pokeField @"prUnique_id"              ptr val
-    pokeField @"prLenIV"                  ptr val
-    pokeField @"prNum_blue_values"        ptr val
-    pokeField @"prNum_other_blues"        ptr val
-    pokeField @"prNum_family_blues"       ptr val
-    pokeField @"prNum_family_other_blues" ptr val
-    pokeField @"prBlue_values"            ptr val
-    pokeField @"prOther_blues"            ptr val
-    pokeField @"prFamily_blues"           ptr val
-    pokeField @"prFamily_other_blues"     ptr val
-    pokeField @"prBlue_scale"             ptr val
-    pokeField @"prBlue_shift"             ptr val
-    pokeField @"prBlue_fuzz"              ptr val
-    pokeField @"prStandard_width"         ptr val
-    pokeField @"prStandard_height"        ptr val
-    pokeField @"prNum_snap_widths"        ptr val
-    pokeField @"prNum_snap_heights"       ptr val
-    pokeField @"prForce_bold"             ptr val
-    pokeField @"prRound_stem_up"          ptr val
-    pokeField @"prSnap_widths"            ptr val
-    pokeField @"prSnap_heights"           ptr val
-    pokeField @"prExpansion_factor"       ptr val
-    pokeField @"prLanguage_group"         ptr val
-    pokeField @"prPassword"               ptr val
-    pokeField @"prMin_feature"            ptr val
+    pokeField @"unique_id"              ptr val
+    pokeField @"lenIV"                  ptr val
+    pokeField @"num_blue_values"        ptr val
+    pokeField @"num_other_blues"        ptr val
+    pokeField @"num_family_blues"       ptr val
+    pokeField @"num_family_other_blues" ptr val
+    pokeField @"blue_values"            ptr val
+    pokeField @"other_blues"            ptr val
+    pokeField @"family_blues"           ptr val
+    pokeField @"family_other_blues"     ptr val
+    pokeField @"blue_scale"             ptr val
+    pokeField @"blue_shift"             ptr val
+    pokeField @"blue_fuzz"              ptr val
+    pokeField @"standard_width"         ptr val
+    pokeField @"standard_height"        ptr val
+    pokeField @"num_snap_widths"        ptr val
+    pokeField @"num_snap_heights"       ptr val
+    pokeField @"force_bold"             ptr val
+    pokeField @"round_stem_up"          ptr val
+    pokeField @"snap_widths"            ptr val
+    pokeField @"snap_heights"           ptr val
+    pokeField @"expansion_factor"       ptr val
+    pokeField @"language_group"         ptr val
+    pokeField @"password"               ptr val
+    pokeField @"min_feature"            ptr val
 
 
 
@@ -192,32 +196,32 @@ type PS_Private = Ptr PS_PrivateRec
 
 
 data CID_FaceDictRec = CID_FaceDictRec
-                         { fdrPrivate_dict        :: PS_PrivateRec
-                         , fdrLen_buildchar       :: FT_UInt
-                         , fdrForcebold_threshold :: FT_Fixed
-                         , fdrStroke_width        :: FT_Pos
-                         , fdrExpansion_factor    :: FT_Fixed
-                         , fdrPaint_type          :: FT_Byte
-                         , fdrFont_type           :: FT_Byte
-                         , fdrFont_matrix         :: FT_Matrix
-                         , fdrFont_offset         :: FT_Vector
-                         , fdrNum_subrs           :: FT_UInt
-                         , fdrSubrmap_offset      :: FT_ULong
-                         , fdrSd_bytes            :: FT_Int
+                         { private_dict        :: PS_PrivateRec
+                         , len_buildchar       :: FT_UInt
+                         , forcebold_threshold :: FT_Fixed
+                         , stroke_width        :: FT_Pos
+                         , expansion_factor    :: FT_Fixed
+                         , paint_type          :: FT_Byte
+                         , font_type           :: FT_Byte
+                         , font_matrix         :: FT_Matrix
+                         , font_offset         :: FT_Vector
+                         , num_subrs           :: FT_UInt
+                         , subrmap_offset      :: FT_ULong
+                         , sd_bytes            :: FT_Int
                          }
 
-instance Offset "fdrPrivate_dict"        CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, private_dict       }
-instance Offset "fdrLen_buildchar"       CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, len_buildchar      }
-instance Offset "fdrForcebold_threshold" CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, forcebold_threshold}
-instance Offset "fdrStroke_width"        CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, stroke_width       }
-instance Offset "fdrExpansion_factor"    CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, expansion_factor   }
-instance Offset "fdrPaint_type"          CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, paint_type         }
-instance Offset "fdrFont_type"           CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, font_type          }
-instance Offset "fdrFont_matrix"         CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, font_matrix        }
-instance Offset "fdrFont_offset"         CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, font_offset        }
-instance Offset "fdrNum_subrs"           CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, num_subrs          }
-instance Offset "fdrSubrmap_offset"      CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, subrmap_offset     }
-instance Offset "fdrSd_bytes"            CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, sd_bytes           }
+instance Offset "private_dict"        CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, private_dict       }
+instance Offset "len_buildchar"       CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, len_buildchar      }
+instance Offset "forcebold_threshold" CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, forcebold_threshold}
+instance Offset "stroke_width"        CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, stroke_width       }
+instance Offset "expansion_factor"    CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, expansion_factor   }
+instance Offset "paint_type"          CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, paint_type         }
+instance Offset "font_type"           CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, font_type          }
+instance Offset "font_matrix"         CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, font_matrix        }
+instance Offset "font_offset"         CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, font_offset        }
+instance Offset "num_subrs"           CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, num_subrs          }
+instance Offset "subrmap_offset"      CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, subrmap_offset     }
+instance Offset "sd_bytes"            CID_FaceDictRec where rawOffset = #{offset struct CID_FaceDictRec_, sd_bytes           }
 
 instance Storable CID_FaceDictRec where
   sizeOf _    = #size      struct CID_FaceDictRec_
@@ -225,32 +229,32 @@ instance Storable CID_FaceDictRec where
 
   peek ptr =
     CID_FaceDictRec
-      <$> peek (offset @"fdrPrivate_dict"        ptr)
-      <*> peek (offset @"fdrLen_buildchar"       ptr)
-      <*> peek (offset @"fdrForcebold_threshold" ptr)
-      <*> peek (offset @"fdrStroke_width"        ptr)
-      <*> peek (offset @"fdrExpansion_factor"    ptr)
-      <*> peek (offset @"fdrPaint_type"          ptr)
-      <*> peek (offset @"fdrFont_type"           ptr)
-      <*> peek (offset @"fdrFont_matrix"         ptr)
-      <*> peek (offset @"fdrFont_offset"         ptr)
-      <*> peek (offset @"fdrNum_subrs"           ptr)
-      <*> peek (offset @"fdrSubrmap_offset"      ptr)
-      <*> peek (offset @"fdrSd_bytes"            ptr)
+      <$> peek (offset @"private_dict"        ptr)
+      <*> peek (offset @"len_buildchar"       ptr)
+      <*> peek (offset @"forcebold_threshold" ptr)
+      <*> peek (offset @"stroke_width"        ptr)
+      <*> peek (offset @"expansion_factor"    ptr)
+      <*> peek (offset @"paint_type"          ptr)
+      <*> peek (offset @"font_type"           ptr)
+      <*> peek (offset @"font_matrix"         ptr)
+      <*> peek (offset @"font_offset"         ptr)
+      <*> peek (offset @"num_subrs"           ptr)
+      <*> peek (offset @"subrmap_offset"      ptr)
+      <*> peek (offset @"sd_bytes"            ptr)
 
   poke ptr val = do
-    pokeField @"fdrPrivate_dict"        ptr val
-    pokeField @"fdrLen_buildchar"       ptr val
-    pokeField @"fdrForcebold_threshold" ptr val
-    pokeField @"fdrStroke_width"        ptr val
-    pokeField @"fdrExpansion_factor"    ptr val
-    pokeField @"fdrPaint_type"          ptr val
-    pokeField @"fdrFont_type"           ptr val
-    pokeField @"fdrFont_matrix"         ptr val
-    pokeField @"fdrFont_offset"         ptr val
-    pokeField @"fdrNum_subrs"           ptr val
-    pokeField @"fdrSubrmap_offset"      ptr val
-    pokeField @"fdrSd_bytes"            ptr val
+    pokeField @"private_dict"        ptr val
+    pokeField @"len_buildchar"       ptr val
+    pokeField @"forcebold_threshold" ptr val
+    pokeField @"stroke_width"        ptr val
+    pokeField @"expansion_factor"    ptr val
+    pokeField @"paint_type"          ptr val
+    pokeField @"font_type"           ptr val
+    pokeField @"font_matrix"         ptr val
+    pokeField @"font_offset"         ptr val
+    pokeField @"num_subrs"           ptr val
+    pokeField @"subrmap_offset"      ptr val
+    pokeField @"sd_bytes"            ptr val
 
 
 
@@ -259,44 +263,44 @@ type CID_FaceDict = Ptr CID_FaceDictRec
 
 
 data CID_FaceInfoRec = CID_FaceInfoRec
-                         { firCid_font_name :: Ptr FT_String
-                         , firCid_version   :: FT_Fixed
-                         , firCid_font_type :: FT_Int
-                         , firRegistry      :: Ptr FT_String
-                         , firOrdering      :: Ptr FT_String
-                         , firSupplement    :: FT_Int
-                         , firFont_info     :: PS_FontInfoRec
-                         , firFont_bbox     :: FT_BBox
-                         , firUid_base      :: FT_ULong
-                         , firNum_xuid      :: FT_Int
-                         , firXuid          :: FT_ULong
-                         , firCidmap_offset :: FT_ULong
-                         , firFd_bytes      :: FT_Int
-                         , firGd_bytes      :: FT_Int
-                         , firCid_count     :: FT_ULong
-                         , firNum_dicts     :: FT_Int
-                         , firFont_dicts    :: CID_FaceDict
-                         , firData_offset   :: FT_ULong
+                         { cid_font_name :: Ptr FT_String
+                         , cid_version   :: FT_Fixed
+                         , cid_font_type :: FT_Int
+                         , registry      :: Ptr FT_String
+                         , ordering      :: Ptr FT_String
+                         , supplement    :: FT_Int
+                         , font_info     :: PS_FontInfoRec
+                         , font_bbox     :: FT_BBox
+                         , uid_base      :: FT_ULong
+                         , num_xuid      :: FT_Int
+                         , xuid          :: FT_ULong
+                         , cidmap_offset :: FT_ULong
+                         , fd_bytes      :: FT_Int
+                         , gd_bytes      :: FT_Int
+                         , cid_count     :: FT_ULong
+                         , num_dicts     :: FT_Int
+                         , font_dicts    :: CID_FaceDict
+                         , data_offset   :: FT_ULong
                          }
 
-instance Offset "firCid_font_name" CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cid_font_name}
-instance Offset "firCid_version"   CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cid_version  }
-instance Offset "firCid_font_type" CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cid_font_type}
-instance Offset "firRegistry"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, registry     }
-instance Offset "firOrdering"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, ordering     }
-instance Offset "firSupplement"    CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, supplement   }
-instance Offset "firFont_info"     CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, font_info    }
-instance Offset "firFont_bbox"     CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, font_bbox    }
-instance Offset "firUid_base"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, uid_base     }
-instance Offset "firNum_xuid"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, num_xuid     }
-instance Offset "firXuid"          CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, xuid         }
-instance Offset "firCidmap_offset" CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cidmap_offset}
-instance Offset "firFd_bytes"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, fd_bytes     }
-instance Offset "firGd_bytes"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, gd_bytes     }
-instance Offset "firCid_count"     CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cid_count    }
-instance Offset "firNum_dicts"     CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, num_dicts    }
-instance Offset "firFont_dicts"    CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, font_dicts   }
-instance Offset "firData_offset"   CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, data_offset  }
+instance Offset "cid_font_name" CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cid_font_name}
+instance Offset "cid_version"   CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cid_version  }
+instance Offset "cid_font_type" CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cid_font_type}
+instance Offset "registry"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, registry     }
+instance Offset "ordering"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, ordering     }
+instance Offset "supplement"    CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, supplement   }
+instance Offset "font_info"     CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, font_info    }
+instance Offset "font_bbox"     CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, font_bbox    }
+instance Offset "uid_base"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, uid_base     }
+instance Offset "num_xuid"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, num_xuid     }
+instance Offset "xuid"          CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, xuid         }
+instance Offset "cidmap_offset" CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cidmap_offset}
+instance Offset "fd_bytes"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, fd_bytes     }
+instance Offset "gd_bytes"      CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, gd_bytes     }
+instance Offset "cid_count"     CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, cid_count    }
+instance Offset "num_dicts"     CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, num_dicts    }
+instance Offset "font_dicts"    CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, font_dicts   }
+instance Offset "data_offset"   CID_FaceInfoRec where rawOffset = #{offset struct CID_FaceInfoRec_, data_offset  }
 
 instance Storable CID_FaceInfoRec where
   sizeOf _    = #size      struct CID_FaceInfoRec_
@@ -304,44 +308,44 @@ instance Storable CID_FaceInfoRec where
 
   peek ptr =
     CID_FaceInfoRec
-      <$> peek (offset @"firCid_font_name" ptr)
-      <*> peek (offset @"firCid_version"   ptr)
-      <*> peek (offset @"firCid_font_type" ptr)
-      <*> peek (offset @"firRegistry"      ptr)
-      <*> peek (offset @"firOrdering"      ptr)
-      <*> peek (offset @"firSupplement"    ptr)
-      <*> peek (offset @"firFont_info"     ptr)
-      <*> peek (offset @"firFont_bbox"     ptr)
-      <*> peek (offset @"firUid_base"      ptr)
-      <*> peek (offset @"firNum_xuid"      ptr)
-      <*> peek (offset @"firXuid"          ptr)
-      <*> peek (offset @"firCidmap_offset" ptr)
-      <*> peek (offset @"firFd_bytes"      ptr)
-      <*> peek (offset @"firGd_bytes"      ptr)
-      <*> peek (offset @"firCid_count"     ptr)
-      <*> peek (offset @"firNum_dicts"     ptr)
-      <*> peek (offset @"firFont_dicts"    ptr)
-      <*> peek (offset @"firData_offset"   ptr)
+      <$> peek (offset @"cid_font_name" ptr)
+      <*> peek (offset @"cid_version"   ptr)
+      <*> peek (offset @"cid_font_type" ptr)
+      <*> peek (offset @"registry"      ptr)
+      <*> peek (offset @"ordering"      ptr)
+      <*> peek (offset @"supplement"    ptr)
+      <*> peek (offset @"font_info"     ptr)
+      <*> peek (offset @"font_bbox"     ptr)
+      <*> peek (offset @"uid_base"      ptr)
+      <*> peek (offset @"num_xuid"      ptr)
+      <*> peek (offset @"xuid"          ptr)
+      <*> peek (offset @"cidmap_offset" ptr)
+      <*> peek (offset @"fd_bytes"      ptr)
+      <*> peek (offset @"gd_bytes"      ptr)
+      <*> peek (offset @"cid_count"     ptr)
+      <*> peek (offset @"num_dicts"     ptr)
+      <*> peek (offset @"font_dicts"    ptr)
+      <*> peek (offset @"data_offset"   ptr)
 
   poke ptr val = do
-    pokeField @"firCid_font_name" ptr val
-    pokeField @"firCid_version"   ptr val
-    pokeField @"firCid_font_type" ptr val
-    pokeField @"firRegistry"      ptr val
-    pokeField @"firOrdering"      ptr val
-    pokeField @"firSupplement"    ptr val
-    pokeField @"firFont_info"     ptr val
-    pokeField @"firFont_bbox"     ptr val
-    pokeField @"firUid_base"      ptr val
-    pokeField @"firNum_xuid"      ptr val
-    pokeField @"firXuid"          ptr val
-    pokeField @"firCidmap_offset" ptr val
-    pokeField @"firFd_bytes"      ptr val
-    pokeField @"firGd_bytes"      ptr val
-    pokeField @"firCid_count"     ptr val
-    pokeField @"firNum_dicts"     ptr val
-    pokeField @"firFont_dicts"    ptr val
-    pokeField @"firData_offset"   ptr val
+    pokeField @"cid_font_name" ptr val
+    pokeField @"cid_version"   ptr val
+    pokeField @"cid_font_type" ptr val
+    pokeField @"registry"      ptr val
+    pokeField @"ordering"      ptr val
+    pokeField @"supplement"    ptr val
+    pokeField @"font_info"     ptr val
+    pokeField @"font_bbox"     ptr val
+    pokeField @"uid_base"      ptr val
+    pokeField @"num_xuid"      ptr val
+    pokeField @"xuid"          ptr val
+    pokeField @"cidmap_offset" ptr val
+    pokeField @"fd_bytes"      ptr val
+    pokeField @"gd_bytes"      ptr val
+    pokeField @"cid_count"     ptr val
+    pokeField @"num_dicts"     ptr val
+    pokeField @"font_dicts"    ptr val
+    pokeField @"data_offset"   ptr val
 
 
 

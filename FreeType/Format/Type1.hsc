@@ -1,11 +1,9 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ForeignFunctionInterface
+           , PatternSynonyms #-}
 
 {- | Please refer to the
      [Format-Specific API > Type 1 Tables](https://www.freetype.org/freetype2/docs/reference/ft2-type1_tables.html)
      chapter of the reference.
-
-     Internal: "FreeType.Format.Type1.Internal".
  -}
 
 module FreeType.Format.Type1
@@ -107,22 +105,17 @@ module FreeType.Format.Type1
     -- ** T1_FontInfo
   , T1_FontInfo
     -- ** T1_Private
-    -- | Deprecated, equivalent to 'PS_FontInfoRec'.
-
+  , T1_Private
     -- ** CID_FontDict
-    -- | Deprecated, equivalent to 'PS_PrivateRec'.
-
+  , CID_FontDict
     -- ** CID_Info
-    -- | Deprecated, equivalent to 'CID_FaceDictRec'.
+  , CID_Info
   ) where
 
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
-import           FreeType.Exception.Internal
-import           FreeType.Format.Type1.Internal
 import           FreeType.Format.Type1.Types
 
-import           Foreign.Marshal.Alloc
 import           Foreign.Ptr
 
 #include "ft2build.h"
@@ -135,25 +128,19 @@ foreign import ccall "FT_Has_PS_Glyph_Names"
 
 
 
--- | The returned 'PS_FontInfo' is allocated with 'malloc' and thus must be 'free'd manually
-ft_Get_PS_Font_Info
-  :: FT_Face        -- ^ face
-  -> IO PS_FontInfo -- ^ font_info
-ft_Get_PS_Font_Info face = do
-  infoPtr <- malloc
-  ftError "ft_Get_PS_Font_Info" $ ft_Get_PS_Font_Info' face infoPtr
-  return infoPtr
+foreign import ccall "FT_Get_PS_Font_Info"
+  ft_Get_PS_Font_Info
+    :: FT_Face     -- ^ face
+    -> PS_FontInfo -- ^ afont_info
+    -> IO FT_Error
 
 
 
--- | The returned 'PS_Private' is allocate with 'malloc' and thus must be 'free'd manually
-ft_Get_PS_Font_Private
-  :: FT_Face       -- ^ face
-  -> IO PS_Private -- ^ font_private
-ft_Get_PS_Font_Private face = do
-  privPtr <- malloc
-  ftError "ft_Get_PS_Font_Private" $ ft_Get_PS_Font_Private' face privPtr
-  return privPtr
+foreign import ccall "FT_Get_PS_Font_Private"
+  ft_Get_PS_Font_Private
+    :: FT_Face     -- ^ face
+    -> PS_Private  -- ^ afont_private
+    -> IO FT_Error
 
 
 

@@ -3,8 +3,6 @@
 {- | Please refer to the
      [Format-Specific API > SFNT Names](https://www.freetype.org/freetype2/docs/reference/ft2-sfnt_names.html)
      chapter of the reference.
-
-     Internal: "FreeType.Format.SFNT.Internal".
  -}
 
 module FreeType.Format.SFNT
@@ -22,9 +20,9 @@ module FreeType.Format.SFNT
 
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
-import           FreeType.Exception.Internal
-import           FreeType.Format.SFNT.Internal
 import           FreeType.Format.SFNT.Types
+
+import           Foreign.Ptr
 
 #include "ft2build.h"
 #include FT_SFNT_NAMES_H
@@ -34,18 +32,18 @@ foreign import ccall "FT_Get_Sfnt_Name_Count"
 
 
 
-ft_Get_Sfnt_Name
-  :: FT_Face        -- ^ face
-  -> FT_UInt        -- ^ idx
-  -> IO FT_SfntName -- ^ name
-ft_Get_Sfnt_Name =
-  autoAllocaError "ft_Get_Sfnt_Name" ft_Get_Sfnt_Name'
+foreign import ccall "FT_Get_Sfnt_Name"
+  ft_Get_Sfnt_Name
+    :: FT_Face         -- ^ face
+    -> FT_UInt         -- ^ idx
+    -> Ptr FT_SfntName -- ^ aname
+    -> IO FT_Error
 
 
 
-ft_Get_Sfnt_LangTag
-  :: FT_Face           -- ^ face
-  -> FT_UInt           -- ^ langID
-  -> IO FT_SfntLangTag -- ^ langTag
-ft_Get_Sfnt_LangTag =
-  autoAllocaError "ft_Get_Sfnt_LangTag" ft_Get_Sfnt_LangTag'
+foreign import ccall "FT_Get_Sfnt_LangTag"
+  ft_Get_Sfnt_LangTag
+    :: FT_Face            -- ^ face
+    -> FT_UInt            -- ^ langID
+    -> Ptr FT_SfntLangTag -- ^ alangTag
+    -> IO FT_Error

@@ -1,11 +1,9 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ForeignFunctionInterface
+           , PatternSynonyms #-}
 
 {- | Please refer to the
      [Miscellaneous > TrueTypeGX/AAT Validation](https://www.freetype.org/freetype2/docs/reference/ft2-gx_validation.html)
      chapter of the reference.
-
-     Internal: "FreeType.Miscellaneous.TrueTypeGX.Internal".
  -}
 
 module FreeType.Miscellaneous.TrueTypeGX
@@ -39,22 +37,19 @@ module FreeType.Miscellaneous.TrueTypeGX
 
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
-import           FreeType.Exception.Internal
-import           FreeType.Miscellaneous.TrueTypeGX.Internal
 
 import           Foreign.Ptr
 
 #include "ft2build.h"
 #include FT_GX_VALIDATE_H
 
-ft_TrueTypeGX_Validate
-  :: FT_Face      -- ^ face
-  -> FT_UInt      -- ^ validation_flags
-  -> Ptr FT_Bytes -- ^ tables
-  -> FT_UInt      -- ^ table_length
-  -> IO ()
-ft_TrueTypeGX_Validate =
-  autoError "ft_TrueTypeGX_Validate" ft_TrueTypeGX_Validate'
+foreign import ccall "FT_TrueTypeGX_Validate"
+  ft_TrueTypeGX_Validate
+    :: FT_Face      -- ^ face
+    -> FT_UInt      -- ^ validation_flags
+    -> Ptr FT_Bytes -- ^ tables
+    -> FT_UInt      -- ^ table_length
+    -> IO FT_Error
 
 
 
@@ -66,13 +61,12 @@ foreign import ccall "FT_TrueTypeGX_Free"
 
 
 
-ft_ClassicKern_Validate
-  :: FT_Face      -- ^ face
-  -> FT_UInt      -- ^ validation_flags
-  -> Ptr FT_Bytes -- ^ ckern_table
-  -> IO ()
-ft_ClassicKern_Validate =
-  autoError "ft_ClassicKern_Validate" ft_ClassicKern_Validate'
+foreign import ccall "FT_ClassicKern_Validate"
+  ft_ClassicKern_Validate
+    :: FT_Face      -- ^ face
+    -> FT_UInt      -- ^ validation_flags
+    -> Ptr FT_Bytes -- ^ ckern_table
+    -> IO FT_Error
 
 
 

@@ -34,10 +34,9 @@ module FreeType.Support.Scanline
     -- ** FT_Raster_Funcs
   , FT_Raster_Funcs (..)
     -- ** FT_Raster_BitTest_Func
-    -- | Deprecated: 'FT_Raster_BitTest_Func'
-
+  , FT_Raster_BitTest_Func
     -- ** FT_Raster_BitSet_Func
-    -- | Deprecated: 'FT_Raster_BitSet_Func'
+  , FT_Raster_BitSet_Func
   ) where
 
 import           FreeType.Support.Scanline.Types

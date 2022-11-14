@@ -1,7 +1,11 @@
 {-# LANGUAGE DataKinds
+           , DuplicateRecordFields
            , FlexibleInstances
-           , MultiParamTypeClasses
-           , TypeApplications #-}
+           , MultiParamTypeClasses #-}
+#if __GLASGOW_HASKELL__ >= 902
+{-# LANGUAGE NoFieldSelectors #-}
+#endif
+{-# LANGUAGE TypeApplications #-}
 
 module FreeType.Control.Driver.Types where
 
@@ -18,12 +22,12 @@ import           Foreign.Storable.Offset
 
 
 data FT_Prop_GlyphToScriptMap = FT_Prop_GlyphToScriptMap
-                                  { pgtsmFace :: FT_Face
-                                  , pgtsmMap  :: Ptr FT_UShort
+                                  { face :: FT_Face
+                                  , map  :: Ptr FT_UShort
                                   }
 
-instance Offset "pgtsmFace" FT_Prop_GlyphToScriptMap where rawOffset = #{offset struct FT_Prop_GlyphToScriptMap_, face}
-instance Offset "pgtsmMap"  FT_Prop_GlyphToScriptMap where rawOffset = #{offset struct FT_Prop_GlyphToScriptMap_, map }
+instance Offset "face" FT_Prop_GlyphToScriptMap where rawOffset = #{offset struct FT_Prop_GlyphToScriptMap_, face}
+instance Offset "map"  FT_Prop_GlyphToScriptMap where rawOffset = #{offset struct FT_Prop_GlyphToScriptMap_, map }
 
 instance Storable FT_Prop_GlyphToScriptMap where
   sizeOf _    = #size      struct FT_Prop_GlyphToScriptMap_
@@ -31,22 +35,22 @@ instance Storable FT_Prop_GlyphToScriptMap where
 
   peek ptr =
     FT_Prop_GlyphToScriptMap
-      <$> peek (offset @"pgtsmFace" ptr)
-      <*> peek (offset @"pgtsmMap"  ptr)
+      <$> peek (offset @"face" ptr)
+      <*> peek (offset @"map"  ptr)
 
   poke ptr val = do
-    pokeField @"pgtsmFace" ptr val
-    pokeField @"pgtsmMap"  ptr val
+    pokeField @"face" ptr val
+    pokeField @"map"  ptr val
 
 
 
 data FT_Prop_IncreaseXHeight = FT_Prop_IncreaseXHeight
-                                 { pixhFace  :: FT_Face
-                                 , pixhLimit :: FT_UInt
+                                 { face  :: FT_Face
+                                 , limit :: FT_UInt
                                  }
 
-instance Offset "pixhFace"  FT_Prop_IncreaseXHeight where rawOffset = #{offset struct FT_Prop_IncreaseXHeight_, face }
-instance Offset "pixhLimit" FT_Prop_IncreaseXHeight where rawOffset = #{offset struct FT_Prop_IncreaseXHeight_, limit}
+instance Offset "face"  FT_Prop_IncreaseXHeight where rawOffset = #{offset struct FT_Prop_IncreaseXHeight_, face }
+instance Offset "limit" FT_Prop_IncreaseXHeight where rawOffset = #{offset struct FT_Prop_IncreaseXHeight_, limit}
 
 instance Storable FT_Prop_IncreaseXHeight where
   sizeOf _    = #size      struct FT_Prop_IncreaseXHeight_
@@ -54,9 +58,9 @@ instance Storable FT_Prop_IncreaseXHeight where
 
   peek ptr =
     FT_Prop_IncreaseXHeight
-      <$> peek (offset @"pixhFace"  ptr)
-      <*> peek (offset @"pixhLimit" ptr)
+      <$> peek (offset @"face"  ptr)
+      <*> peek (offset @"limit" ptr)
 
   poke ptr val = do
-    pokeField @"pixhFace"  ptr val
-    pokeField @"pixhLimit" ptr val
+    pokeField @"face"  ptr val
+    pokeField @"limit" ptr val

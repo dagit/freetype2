@@ -1,11 +1,9 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ForeignFunctionInterface
+           , PatternSynonyms #-}
 
 {- | Please refer to the
      [Format-Specific API > Window FNT Files](https://www.freetype.org/freetype2/docs/reference/ft2-winfnt_fonts.html)
      chapter of the reference.
-
-     Internal: "FreeType.Format.WinFNT.Internal".
  -}
 
 module FreeType.Format.WinFNT
@@ -38,9 +36,10 @@ module FreeType.Format.WinFNT
   ) where
 
 import           FreeType.Core.Base.Types
-import           FreeType.Exception.Internal
-import           FreeType.Format.WinFNT.Internal
+import           FreeType.Core.Types.Types
 import           FreeType.Format.WinFNT.Types
+
+import           Foreign.Ptr
 
 #include "ft2build.h"
 #include FT_WINFONTS_H
@@ -87,9 +86,8 @@ pattern FT_WinFNT_ID_OEM     = #const FT_WinFNT_ID_OEM
 
 
 
-
-ft_Get_WinFNT_Header
-  :: FT_Face                -- ^ face
-  -> IO FT_WinFNT_HeaderRec -- ^ header
-ft_Get_WinFNT_Header =
-  autoAllocaError "ft_Get_WinFNT_Header" ft_Get_WinFNT_Header'
+foreign import ccall "FT_Get_WinFNT_Header"
+  ft_Get_WinFNT_Header
+    :: FT_Face                 -- ^ face
+    -> Ptr FT_WinFNT_HeaderRec -- ^ aheader
+    -> IO FT_Error

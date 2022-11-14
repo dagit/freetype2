@@ -1,13 +1,11 @@
-{-# LANGUAGE EmptyDataDecls #-}
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE EmptyDataDecls
+           , ForeignFunctionInterface
+           , PatternSynonyms #-}
 
-{- | Please refer to the    
+{- | Please refer to the
      [Support API > Glyph Stroker](https://www.freetype.org/freetype2/docs/reference/ft2-glyph_stroker.html)
-     chapter of the reference.    
-    
-     Internal: "FreeType.Support.Glyph.Internal".    
- -}
+     chapter of the reference.
+-}
 
 module FreeType.Support.Glyph
   ( -- ** FT_Stroker
@@ -38,7 +36,6 @@ module FreeType.Support.Glyph
   , ft_Glyph_StrokeBorder
     -- ** FT_Stroker_New
   , ft_Stroker_New
-  , ft_Stroker_With
     -- ** FT_Stroker_Set
   , ft_Stroker_Set
     -- ** FT_Stroker_Rewind
@@ -70,17 +67,10 @@ module FreeType.Support.Glyph
 import           FreeType.Core.Base
 import           FreeType.Core.Glyph
 import           FreeType.Core.Types.Types
-import           FreeType.Exception.Internal
-import           FreeType.Support.Glyph.Internal
 import           FreeType.Support.Glyph.Types
-import           FreeType.Support.Outline
+import           FreeType.Support.Outline.Types
 
-import           Control.Exception
-import           Data.Bool (bool)
-import           Foreign.Marshal.Alloc
-import           Foreign.Marshal.Utils
 import           Foreign.Ptr
-import           Foreign.Storable
 
 #include "ft2build.h"
 #include FT_STROKER_H
@@ -131,48 +121,30 @@ foreign import ccall "FT_Outline_GetOutsideBorder"
 
 
 
-ft_Glyph_Stroke
-  :: FT_Glyph    -- ^ glyph
-  -> FT_Stroker  -- ^ stroker
-  -> Bool        -- ^ destroy
-  -> IO FT_Glyph
-ft_Glyph_Stroke glyph stroker destroy =
-  with glyph $ \glyphPtr -> do
-    ftError "ft_Glyph_Stroke" . ft_Glyph_Stroke' glyphPtr stroker $ bool 0 1 destroy
-    peek glyphPtr
+foreign import ccall "FT_Glyph_Stroke"
+  ft_Glyph_Stroke
+    :: Ptr FT_Glyph -- ^ pglyph
+    -> FT_Stroker   -- ^ stroker
+    -> FT_Bool      -- ^ destroy
+    -> IO FT_Error
 
 
 
-ft_Glyph_StrokeBorder
-  :: FT_Glyph    -- ^ glyph
-  -> FT_Stroker  -- ^ stroker
-  -> Bool        -- ^ inside
-  -> Bool        -- ^ destroy
-  -> IO FT_Glyph
-ft_Glyph_StrokeBorder glyph stroker inside destroy =
-  with glyph $ \glyphPtr -> do
-    ftError "ft_Glyph_StrokeBorder"
-      . ft_Glyph_StrokeBorder' glyphPtr stroker (bool 0 1 inside) $ bool 0 1 destroy
-    peek glyphPtr
+foreign import ccall "FT_Glyph_StrokeBorder"
+  ft_Glyph_StrokeBorder
+    :: Ptr FT_Glyph -- ^ pglyph
+    -> FT_Stroker   -- ^ stroker
+    -> FT_Bool      -- ^ inside
+    -> FT_Bool      -- ^ destroy
+    -> IO FT_Error
 
 
 
-ft_Stroker_New
-  :: FT_Library    -- ^ library
-  -> IO FT_Stroker -- ^ stroker
-ft_Stroker_New =
-  autoAllocaError "ft_Stroker_New" ft_Stroker_New'
-
-
-
--- | 'bracket' over 'ft_Stroker_New' and 'ft_Stroker_Done'.
---
---   The provided 'FT_Stroker' should not be used after this function terminates.
-ft_Stroker_With
-  :: FT_Library           -- ^ library
-  -> (FT_Stroker -> IO a)
-  -> IO a
-ft_Stroker_With lib = bracket (ft_Stroker_New lib) ft_Stroker_Done
+foreign import ccall "FT_Stroker_New"
+  ft_Stroker_New
+    :: FT_Library     -- ^ library
+    -> Ptr FT_Stroker -- ^ astroker
+    -> IO FT_Error
 
 
 
@@ -194,14 +166,12 @@ foreign import ccall "FT_Stroker_Rewind"
 
 
 
-ft_Stroker_ParseOutline
-  :: FT_Stroker     -- ^ stroker
-  -> Ptr FT_Outline -- ^ outline
-  -> Bool           -- ^ opened
-  -> IO ()
-ft_Stroker_ParseOutline stroker outlinePtr opened =
-  ftError "ft_Stroker_ParseOutline"
-    . ft_Stroker_ParseOutline' stroker outlinePtr $ bool 0 1 opened
+foreign import ccall "FT_Stroker_ParseOutline"
+  ft_Stroker_ParseOutline
+    :: FT_Stroker     -- ^ stroker
+    -> Ptr FT_Outline -- ^ outline
+    -> FT_Bool        -- ^ opened
+    -> IO FT_Error
 
 
 
@@ -210,74 +180,56 @@ foreign import ccall "FT_Stroker_Done"
 
 
 
-ft_Stroker_BeginSubPath
-  :: FT_Stroker -- ^ stroker
-  -> FT_Vector  -- ^ to
-  -> Bool       -- ^ open
-  -> IO ()
-ft_Stroker_BeginSubPath stroker to open =
-  with to $ \toPtr ->
-    ftError "ft_Stroker_BeginSubPath"
-      . ft_Stroker_BeginSubPath' stroker toPtr $ bool 0 1 open
+foreign import ccall "FT_Stroker_BeginSubPath"
+  ft_Stroker_BeginSubPath
+    :: FT_Stroker    -- ^ stroker
+    -> Ptr FT_Vector -- ^ to
+    -> FT_Bool       -- ^ open
+    -> IO FT_Error
 
 
 
-ft_Stroker_EndSubPath
-  :: FT_Stroker -- ^ stroker
-  -> IO ()
-ft_Stroker_EndSubPath =
-  autoError "ft_Stroker_EndSubPath" ft_Stroker_EndSubPath'
+foreign import ccall "FT_Stroker_EndSubPath"
+  ft_Stroker_EndSubPath
+    :: FT_Stroker -- ^ stroker
+    -> IO FT_Error
 
 
 
-ft_Stroker_LineTo
-  :: FT_Stroker -- ^ stroker
-  -> FT_Vector  -- ^ to
-  -> IO ()
-ft_Stroker_LineTo stroker to =
-  with to $
-    ftError "ft_Stroker_LineTo" . ft_Stroker_LineTo' stroker
+foreign import ccall "FT_Stroker_LineTo"
+  ft_Stroker_LineTo
+    :: FT_Stroker    -- ^ stroker
+    -> Ptr FT_Vector -- ^ to
+    -> IO FT_Error
 
 
 
-ft_Stroker_ConicTo
-  :: FT_Stroker -- ^ stroker
-  -> FT_Vector  -- ^ control
-  -> FT_Vector  -- ^ to
-  -> IO ()
-ft_Stroker_ConicTo stroker control to =
-  with control $ \controlPtr ->
-    with to $
-      ftError "ft_Stroker_ConicTo" . ft_Stroker_ConicTo' stroker controlPtr
+foreign import ccall "FT_Stroker_ConicTo"
+  ft_Stroker_ConicTo
+    :: FT_Stroker    -- ^ stroker
+    -> Ptr FT_Vector -- ^ control
+    -> Ptr FT_Vector -- ^ to
+    -> IO FT_Error
 
 
 
-ft_Stroker_CubicTo
-  :: FT_Stroker -- ^ stroker
-  -> FT_Vector  -- ^ control1
-  -> FT_Vector  -- ^ control2
-  -> FT_Vector  -- ^ to
-  -> IO ()
-ft_Stroker_CubicTo stroker control1 control2 to =
-  with control1 $ \control1Ptr ->
-    with control2 $ \control2Ptr ->
-      with to $
-        ftError "ft_Stroker_CubicTo" . ft_Stroker_CubicTo' stroker control1Ptr control2Ptr
+foreign import ccall "FT_Stroker_CubicTo"
+  ft_Stroker_CubicTo
+    :: FT_Stroker    -- ^ stroker
+    -> Ptr FT_Vector -- ^ control1
+    -> Ptr FT_Vector -- ^ control2
+    -> Ptr FT_Vector -- ^ to
+    -> IO FT_Error
 
 
 
-ft_Stroker_GetBorderCounts
-  :: FT_Stroker            -- ^ stroker
-  -> FT_StrokerBorder      -- ^ border
-  -> IO (FT_UInt, FT_UInt) -- ^ (num_points, num_contours)
-ft_Stroker_GetBorderCounts stroker border =
-  alloca $ \pointsPtr ->
-    alloca $ \contoursPtr -> do
-      ftError "ft_Stroker_GetBorderCounts"
-        $ ft_Stroker_GetBorderCounts' stroker border pointsPtr contoursPtr
-      (,)
-        <$> peek pointsPtr
-        <*> peek contoursPtr
+foreign import ccall "FT_Stroker_GetBorderCounts"
+  ft_Stroker_GetBorderCounts
+    :: FT_Stroker       -- ^ stroker
+    -> FT_StrokerBorder -- ^ border
+    -> Ptr FT_UInt      -- ^ anum_points
+    -> Ptr FT_UInt      -- ^ anum_contours
+    -> IO FT_Error
 
 
 
@@ -286,17 +238,13 @@ foreign import ccall "FT_Stroker_ExportBorder"
 
 
 
-ft_Stroker_GetCounts
-  :: FT_Stroker            -- ^ stroker
-  -> IO (FT_UInt, FT_UInt) -- ^ (num_points, num_contours)
-ft_Stroker_GetCounts stroker =
-  alloca $ \pointsPtr -> do
-    alloca $ \contoursPtr -> do
-      ftError "ft_Stroker_GetCounts"
-        $ ft_Stroker_GetCounts' stroker pointsPtr contoursPtr
-      (,)
-        <$> peek pointsPtr
-        <*> peek contoursPtr
+foreign import ccall "FT_Stroker_GetCounts"
+  ft_Stroker_GetCounts
+    :: FT_Stroker  -- ^ stroker
+    -> Ptr FT_UInt -- ^ anum_points
+    -> Ptr FT_UInt -- ^ anum_contours
+    -> IO FT_Error
+
 
 
 foreign import ccall "FT_Stroker_Export"

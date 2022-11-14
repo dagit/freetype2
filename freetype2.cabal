@@ -1,16 +1,14 @@
 Name:                freetype2
-Version:             0.2.1
-Synopsis:            Haskell bindings for FreeType 2 library
-Description:         Mostly complete and mostly raw bindings to the [FreeType2](https://www.freetype.org/) library.
-                     .
-                     Please check the README for information on how these
+Version:             0.3.0
+Synopsis:            Raw Haskell bindings for FreeType 2 library
+Description:         Please check the README for information on how these
                      bindings operate.
 License:             BSD3
 License-file:        LICENSE
 Author:              Jason Dagit, Oleksii Divak
 Maintainer:          Oleksii Divak <frozenwitness@gmail.com>
 Copyright:           Copyright © 2011-2012 Jason Dagit
-                     Copyright © 2020 Oleksii Divak
+                     Copyright © 2020-2022 Oleksii Divak
 Category:            Graphics
 Build-type:          Simple
 Extra-source-files:  freetype2/include/*.h
@@ -71,92 +69,52 @@ Cabal-version:       >=1.8
 
 Library
   Exposed-modules: FreeType
-                   FreeType.Internal
-
-                   FreeType.Exception
-                   FreeType.Exception.Internal
 
                    FreeType.Core.Version
-                   FreeType.Core.Version.Internal
                    FreeType.Core.Types
                    FreeType.Core.Base
-                   FreeType.Core.Base.Internal
                    FreeType.Core.Unicode
                    FreeType.Core.Color
-                   FreeType.Core.Color.Internal
                    FreeType.Core.Layer
                    FreeType.Core.Glyph
-                   FreeType.Core.Glyph.Internal
                    FreeType.Core.Mac
-                   FreeType.Core.Mac.Internal
                    FreeType.Core.Size
-                   FreeType.Core.Size.Internal
                    FreeType.Format.Multiple
-                   FreeType.Format.Multiple.Internal
                    FreeType.Format.TrueType
-                   FreeType.Format.TrueType.Internal
                    FreeType.Format.Type1
-                   FreeType.Format.Type1.Internal
                    FreeType.Format.SFNT
-                   FreeType.Format.SFNT.Internal
                    FreeType.Format.BDF
-                   FreeType.Format.BDF.Internal
                    FreeType.Format.CID
-                   FreeType.Format.CID.Internal
                    FreeType.Format.PFR
-                   FreeType.Format.PFR.Internal
                    FreeType.Format.WinFNT
-                   FreeType.Format.WinFNT.Internal
                    FreeType.Format.Font
-                   FreeType.Format.Font.Internal
                    FreeType.Format.Gasp
                    FreeType.Control.Driver
                    FreeType.Control.Parameter
-                   FreeType.Control.Parameter.Internal
                    FreeType.Control.Subpixel
-                   FreeType.Control.Subpixel.Internal
                    FreeType.Cache
-                   FreeType.Cache.Internal
                    FreeType.Support.Computations
-                   FreeType.Support.Computations.Internal
                    FreeType.Support.List
-                   FreeType.Support.List.Internal
                    FreeType.Support.Bitmap
-                   FreeType.Support.Bitmap.Internal
                    FreeType.Support.Outline
-                   FreeType.Support.Outline.Internal
                    FreeType.Support.Scanline
-                   FreeType.Support.Scanline.Internal
                    FreeType.Support.Advance
-                   FreeType.Support.Advance.Internal
                    FreeType.Support.Glyph
-                   FreeType.Support.Glyph.Internal
                    FreeType.Support.System
-                   FreeType.Support.System.Internal
                    FreeType.Support.Module
-                   FreeType.Support.Module.Internal
                    FreeType.Support.GZIP
-                   FreeType.Support.GZIP.Internal
                    FreeType.Support.LZW
-                   FreeType.Support.LZW.Internal
                    FreeType.Support.BZIP2
-                   FreeType.Support.BZIP2.Internal
                    FreeType.Error.Enumerations
-                   FreeType.Error.Enumerations.Internal
                    FreeType.Error.Values
                    FreeType.Miscellaneous.OpenType
-                   FreeType.Miscellaneous.OpenType.Internal
                    FreeType.Miscellaneous.Incremental
-                   FreeType.Miscellaneous.Incremental.Internal
                    FreeType.Miscellaneous.TrueType
-                   FreeType.Miscellaneous.TrueType.Internal
                    FreeType.Miscellaneous.TrueTypeGX
-                   FreeType.Miscellaneous.TrueTypeGX.Internal
 
   Reexported-modules: Foreign.Storable.Offset
 
   Other-modules: FreeType.Circular.Types
-                 FreeType.Exception.Types
 
                  FreeType.Core.Types.Types
                  FreeType.Core.Base.Types
@@ -179,7 +137,6 @@ Library
                  FreeType.Support.Module.Types
                  FreeType.Support.Outline.Types
                  FreeType.Support.Scanline.Types
-                 FreeType.Support.System.Types
                  FreeType.Miscellaneous.Incremental.Types
                  FreeType.Miscellaneous.TrueType.Types
 
@@ -187,9 +144,7 @@ Library
                , storable-offset
 
   Build-tools: hsc2hs
-  ghc-options:
-    -O1
-    -Wall
+  ghc-options: -Wall
 
   include-dirs: freetype2/include
                 freetype2/include/freetype
@@ -276,6 +231,7 @@ Executable freetype-example
   hs-source-dirs: app/example
   Build-depends: base >= 4.10 && < 5
                , freetype2
+  ghc-options: -Wall
 
   if flag(examples)
     Buildable: True
@@ -290,16 +246,6 @@ test-suite dynamic-function-check
                , freetype2
 
   other-modules: Dynamic.Report
-
-test-suite field-coherence-check
-  type: exitcode-stdio-1.0
-  main-is: Fields.hs
-  hs-source-dirs: test/fields
-  build-depends: base >= 4.10 && < 4.17
-               , freetype2
-               , template-haskell
-
-  other-modules: Fields.Lens
 
 source-repository head
   type: git

@@ -1,11 +1,9 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ForeignFunctionInterface
+           , PatternSynonyms #-}
 
 {- | Please refer to the
      [Controlling FreeType Modules > Subpixel Rendering](https://www.freetype.org/freetype2/docs/reference/ft2-lcd_rendering.html)
      chapter of the reference.
-
-     Internal: "FreeType.Control.Subpixel.Internal".
  -}
 
 module FreeType.Control.Subpixel
@@ -27,14 +25,12 @@ module FreeType.Control.Subpixel
   , ft_Library_SetLcdGeometry
   ) where
 
-import           FreeType.Control.Subpixel.Internal
 import           FreeType.Control.Subpixel.Types
 import           FreeType.Core.Base
 import           FreeType.Core.Types.Types
-import           FreeType.Exception.Internal
 
 import           Data.Word
-import           Foreign.Marshal.Array
+import           Foreign.Ptr
 
 #include "ft2build.h"
 #include FT_LCD_FILTER_H
@@ -53,28 +49,19 @@ pattern FT_LCD_FILTER_LEGACY  = #const FT_LCD_FILTER_LEGACY
 
 
 
-ft_Library_SetLcdFilter
-  :: FT_Library   -- ^ library
-  -> FT_LcdFilter -- ^ filter
-  -> IO ()
-ft_Library_SetLcdFilter =
-  autoError "ft_Library_SetLcdFilter" ft_Library_SetLcdFilter'
+foreign import ccall "FT_Library_SetLcdFilter"
+  ft_Library_SetLcdFilter
+    :: FT_Library   -- ^ library
+    -> FT_LcdFilter -- ^ filter
+    -> IO FT_Error
 
 
 
-ft_Library_SetLcdFilterWeights
-  :: FT_Library              -- ^ library
-  -> ( #type unsigned char
-     , #type unsigned char
-     , #type unsigned char
-     , #type unsigned char
-     , #type unsigned char
-     ) -- ^ weights
-  -> IO ()
-ft_Library_SetLcdFilterWeights lib (a, b, c, d, e) =
-  withArray [a, b, c, d, e] $ \weightsPtr ->
-    ftError "ft_Library_SetLcdFilterWeights"
-      $ ft_Library_SetLcdFilterWeights' lib weightsPtr
+foreign import ccall "FT_Library_SetLcdFilterWeights"
+  ft_Library_SetLcdFilterWeights
+    :: FT_Library                -- ^ library
+    -> Ptr #{type unsigned char} -- ^ weights
+    -> IO FT_Error
 
 
 
@@ -83,10 +70,8 @@ pattern FT_LCD_FILTER_FIVE_TAPS = #const FT_LCD_FILTER_FIVE_TAPS
 
 
 
-ft_Library_SetLcdGeometry
-  :: FT_Library                        -- ^ library
-  -> (FT_Vector, FT_Vector, FT_Vector) -- ^ sub
-  -> IO ()
-ft_Library_SetLcdGeometry lib (a, b, c) =
-  withArray [a, b, c] $ \subPtr ->
-    ftError "ft_Library_SetLcdGeometry" $ ft_Library_SetLcdGeometry' lib subPtr
+foreign import ccall "FT_Library_SetLcdGeometry"
+  ft_Library_SetLcdGeometry
+    :: FT_Library    -- ^ library
+    -> Ptr FT_Vector -- ^ sub
+    -> IO FT_Error

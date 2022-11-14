@@ -1,11 +1,9 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ForeignFunctionInterface
+           , PatternSynonyms #-}
 
 {- | Please refer to the
      [Format-Specific API > BDF and PCF Files](https://www.freetype.org/freetype2/docs/reference/ft2-bdf_fonts.html)
      chapter of the reference.
-
-     Internal: "FreeType.Format.BDF.Internal".
  -}
 
 module FreeType.Format.BDF
@@ -26,39 +24,31 @@ module FreeType.Format.BDF
   ) where
 
 import           FreeType.Core.Base.Types
-import           FreeType.Exception.Internal
-import           FreeType.Format.BDF.Internal
+import           FreeType.Core.Types.Types
 import           FreeType.Format.BDF.Types
 
-import           Foreign.C.String
-import           Foreign.Marshal.Alloc
+#ifdef aarch64_HOST_ARCH
+import           Data.Word
+#else
+import           Data.Int
+#endif
 import           Foreign.Ptr
-import           Foreign.Storable
 
 #include "ft2build.h"
 #include FT_BDF_H
 
-ft_Get_BDF_Charset_ID
-  :: FT_Face             -- ^ face
-  -> IO (String, String) -- ^ (charset_encoding, charset_registry)
-ft_Get_BDF_Charset_ID face =
-  alloca $ \encodingPtr ->
-    alloca $ \registryPtr -> do
-      ftError "ft_Get_BDF_Charset_ID"
-        $ ft_Get_BDF_Charset_ID' face encodingPtr registryPtr
-      (,)
-        <$> (peekCString . castPtr =<< peek encodingPtr)
-        <*> (peekCString . castPtr =<< peek registryPtr)
+foreign import ccall "FT_Get_BDF_Charset_ID"
+  ft_Get_BDF_Charset_ID
+    :: FT_Face                -- ^ face
+    -> Ptr (Ptr #{type char}) -- ^ acharset_encoding
+    -> Ptr (Ptr #{type char}) -- ^ acharset_registry
+    -> IO FT_Error
 
 
 
-ft_Get_BDF_Property
-  :: FT_Face            -- ^ face
-  -> String             -- ^ prop_name
-  -> IO BDF_PropertyRec -- ^ property
-ft_Get_BDF_Property face name =
-  withCString name $ \namePtr ->
-    alloca $ \propPtr -> do
-      ftError "ft_Get_BDF_Property"
-        $ ft_Get_BDF_Property' face (castPtr namePtr) propPtr
-      peek propPtr
+foreign import ccall "FT_Get_BDF_Property"
+  ft_Get_BDF_Property
+    :: FT_Face             -- ^ face
+    -> Ptr #{type char}    -- ^ prop_name
+    -> Ptr BDF_PropertyRec -- ^ aproperty
+    -> IO FT_Error

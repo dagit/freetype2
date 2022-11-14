@@ -3,8 +3,6 @@
 {- | Please refer to the
      [Cache Sub-System > Cache Sub-System](https://www.freetype.org/freetype2/docs/reference/ft2-cache_subsystem.html)
      chapter of the reference.
-
-     Internal: "FreeType.Cache.Internal".
  -}
 
 module FreeType.Cache
@@ -16,7 +14,6 @@ module FreeType.Cache
   , FTC_Face_Requester
     -- ** FTC_Manager_New
   , ftc_Manager_New
-  , ftc_Manager_With
     -- ** FTC_Manager_Reset
   , ftc_Manager_Reset
     -- ** FTC_Manager_Done
@@ -67,48 +64,26 @@ module FreeType.Cache
   , ftc_SBitCache_LookupScaler
   ) where
 
-import           FreeType.Cache.Internal
 import           FreeType.Cache.Types
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Glyph.Types
 import           FreeType.Core.Types.Types
-import           FreeType.Exception.Internal
 
-import           Control.Exception
-import           Foreign.Marshal.Alloc
 import           Foreign.Ptr
-import           Foreign.Storable
 
 #include "ft2build.h"
 #include FT_CACHE_H
 
-ftc_Manager_New
-  :: FT_Library         -- ^ library
-  -> FT_UInt            -- ^ max_faces
-  -> FT_UInt            -- ^ max_sizes
-  -> FT_ULong           -- ^ max_bytes
-  -> FTC_Face_Requester -- ^ requester
-  -> FT_Pointer         -- ^ req_data
-  -> IO FTC_Manager     -- ^ manager
-ftc_Manager_New =
-  autoAllocaError "ftc_Manager_New" ftc_Manager_New'
-
-
-
--- | 'bracket' over 'ftc_Manager_With' and 'ftc_Manager_Done'.
---
---   The provided 'FTC_Manager' should not be used after this function terminates.
-ftc_Manager_With
-  :: FT_Library            -- ^ library
-  -> FT_UInt               -- ^ max_faces
-  -> FT_UInt               -- ^ max_sizes
-  -> FT_ULong              -- ^ max_bytes
-  -> FTC_Face_Requester    -- ^ requester
-  -> FT_Pointer            -- ^ req_data
-  -> (FTC_Manager -> IO a)
-  -> IO a
-ftc_Manager_With lib faces sizes bytes req data_ =
-  bracket (ftc_Manager_New lib faces sizes bytes req data_) ftc_Manager_Done
+foreign import ccall "FTC_Manager_New"
+  ftc_Manager_New
+    :: FT_Library         -- ^ library
+    -> FT_UInt            -- ^ max_faces
+    -> FT_UInt            -- ^ max_sizes
+    -> FT_ULong           -- ^ max_bytes
+    -> FTC_Face_Requester -- ^ requester
+    -> FT_Pointer         -- ^ req_data
+    -> Ptr FTC_Manager    -- ^ amanager
+    -> IO FT_Error
 
 
 
@@ -125,96 +100,82 @@ foreign import ccall "FTC_Manager_Done"
     -> IO ()
 
 
-
-ftc_Manager_LookupFace
-  :: FTC_Manager -- ^ manager
-  -> FTC_FaceID  -- ^ face_id
-  -> IO FT_Face  -- ^ face
-ftc_Manager_LookupFace =
-  autoAllocaError "ftc_Manager_LookupFace" ftc_Manager_LookupFace'
-
+foreign import ccall "FTC_Manager_LookupFace"
+  ftc_Manager_LookupFace
+    :: FTC_Manager -- ^ manager
+    -> FTC_FaceID  -- ^ face_id
+    -> Ptr FT_Face -- ^ aface
+    -> IO FT_Error
 
 
-ftc_Manager_LookupSize
-  :: FTC_Manager -- ^ manager
-  -> FTC_Scaler  -- ^ scaler
-  -> IO FT_Size  -- ^ size
-ftc_Manager_LookupSize =
-  autoAllocaError "ftc_Manager_LookupSize" ftc_Manager_LookupSize'
+foreign import ccall "FTC_Manager_LookupSize"
+  ftc_Manager_LookupSize
+    :: FTC_Manager -- ^ manager
+    -> FTC_Scaler  -- ^ scaler
+    -> Ptr FT_Size -- ^ asize
+    -> IO FT_Error
 
 
 
-foreign import ccall "FTC_Manager_RemoveFaceID"    
+foreign import ccall "FTC_Manager_RemoveFaceID"
   ftc_Manager_RemoveFaceID
     :: FTC_Manager -- ^ manager
     -> FTC_FaceID  -- ^ face_id
-    -> IO ()    
+    -> IO ()
 
 
 
-foreign import ccall "FTC_Node_Unref"    
+foreign import ccall "FTC_Node_Unref"
   ftc_Node_Unref
     :: FTC_Node    -- ^ node
     -> FTC_Manager -- ^ manager
-    -> IO ()    
+    -> IO ()
 
 
 
-ftc_ImageCache_New
-  :: FTC_Manager       -- ^ manager
-  -> IO FTC_ImageCache -- ^ cache
-ftc_ImageCache_New =
-  autoAllocaError "ftc_ImageCache_New" ftc_ImageCache_New'
+foreign import ccall "FTC_ImageCache_New"
+  ftc_ImageCache_New
+    :: FTC_Manager        -- ^ manager
+    -> Ptr FTC_ImageCache -- ^ acache
+    -> IO FT_Error
 
 
 
-anodize :: Storable a => String -> (Ptr a -> Ptr FTC_Node -> IO FT_Error) -> IO (a, Maybe FTC_Node)
-anodize name f =
-  alloca $ \objPtr ->
-    alloca $ \anodePtr -> do
-      ftError name $ f objPtr anodePtr
-      (,)
-        <$> peek objPtr
-        <*> do anode <- peek anodePtr
-               return $ if anode == nullPtr
-                          then Nothing
-                          else Just anode
+foreign import ccall "FTC_ImageCache_Lookup"
+  ftc_ImageCache_Lookup
+    :: FTC_ImageCache -- ^ cache
+    -> FTC_ImageType  -- ^ type
+    -> FT_UInt        -- ^ gindex
+    -> Ptr FT_Glyph   -- ^ aglyph
+    -> Ptr FTC_Node   -- ^ anode
+    -> IO FT_Error
 
 
 
-ftc_ImageCache_Lookup
-  :: FTC_ImageCache                -- ^ cache
-  -> FTC_ImageType                 -- ^ type
-  -> FT_UInt                       -- ^ gindex
-  -> IO (FT_Glyph, Maybe FTC_Node) -- ^ (aglyph, anode)
-ftc_ImageCache_Lookup cache type_ gindex =
-  anodize "ftc_ImageCache_Lookup" $ ftc_ImageCache_Lookup' cache type_ gindex
+foreign import ccall "FTC_SBitCache_New"
+  ftc_SBitCache_New
+    :: FTC_Manager       -- ^ manager
+    -> Ptr FTC_SBitCache -- ^ acache
+    -> IO FT_Error
 
 
 
-ftc_SBitCache_New
-  :: FTC_Manager      -- ^ manager
-  -> IO FTC_SBitCache -- ^ acache
-ftc_SBitCache_New =
-  autoAllocaError "ftc_SBitCache_New" ftc_SBitCache_New'
+foreign import ccall "FTC_SBitCache_Lookup"
+  ftc_SBitCache_Lookup
+    :: FTC_SBitCache -- ^ cache
+    -> FTC_ImageType -- ^ type
+    -> FT_UInt       -- ^ gindex
+    -> Ptr FTC_SBit  -- ^ sbit
+    -> Ptr FTC_Node  -- ^ anode
+    -> IO FT_Error
 
 
 
-ftc_SBitCache_Lookup
-  :: FTC_SBitCache                 -- ^ cache
-  -> FTC_ImageType                 -- ^ type
-  -> FT_UInt                       -- ^ gindex
-  -> IO (FTC_SBit, Maybe FTC_Node) -- ^ (sbit, anode)
-ftc_SBitCache_Lookup cache type_ gindex =
-  anodize "ftc_SBitCache_Lookup" $ ftc_SBitCache_Lookup' cache type_ gindex
-
-
-
-ftc_CMapCache_New
-  :: FTC_Manager      -- ^ manager
-  -> IO FTC_CMapCache -- ^ acache
-ftc_CMapCache_New =
-  autoAllocaError "ftc_CMapCache_New" ftc_CMapCache_New'
+foreign import ccall "FTC_CMapCache_New"
+  ftc_CMapCache_New
+    :: FTC_Manager       -- ^ manager
+    -> Ptr FTC_CMapCache -- ^ acache
+    -> IO FT_Error
 
 
 
@@ -228,22 +189,24 @@ foreign import ccall "FTC_CMapCache_Lookup"
 
 
 
-ftc_ImageCache_LookupScaler
-  :: FTC_ImageCache                -- ^ cache
-  -> FTC_Scaler                    -- ^ scaler
-  -> FT_ULong                      -- ^ load_flags
-  -> FT_UInt                       -- ^ gindex
-  -> IO (FT_Glyph, Maybe FTC_Node) -- ^(aglyph, anode)
-ftc_ImageCache_LookupScaler cache scaler flags gindex =
-  anodize "ftc_ImageCache_LookupScaler" $ ftc_ImageCache_LookupScaler' cache scaler flags gindex
+foreign import ccall "FTC_ImageCache_LookupScaler"
+  ftc_ImageCache_LookupScaler
+    :: FTC_ImageCache -- ^ cache
+    -> FTC_Scaler     -- ^ scaler
+    -> FT_ULong       -- ^ load_flags
+    -> FT_UInt        -- ^ gindex
+    -> Ptr FT_Glyph   -- ^ aglyph
+    -> Ptr FTC_Node   -- ^ anode
+    -> IO FT_Error
 
 
 
-ftc_SBitCache_LookupScaler
-  :: FTC_SBitCache                 -- ^ cache
-  -> FTC_Scaler                    -- ^ scaler
-  -> FT_ULong                      -- ^ load_flags
-  -> FT_UInt                       -- ^ gindex
-  -> IO (FTC_SBit, Maybe FTC_Node) -- ^ (sbit, anode)
-ftc_SBitCache_LookupScaler cache scaler flags gindex =
-  anodize "ftc_SBitCache_LookupScaler" $ ftc_SBitCache_LookupScaler' cache scaler flags gindex
+foreign import ccall "FTC_SBitCache_LookupScaler"
+  ftc_SBitCache_LookupScaler
+    :: FTC_SBitCache -- ^ cache
+    -> FTC_Scaler    -- ^ scaler
+    -> FT_ULong      -- ^ load_flags
+    -> FT_UInt       -- ^ gindex
+    -> Ptr FTC_SBit  -- ^ sbit
+    -> Ptr FTC_Node  -- ^ anode
+    -> IO FT_Error

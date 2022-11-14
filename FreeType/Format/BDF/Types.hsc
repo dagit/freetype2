@@ -1,8 +1,11 @@
 {-# LANGUAGE DataKinds
            , FlexibleInstances
            , ForeignFunctionInterface
-           , MultiParamTypeClasses
-           , PatternSynonyms
+           , MultiParamTypeClasses #-}
+#if __GLASGOW_HASKELL__ >= 902
+{-# LANGUAGE NoFieldSelectors #-}
+#endif
+{-# LANGUAGE PatternSynonyms
            , TypeApplications #-}
 
 module FreeType.Format.BDF.Types where
@@ -16,6 +19,7 @@ import           Data.Word
 import           Foreign.Ptr
 import           Foreign.Storable
 import           Foreign.Storable.Offset
+import           GHC.Records
 
 #include "ft2build.h"
 #include FT_BDF_H
@@ -39,18 +43,22 @@ type BDF_Property = Ptr BDF_PropertyRec
 
 
 data BDF_PropertyRec = BDF_PropertyRec
-                         { prType     :: BDF_PropertyType
-                         , prAtom     :: Ptr #type char
-                         , prInteger  :: FT_Int32
-                         , prCardinal :: FT_UInt32
+                         { type_    :: BDF_PropertyType
+                         , atom     :: Ptr #type char
+                         , integer  :: FT_Int32
+                         , cardinal :: FT_UInt32
                          }
 
-instance Offset "prType"     BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, type      }
-instance Offset "prAtom"     BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.atom    }
-instance Offset "prInteger"  BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.integer }
-instance Offset "prCardinal" BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.cardinal}
+instance Offset "type"     BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, type      }
+instance Offset "atom"     BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.atom    }
+instance Offset "integer"  BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.integer }
+instance Offset "cardinal" BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, u.cardinal}
 
+instance Offset "type_" BDF_PropertyRec where
+  rawOffset = rawOffset @"type" @BDF_PropertyRec
 
+instance HasField "type" BDF_PropertyRec BDF_PropertyType where
+  getField = getField @"type_" @BDF_PropertyRec
 
 instance Storable BDF_PropertyRec where
   sizeOf _    = #size struct BDF_PropertyRec_
@@ -58,15 +66,15 @@ instance Storable BDF_PropertyRec where
 
   peek ptr =
     BDF_PropertyRec
-      <$> peek (offset @"prType"     ptr)
-      <*> peek (offset @"prAtom"     ptr)
-      <*> peek (offset @"prInteger"  ptr)
-      <*> peek (offset @"prCardinal" ptr)
+      <$> peek (offset @"type"     ptr)
+      <*> peek (offset @"atom"     ptr)
+      <*> peek (offset @"integer"  ptr)
+      <*> peek (offset @"cardinal" ptr)
 
   poke ptr val = do
-    pokeField @"prType" ptr val
-    case prType val of
-      BDF_PROPERTY_TYPE_ATOM     -> pokeField @"prAtom"     ptr val
-      BDF_PROPERTY_TYPE_INTEGER  -> pokeField @"prInteger"  ptr val
-      BDF_PROPERTY_TYPE_CARDINAL -> pokeField @"prCardinal" ptr val
+    pokeField @"type" ptr val
+    case getField @"type" val of
+      BDF_PROPERTY_TYPE_ATOM     -> pokeField @"atom"     ptr val
+      BDF_PROPERTY_TYPE_INTEGER  -> pokeField @"integer"  ptr val
+      BDF_PROPERTY_TYPE_CARDINAL -> pokeField @"cardinal" ptr val
       _                          -> return ()

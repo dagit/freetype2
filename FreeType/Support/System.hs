@@ -28,4 +28,4 @@ module FreeType.Support.System
   , FT_StreamRec (..)
   ) where
 
-import           FreeType.Support.System.Types
+import           FreeType.Circular.Types

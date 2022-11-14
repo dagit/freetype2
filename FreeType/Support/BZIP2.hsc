@@ -1,8 +1,8 @@
+{-# LANGUAGE ForeignFunctionInterface #-}
+
 {- | Please refer to the
      [Support API > BZIP2 Streams](https://www.freetype.org/freetype2/docs/reference/ft2-bzip2.html)
      chapter of the reference.
-
-     Internal: "FreeType.Support.BZIP2.Internal".
  -}
 
 module FreeType.Support.BZIP2
@@ -10,15 +10,14 @@ module FreeType.Support.BZIP2
     ft_Stream_OpenBzip2
   ) where
 
-import           FreeType.Exception.Internal
-import           FreeType.Support.BZIP2.Internal
-import           FreeType.Support.System.Types
+import           FreeType.Circular.Types
+import           FreeType.Core.Types.Types
 
+#include "ft2build.h"
+#include FT_BZIP2_H
 
-
-ft_Stream_OpenBzip2
-  :: FT_Stream -- ^ stream
-  -> FT_Stream -- ^ source
-  -> IO ()
-ft_Stream_OpenBzip2 =
-  autoError "ft_Stream_OpenBzip2" ft_Stream_OpenBzip2'
+foreign import ccall "FT_Stream_OpenBzip2"
+  ft_Stream_OpenBzip2
+    :: FT_Stream   -- ^ stream
+    -> FT_Stream   -- ^ source
+    -> IO FT_Error

@@ -2,8 +2,11 @@
            , EmptyDataDecls
            , FlexibleInstances
            , ForeignFunctionInterface
-           , MultiParamTypeClasses
-           , TypeApplications #-}
+           , MultiParamTypeClasses #-}
+#if __GLASGOW_HASKELL__ >= 902
+{-# LANGUAGE NoFieldSelectors #-}
+#endif
+{-# LANGUAGE TypeApplications #-}
 
 module FreeType.Miscellaneous.Incremental.Types where
 
@@ -22,16 +25,16 @@ type FT_Incremental = Ptr FT_IncrementalRec
 
 
 data FT_Incremental_MetricsRec = FT_Incremental_MetricsRec
-                                   { imrBearing_x :: FT_Long
-                                   , imrBearing_y :: FT_Long
-                                   , imrAdvance   :: FT_Long
-                                   , imrAdvance_v :: FT_Long
+                                   { bearing_x :: FT_Long
+                                   , bearing_y :: FT_Long
+                                   , advance   :: FT_Long
+                                   , advance_v :: FT_Long
                                    }
 
-instance Offset "imrBearing_x" FT_Incremental_MetricsRec where rawOffset = #{offset struct FT_Incremental_MetricsRec_, bearing_x}
-instance Offset "imrBearing_y" FT_Incremental_MetricsRec where rawOffset = #{offset struct FT_Incremental_MetricsRec_, bearing_y}
-instance Offset "imrAdvance"   FT_Incremental_MetricsRec where rawOffset = #{offset struct FT_Incremental_MetricsRec_, advance  }
-instance Offset "imrAdvance_v" FT_Incremental_MetricsRec where rawOffset = #{offset struct FT_Incremental_MetricsRec_, advance_v}
+instance Offset "bearing_x" FT_Incremental_MetricsRec where rawOffset = #{offset struct FT_Incremental_MetricsRec_, bearing_x}
+instance Offset "bearing_y" FT_Incremental_MetricsRec where rawOffset = #{offset struct FT_Incremental_MetricsRec_, bearing_y}
+instance Offset "advance"   FT_Incremental_MetricsRec where rawOffset = #{offset struct FT_Incremental_MetricsRec_, advance  }
+instance Offset "advance_v" FT_Incremental_MetricsRec where rawOffset = #{offset struct FT_Incremental_MetricsRec_, advance_v}
 
 instance Storable FT_Incremental_MetricsRec where
   sizeOf _    = #size      struct FT_Incremental_MetricsRec_
@@ -39,16 +42,16 @@ instance Storable FT_Incremental_MetricsRec where
 
   peek ptr =
     FT_Incremental_MetricsRec
-      <$> peek (offset @"imrBearing_x" ptr)
-      <*> peek (offset @"imrBearing_y" ptr)
-      <*> peek (offset @"imrAdvance"   ptr)
-      <*> peek (offset @"imrAdvance_v" ptr)
+      <$> peek (offset @"bearing_x" ptr)
+      <*> peek (offset @"bearing_y" ptr)
+      <*> peek (offset @"advance"   ptr)
+      <*> peek (offset @"advance_v" ptr)
 
   poke ptr val = do
-    pokeField @"imrBearing_x" ptr val
-    pokeField @"imrBearing_y" ptr val
-    pokeField @"imrAdvance"   ptr val
-    pokeField @"imrAdvance_v" ptr val
+    pokeField @"bearing_x" ptr val
+    pokeField @"bearing_y" ptr val
+    pokeField @"advance"   ptr val
+    pokeField @"advance_v" ptr val
 
 
 
@@ -61,23 +64,11 @@ type FT_Incremental_GetGlyphDataFunc = FT_Incremental -- ^ incremental
                                     -> Ptr FT_Data    -- ^ data
                                     -> IO FT_Error
 
-foreign import ccall "wrapper"
-  ft_Incremental_GetGlyphDataFunc :: FT_Incremental_GetGlyphDataFunc -> IO (FunPtr FT_Incremental_GetGlyphDataFunc)
-
-foreign import ccall "dynamic"
-  ft_Incremental_GetGlyphDataFunc' :: FunPtr FT_Incremental_GetGlyphDataFunc -> FT_Incremental_GetGlyphDataFunc
-
 
 
 type FT_Incremental_FreeGlyphDataFunc = FT_Incremental -- ^ incremental
                                      -> Ptr FT_Data    -- ^ data
                                      -> IO ()
-
-foreign import ccall "wrapper"
-  ft_Incremental_FreeGlyphDataFunc :: FT_Incremental_FreeGlyphDataFunc -> IO (FunPtr FT_Incremental_FreeGlyphDataFunc)
-
-foreign import ccall "dynamic"
-  ft_Incremental_FreeGlyphDataFunc' :: FunPtr FT_Incremental_FreeGlyphDataFunc -> FT_Incremental_FreeGlyphDataFunc
 
 
 
@@ -87,23 +78,17 @@ type FT_Incremental_GetGlyphMetricsFunc = FT_Incremental                -- ^ inc
                                        -> Ptr FT_Incremental_MetricsRec -- ^ metrics
                                        -> IO FT_Error
 
-foreign import ccall "wrapper"
-  ft_Incremental_GetGlyphMetricsFunc :: FT_Incremental_GetGlyphMetricsFunc -> IO (FunPtr FT_Incremental_GetGlyphMetricsFunc)
-
-foreign import ccall "dynamic"
-  ft_Incremental_GetGlyphMetricsFunc' :: FunPtr FT_Incremental_GetGlyphMetricsFunc -> FT_Incremental_GetGlyphMetricsFunc
-
 
 
 data FT_Incremental_FuncsRec = FT_Incremental_FuncsRec
-                                 { ifrGet_glyph_data    :: FunPtr FT_Incremental_GetGlyphDataFunc
-                                 , ifrFree_glyph_data   :: FunPtr FT_Incremental_FreeGlyphDataFunc
-                                 , ifrGet_glyph_metrics :: FunPtr FT_Incremental_GetGlyphMetricsFunc
+                                 { get_glyph_data    :: FunPtr FT_Incremental_GetGlyphDataFunc
+                                 , free_glyph_data   :: FunPtr FT_Incremental_FreeGlyphDataFunc
+                                 , get_glyph_metrics :: FunPtr FT_Incremental_GetGlyphMetricsFunc
                                  }
 
-instance Offset "ifrGet_glyph_data"    FT_Incremental_FuncsRec where rawOffset = #{offset struct FT_Incremental_FuncsRec_, get_glyph_data    }
-instance Offset "ifrFree_glyph_data"   FT_Incremental_FuncsRec where rawOffset = #{offset struct FT_Incremental_FuncsRec_, free_glyph_data   }
-instance Offset "ifrGet_glyph_metrics" FT_Incremental_FuncsRec where rawOffset = #{offset struct FT_Incremental_FuncsRec_, get_glyph_metrics }
+instance Offset "get_glyph_data"    FT_Incremental_FuncsRec where rawOffset = #{offset struct FT_Incremental_FuncsRec_, get_glyph_data    }
+instance Offset "free_glyph_data"   FT_Incremental_FuncsRec where rawOffset = #{offset struct FT_Incremental_FuncsRec_, free_glyph_data   }
+instance Offset "get_glyph_metrics" FT_Incremental_FuncsRec where rawOffset = #{offset struct FT_Incremental_FuncsRec_, get_glyph_metrics }
 
 
 instance Storable FT_Incremental_FuncsRec where
@@ -112,24 +97,24 @@ instance Storable FT_Incremental_FuncsRec where
 
   peek ptr =
     FT_Incremental_FuncsRec
-      <$> peek (offset @"ifrGet_glyph_data"    ptr)
-      <*> peek (offset @"ifrFree_glyph_data"   ptr)
-      <*> peek (offset @"ifrGet_glyph_metrics" ptr)
+      <$> peek (offset @"get_glyph_data"    ptr)
+      <*> peek (offset @"free_glyph_data"   ptr)
+      <*> peek (offset @"get_glyph_metrics" ptr)
 
   poke ptr val = do
-    pokeField @"ifrGet_glyph_data"    ptr val
-    pokeField @"ifrFree_glyph_data"   ptr val
-    pokeField @"ifrGet_glyph_metrics" ptr val
+    pokeField @"get_glyph_data"    ptr val
+    pokeField @"free_glyph_data"   ptr val
+    pokeField @"get_glyph_metrics" ptr val
 
 
 
 data FT_Incremental_InterfaceRec = FT_Incremental_InterfaceRec
-                                 { iirFuncs  :: Ptr (FunPtr FT_Incremental_FuncsRec)
-                                 , iirObject :: FT_Incremental
+                                 { funcs  :: Ptr (FunPtr FT_Incremental_FuncsRec)
+                                 , object :: FT_Incremental
                                  }
 
-instance Offset "iirFuncs"  FT_Incremental_InterfaceRec where rawOffset = #{offset struct FT_Incremental_InterfaceRec_, funcs }
-instance Offset "iirObject" FT_Incremental_InterfaceRec where rawOffset = #{offset struct FT_Incremental_InterfaceRec_, object}
+instance Offset "funcs"  FT_Incremental_InterfaceRec where rawOffset = #{offset struct FT_Incremental_InterfaceRec_, funcs }
+instance Offset "object" FT_Incremental_InterfaceRec where rawOffset = #{offset struct FT_Incremental_InterfaceRec_, object}
 
 instance Storable FT_Incremental_InterfaceRec where
   sizeOf _    = #size      struct FT_Incremental_InterfaceRec_
@@ -137,12 +122,12 @@ instance Storable FT_Incremental_InterfaceRec where
 
   peek ptr =
     FT_Incremental_InterfaceRec
-      <$> peek (offset @"iirFuncs"  ptr)
-      <*> peek (offset @"iirObject" ptr)
+      <$> peek (offset @"funcs"  ptr)
+      <*> peek (offset @"object" ptr)
  
   poke ptr val = do
-    pokeField @"iirFuncs"  ptr val
-    pokeField @"iirObject" ptr val
+    pokeField @"funcs"  ptr val
+    pokeField @"object" ptr val
 
 
 

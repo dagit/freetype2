@@ -1,5 +1,5 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ForeignFunctionInterface
+           , PatternSynonyms #-}
 
 {- | Please refer to the
      [Format-Specific API > Gasp Table](https://www.freetype.org/freetype2/docs/reference/ft2-gasp_table.html)

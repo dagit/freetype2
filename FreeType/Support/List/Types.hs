@@ -8,7 +8,7 @@ module FreeType.Support.List.Types
   ) where
 
 import           FreeType.Circular.Types
-import           FreeType.Core.Types.Types (FT_Error)
+import           FreeType.Core.Types.Types
 
 import           Foreign.Ptr
 

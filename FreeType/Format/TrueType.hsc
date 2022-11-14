@@ -43,23 +43,23 @@ module FreeType.Format.TrueType
     -- ** FT_Get_CMap_Format
   , ft_Get_CMap_Format
     -- ** FT_PARAM_TAG_UNPATENTED_HINTING
-    -- | Deprecated: 'FT_PARAM_TAG_UNPATENTED_HINTING'.
+  , pattern FT_PARAM_TAG_UNPATENTED_HINTING
 
     -- ** TT_PLATFORM_XXX
-    -- | 'TT_PLATFORM_ISO' is deprecated.
   , pattern TT_PLATFORM_APPLE_UNICODE
   , pattern TT_PLATFORM_MACINTOSH
   , pattern TT_PLATFORM_MICROSOFT
   , pattern TT_PLATFORM_CUSTOM
   , pattern TT_PLATFORM_ADOBE
+  , pattern TT_PLATFORM_ISO
     -- ** TT_APPLE_ID_XXX
-    -- | 'TT_APPLE_ID_ISO_10646' is deprecated.
   , pattern TT_APPLE_ID_DEFAULT
   , pattern TT_APPLE_ID_UNICODE_1_1
   , pattern TT_APPLE_ID_UNICODE_2_0
   , pattern TT_APPLE_ID_UNICODE_32
   , pattern TT_APPLE_ID_VARIANT_SELECTOR
   , pattern TT_APPLE_ID_FULL_UNICODE
+  , pattern TT_APPLE_ID_ISO_10646
     -- ** TT_MAC_ID_XXX
   , pattern TT_MAC_ID_ROMAN
   , pattern TT_MAC_ID_JAPANESE
@@ -96,8 +96,9 @@ module FreeType.Format.TrueType
   , pattern TT_MAC_ID_SINDHI
   , pattern TT_MAC_ID_UNINTERP
     -- ** TT_ISO_ID_XXX
-    -- | Deprecated: 'TT_ISO_ID_7BIT_ASCII', 'TT_ISO_ID_10646', 'TT_ISO_ID_8859_1'.
-
+  , pattern TT_ISO_ID_7BIT_ASCII
+  , pattern TT_ISO_ID_10646
+  , pattern TT_ISO_ID_8859_1
     -- ** TT_MS_ID_XXX
   , pattern TT_MS_ID_SYMBOL_CS
   , pattern TT_MS_ID_UNICODE_CS
@@ -597,17 +598,12 @@ module FreeType.Format.TrueType
   , pattern TT_UCR_GAME_TILES
   ) where
 
+import           FreeType.Control.Parameter
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
-import           FreeType.Exception.Internal
-import           FreeType.Format.TrueType.Internal
 import           FreeType.Format.TrueType.Types
 
-import           Foreign.Marshal.Alloc
-import           Foreign.Marshal.Array
-import           Foreign.Marshal.Utils
 import           Foreign.Ptr
-import           Foreign.Storable
 
 #include "ft2build.h"
 #include FT_TRUETYPE_TABLES_H
@@ -631,60 +627,32 @@ pattern FT_SFNT_PCLT = #const FT_SFNT_PCLT
 
 
 
-ft_Get_Sfnt_Table
-  :: FT_Face             -- ^ face
-  -> FT_Sfnt_Tag         -- ^ tag
-  -> IO (Maybe (Ptr ()))
-ft_Get_Sfnt_Table face tag = do
-  result <- ft_Get_Sfnt_Table' face tag
-  return $ if result == nullPtr
-             then Nothing
-             else Just result
+foreign import ccall "FT_Get_Sfnt_Table"
+  ft_Get_Sfnt_Table
+    :: FT_Face     -- ^ face
+    -> FT_Sfnt_Tag -- ^ tag
+    -> IO (Ptr ())
 
 
 
--- | If @length@ is zero, 'ft_Load_Sfnt_Table' automatically reruns the
---   the underlying function with the returned table length.
---
---   The returned buffer is allocated with 'malloc' and therefore must be 'free'd
---   manually.
-ft_Load_Sfnt_Table
-  :: FT_Face          -- ^ face
-  -> FT_ULong         -- ^ tag
-  -> FT_Long          -- ^ offset
-  -> FT_ULong         -- ^ length
-  -> IO (Ptr FT_Byte) -- ^ buffer
-ft_Load_Sfnt_Table face tag offset 0 =
-  alloca $ \lengthPtr -> do
-    ftError "ft_Load_Sfnt_Table" $ ft_Load_Sfnt_Table' face tag offset nullPtr lengthPtr
-    length_ <- peek lengthPtr
-    bufferPtr <- mallocArray $ fromIntegral length_
-    ftError "ft_Load_Sfnt_Table" $ ft_Load_Sfnt_Table' face tag offset bufferPtr lengthPtr
-    return bufferPtr
-
-ft_Load_Sfnt_Table face tag offset length_ =
-  with length_ $ \lengthPtr -> do
-    bufferPtr <- mallocArray $ fromIntegral length_
-    ftError "ft_Load_Sfnt_Table" $ ft_Load_Sfnt_Table' face tag offset bufferPtr lengthPtr
-    return bufferPtr
+foreign import ccall "FT_Load_Sfnt_Table"
+  ft_Load_Sfnt_Table
+    :: FT_Face      -- ^ face
+    -> FT_ULong     -- ^ tag
+    -> FT_Long      -- ^ offset
+    -> Ptr FT_Byte  -- ^ buffer
+    -> Ptr FT_ULong -- ^ length
+    -> IO FT_Error
 
 
 
-ft_Sfnt_Table_Info
-  :: FT_Face        -- ^ face
-  -> FT_UInt        -- ^ table_index
-  -> Maybe FT_ULong -- ^ tag
-  -> IO FT_ULong    -- ^ length
-ft_Sfnt_Table_Info face index Nothing =
-  alloca $ \lengthPtr -> do
-    ftError "ft_Sfnt_Table_Info" $ ft_Sfnt_Table_Info' face index nullPtr lengthPtr
-    peek lengthPtr
-
-ft_Sfnt_Table_Info face index (Just tag) =
-  with tag $ \tagPtr ->
-    alloca $ \lengthPtr -> do
-      ftError "ft_Sfnt_Table_Info" $ ft_Sfnt_Table_Info' face index tagPtr lengthPtr
-      peek lengthPtr
+foreign import ccall "FT_Sfnt_Table_Info"
+  ft_Sfnt_Table_Info
+    :: FT_Face      -- ^ face
+    -> FT_UInt      -- ^ table_index
+    -> Ptr FT_ULong -- ^ tag
+    -> Ptr FT_ULong -- ^ length
+    -> IO FT_Error
 
 
 
@@ -703,12 +671,14 @@ pattern TT_PLATFORM_APPLE_UNICODE
       , TT_PLATFORM_MICROSOFT
       , TT_PLATFORM_CUSTOM
       , TT_PLATFORM_ADOBE
+      , TT_PLATFORM_ISO
      :: (Eq a, Num a) => a
 pattern TT_PLATFORM_APPLE_UNICODE = #const TT_PLATFORM_APPLE_UNICODE
 pattern TT_PLATFORM_MACINTOSH     = #const TT_PLATFORM_MACINTOSH
 pattern TT_PLATFORM_MICROSOFT     = #const TT_PLATFORM_MICROSOFT
 pattern TT_PLATFORM_CUSTOM        = #const TT_PLATFORM_CUSTOM
 pattern TT_PLATFORM_ADOBE         = #const TT_PLATFORM_ADOBE
+pattern TT_PLATFORM_ISO           = #const TT_PLATFORM_ISO
 
 
 
@@ -718,6 +688,7 @@ pattern TT_APPLE_ID_DEFAULT
       , TT_APPLE_ID_UNICODE_32
       , TT_APPLE_ID_VARIANT_SELECTOR
       , TT_APPLE_ID_FULL_UNICODE
+      , TT_APPLE_ID_ISO_10646
      :: (Eq a, Num a) => a
 pattern TT_APPLE_ID_DEFAULT          = #const TT_APPLE_ID_DEFAULT
 pattern TT_APPLE_ID_UNICODE_1_1      = #const TT_APPLE_ID_UNICODE_1_1
@@ -725,6 +696,7 @@ pattern TT_APPLE_ID_UNICODE_2_0      = #const TT_APPLE_ID_UNICODE_2_0
 pattern TT_APPLE_ID_UNICODE_32       = #const TT_APPLE_ID_UNICODE_32
 pattern TT_APPLE_ID_VARIANT_SELECTOR = #const TT_APPLE_ID_VARIANT_SELECTOR
 pattern TT_APPLE_ID_FULL_UNICODE     = #const TT_APPLE_ID_FULL_UNICODE
+pattern TT_APPLE_ID_ISO_10646        = #const TT_APPLE_ID_ISO_10646
 
 
 
@@ -797,6 +769,15 @@ pattern TT_MAC_ID_SLAVIC              = #const TT_MAC_ID_SLAVIC
 pattern TT_MAC_ID_VIETNAMESE          = #const TT_MAC_ID_VIETNAMESE
 pattern TT_MAC_ID_SINDHI              = #const TT_MAC_ID_SINDHI
 pattern TT_MAC_ID_UNINTERP            = #const TT_MAC_ID_UNINTERP
+
+
+pattern TT_ISO_ID_7BIT_ASCII
+      , TT_ISO_ID_10646
+      , TT_ISO_ID_8859_1
+     :: (Eq a, Num a) => a
+pattern TT_ISO_ID_7BIT_ASCII = #const TT_ISO_ID_7BIT_ASCII
+pattern TT_ISO_ID_10646      = #const TT_ISO_ID_10646
+pattern TT_ISO_ID_8859_1     = #const TT_ISO_ID_8859_1
 
 
 
