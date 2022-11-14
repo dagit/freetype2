@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds
            , DuplicateRecordFields
+           , FlexibleInstances
            , MultiParamTypeClasses #-}
 #if __GLASGOW_HASKELL__ >= 902
 {-# LANGUAGE NoFieldSelectors #-}
