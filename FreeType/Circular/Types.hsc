@@ -672,26 +672,24 @@ type FT_Stream_CloseFunc = FT_Stream -- ^ stream
 
 
 
-data FT_StreamDesc = FT_StreamDesc
-                       { value   :: #type long
-                       , pointer :: Ptr ()
-                       }
+data FT_StreamDesc
 
 instance Offset "value"   FT_StreamDesc where rawOffset = #{offset union FT_StreamDesc_, value  }
 instance Offset "pointer" FT_StreamDesc where rawOffset = #{offset union FT_StreamDesc_, pointer}
+
+instance HasField "value" FT_StreamDesc #{type long} where
+  getField = errorWithoutStackTrace "FT_StreamDesc.value.getField: union field"
+
+instance HasField "pointer" FT_StreamDesc (Ptr ()) where
+  getField = errorWithoutStackTrace "FT_StreamDesc.pointer.getField: union field"
 
 instance Storable FT_StreamDesc where
   sizeOf _    = #size      union FT_StreamDesc_
   alignment _ = #alignment union FT_StreamDesc_
 
-  peek ptr =
-    FT_StreamDesc
-      <$> peek (offset @"value"   ptr)
-      <*> peek (offset @"pointer" ptr)
+  peek _ = errorWithoutStackTrace "FT_StreamDesc.peek: union type"
 
-  poke ptr val = do
-    pokeField @"value"   ptr val
-    pokeField @"pointer" ptr val
+  poke _ _ = return ()
 
 
 

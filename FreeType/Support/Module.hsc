@@ -1,5 +1,7 @@
-{-# LANGUAGE ForeignFunctionInterface
-           , PatternSynonyms #-}
+{-# LANGUAGE DataKinds
+           , ForeignFunctionInterface
+           , PatternSynonyms
+           , TypeApplications #-}
 
 {- | Please refer to the
      [Support API > Module Management](https://www.freetype.org/freetype2/docs/reference/ft2-module_management.html)
@@ -26,6 +28,8 @@ module FreeType.Support.Module
   , ft_Remove_Module
     -- ** FT_Add_Default_Modules
   , ft_Add_Default_Modules
+    -- ** FT_FACE_DRIVER_NAME
+  , pattern FT_FACE_DRIVER_NAME
     -- ** FT_Property_Set
   , ft_Property_Set
     -- ** FT_Property_Get
@@ -67,6 +71,8 @@ import           Data.Word
 import           Data.Int
 #endif
 import           Foreign.Ptr
+import           Foreign.Storable
+import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_MODULE_H
@@ -102,6 +108,15 @@ foreign import ccall "FT_Add_Default_Modules"
   ft_Add_Default_Modules
     :: FT_Library -- ^ library
     -> IO ()
+
+
+
+pattern FT_FACE_DRIVER_NAME :: FT_Face -> IO (Ptr FT_String)
+pattern FT_FACE_DRIVER_NAME <- _
+  where
+    FT_FACE_DRIVER_NAME fac = do
+      drivr <- peek $ castPtr (offset @"driver" fac) :: IO (Ptr FT_Module_Class)
+      peek $ offset @"module_name" drivr
 
 
 

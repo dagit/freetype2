@@ -48,10 +48,14 @@ Extra-source-files:  freetype2/include/*.h
                      freetype2/src/psnames/*.h
                      freetype2/src/raster/*.c
                      freetype2/src/raster/*.h
+                     freetype2/src/sdf/*.c
+                     freetype2/src/sdf/*.h
                      freetype2/src/sfnt/*.c
                      freetype2/src/sfnt/*.h
                      freetype2/src/smooth/*.c
                      freetype2/src/smooth/*.h
+                     freetype2/src/svg/*.c
+                     freetype2/src/svg/*.h
                      freetype2/src/truetype/*.c
                      freetype2/src/truetype/*.h
                      freetype2/src/type1/*.c
@@ -149,26 +153,28 @@ Library
   include-dirs: freetype2/include
                 freetype2/include/freetype
                 freetype2/include/freetype/config
+                freetype2/src/autofit
                 freetype2/src/base
-                freetype2/src/truetype
-                freetype2/src/type1
+                freetype2/src/bdf
                 freetype2/src/cff
                 freetype2/src/cid
-                freetype2/src/pfr
-                freetype2/src/type42
-                freetype2/src/winfonts
-                freetype2/src/pcf
-                freetype2/src/bdf
-                freetype2/src/sfnt
-                freetype2/src/autofit
-                freetype2/src/pshinter
-                freetype2/src/raster
-                freetype2/src/smooth
                 freetype2/src/cache
                 freetype2/src/gzip
                 freetype2/src/lzw
+                freetype2/src/pcf
+                freetype2/src/pfr
                 freetype2/src/psaux
+                freetype2/src/pshinter
                 freetype2/src/psnames
+                freetype2/src/raster
+                freetype2/src/sdf
+                freetype2/src/sfnt
+                freetype2/src/smooth
+                freetype2/src/svg
+                freetype2/src/truetype
+                freetype2/src/type1
+                freetype2/src/type42
+                freetype2/src/winfonts
                 freetype2-plus/include
                 freetype2-plus/src
 
@@ -177,18 +183,18 @@ Library
               -DFT_CONFIG_MODULES_H=<ftmodule.h>
               -DDARWIN_NO_CARBON
 
-  c-sources: freetype2/src/base/ftsystem.c
-             freetype2/src/base/ftdebug.c
-             freetype2/src/base/ftinit.c
+  c-sources: freetype2/src/autofit/autofit.c
              freetype2/src/base/ftbase.c
              freetype2/src/base/ftbbox.c
              freetype2/src/base/ftbdf.c
              freetype2/src/base/ftbitmap.c
              freetype2/src/base/ftcid.c
              freetype2/src/base/ftfstype.c
+             freetype2/src/base/ftdebug.c
              freetype2/src/base/ftgasp.c
              freetype2/src/base/ftglyph.c
              freetype2/src/base/ftgxval.c
+             freetype2/src/base/ftinit.c
              freetype2/src/base/ftmac.c
              freetype2/src/base/ftmm.c
              freetype2/src/base/ftotval.c
@@ -199,28 +205,30 @@ Library
              freetype2/src/base/ftsystem.c
              freetype2/src/base/fttype1.c
              freetype2/src/base/ftwinfnt.c
+             freetype2/src/bdf/bdf.c
              freetype2/src/bzip2/ftbzip2.c
-             freetype2/src/truetype/truetype.c
-             freetype2/src/type1/type1.c
+             freetype2/src/cache/ftcache.c
              freetype2/src/cff/cff.c
              freetype2/src/cid/type1cid.c
-             freetype2/src/pfr/pfr.c
-             freetype2/src/type42/type42.c
-             freetype2/src/winfonts/winfnt.c
-             freetype2/src/pcf/pcf.c
-             freetype2/src/bdf/bdf.c
-             freetype2/src/sfnt/sfnt.c
-             freetype2/src/autofit/autofit.c
-             freetype2/src/pshinter/pshinter.c
-             freetype2/src/raster/raster.c
-             freetype2/src/smooth/smooth.c
-             freetype2/src/cache/ftcache.c
              freetype2/src/gzip/ftgzip.c
              freetype2/src/lzw/ftlzw.c
+             freetype2/src/pcf/pcf.c
+             freetype2/src/pfr/pfr.c
              freetype2/src/psaux/psaux.c
+             freetype2/src/pshinter/pshinter.c
              freetype2/src/psnames/psmodule.c
+             freetype2/src/raster/raster.c
+             freetype2/src/sdf/sdf.c
+             freetype2/src/sfnt/sfnt.c
+             freetype2/src/smooth/smooth.c
+             freetype2/src/svg/svg.c
+             freetype2/src/truetype/truetype.c
+             freetype2/src/type1/type1.c
+             freetype2/src/type42/type42.c
+             freetype2/src/winfonts/winfnt.c
              freetype2-plus/src/ftbitmap-plus.c
              freetype2-plus/src/ftcolor-plus.c
+             freetype2-plus/src/ftlayer-plus.c
 
 Flag examples
   Description: Whether the example program should be built
@@ -231,7 +239,7 @@ Executable freetype-example
   hs-source-dirs: app/example
   Build-depends: base >= 4.10 && < 5
                , freetype2
-  ghc-options: -Wall
+  ghc-options: -Wall -Wno-name-shadowing
 
   if flag(examples)
     Buildable: True

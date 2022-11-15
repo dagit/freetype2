@@ -60,19 +60,19 @@ withBitmap lib src f = do
 
 
 
-color :: Word8 -> Char
-color a | a == 0    = ' '
-        | a < 85    = '░'
-        | a < 170   = '▒'
-        | a < 255   = '▓'
-        | otherwise = '█'
+colr :: Word8 -> Char
+colr a | a == 0    = ' '
+       | a < 85    = '░'
+       | a < 170   = '▒'
+       | a < 255   = '▓'
+       | otherwise = '█'
 
 drawBitmap :: Int -> Int -> [Word8] -> IO ()
-drawBitmap _ _ [] = return ()
-drawBitmap w p ls = do
-  let (as, rest) = splitAt p ls
-  putStrLn $ color <$> as
-  drawBitmap w p rest
+drawBitmap _     _     [] = return ()
+drawBitmap width pitch ls = do
+  let (as, rest) = splitAt pitch ls
+  putStrLn $ colr <$> take width as
+  drawBitmap width pitch rest
 
 
 

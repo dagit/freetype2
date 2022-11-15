@@ -44,10 +44,7 @@ type BDF_Property = Ptr BDF_PropertyRec
 
 
 data BDF_PropertyRec = BDF_PropertyRec
-                         { type_    :: BDF_PropertyType
-                         , atom     :: Ptr #type char
-                         , integer  :: FT_Int32
-                         , cardinal :: FT_UInt32
+                         { type_ :: BDF_PropertyType
                          }
 
 instance Offset "type"     BDF_PropertyRec where rawOffset = #{offset struct BDF_PropertyRec_, type      }
@@ -61,21 +58,22 @@ instance Offset "type_" BDF_PropertyRec where
 instance HasField "type" BDF_PropertyRec BDF_PropertyType where
   getField = getField @"type_" @BDF_PropertyRec
 
+instance HasField "atom" BDF_PropertyRec (Ptr #{type char}) where
+  getField = errorWithoutStackTrace "BDF_PropertyRec.atom.getField: union field"
+
+instance HasField "integer" BDF_PropertyRec FT_Int where
+  getField = errorWithoutStackTrace "BDF_PropertyRec.integer.getField: union field"
+
+instance HasField "cardinal" BDF_PropertyRec FT_UInt where
+  getField = errorWithoutStackTrace "BDF_PropertyRec.cardinal.getField: union field"
+
 instance Storable BDF_PropertyRec where
-  sizeOf _    = #size struct BDF_PropertyRec_
-  alignment _ = #size struct BDF_PropertyRec_
+  sizeOf _    = #size      struct BDF_PropertyRec_
+  alignment _ = #alignment struct BDF_PropertyRec_
 
   peek ptr =
     BDF_PropertyRec
-      <$> peek (offset @"type"     ptr)
-      <*> peek (offset @"atom"     ptr)
-      <*> peek (offset @"integer"  ptr)
-      <*> peek (offset @"cardinal" ptr)
+      <$> peek (offset @"type" ptr)
 
-  poke ptr val = do
+  poke ptr val =
     pokeField @"type" ptr val
-    case getField @"type" val of
-      BDF_PROPERTY_TYPE_ATOM     -> pokeField @"atom"     ptr val
-      BDF_PROPERTY_TYPE_INTEGER  -> pokeField @"integer"  ptr val
-      BDF_PROPERTY_TYPE_CARDINAL -> pokeField @"cardinal" ptr val
-      _                          -> return ()

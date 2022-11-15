@@ -93,7 +93,7 @@ instance Storable FT_BitmapGlyphRec where
 
 
 
-newtype FT_OutlineGlyph = Ptr FT_OutlineGlyphRec
+type FT_OutlineGlyph = Ptr FT_OutlineGlyphRec
 
 data FT_OutlineGlyphRec = FT_OutlineGlyphRec
                             { root    :: FT_GlyphRec
@@ -115,3 +115,60 @@ instance Storable FT_OutlineGlyphRec where
   poke ptr val = do
     pokeField @"root"    ptr val
     pokeField @"outline" ptr val
+
+
+
+type FT_SvgGlyph = Ptr FT_SvgGlyphRec
+
+data FT_SvgGlyphRec = FT_SvgGlyphRec
+                          { root                :: FT_GlyphRec
+                          , svg_document        :: Ptr FT_Byte
+                          , svg_document_length :: FT_ULong
+                          , glyph_index         :: FT_UInt
+                          , metrics             :: FT_Size_Metrics
+                          , units_per_EM        :: FT_UShort
+                          , start_glyph_id      :: FT_UShort
+                          , end_glyph_id        :: FT_UShort
+                          , transform           :: FT_Matrix
+                          , delta               :: FT_Vector
+                          }
+
+instance Offset "root"                FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, root               }
+instance Offset "svg_document"        FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, svg_document       }
+instance Offset "svg_document_length" FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, svg_document_length}
+instance Offset "glyph_index"         FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, glyph_index        }
+instance Offset "metrics"             FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, metrics            }
+instance Offset "units_per_EM"        FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, units_per_EM       }
+instance Offset "start_glyph_id"      FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, start_glyph_id     }
+instance Offset "end_glyph_id"        FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, end_glyph_id       }
+instance Offset "transform"           FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, transform          }
+instance Offset "delta"               FT_SvgGlyphRec where rawOffset = #{offset struct FT_SvgGlyphRec_, delta              }
+
+instance Storable FT_SvgGlyphRec where
+  sizeOf _    = #size      struct FT_SvgGlyphRec_
+  alignment _ = #alignment struct FT_SvgGlyphRec_
+
+  peek ptr =
+    FT_SvgGlyphRec
+      <$> peek (offset @"root"                ptr)
+      <*> peek (offset @"svg_document"        ptr)
+      <*> peek (offset @"svg_document_length" ptr)
+      <*> peek (offset @"glyph_index"         ptr)
+      <*> peek (offset @"metrics"             ptr)
+      <*> peek (offset @"units_per_EM"        ptr)
+      <*> peek (offset @"start_glyph_id"      ptr)
+      <*> peek (offset @"end_glyph_id"        ptr)
+      <*> peek (offset @"transform"           ptr)
+      <*> peek (offset @"delta"               ptr)
+
+  poke ptr val = do
+    pokeField @"root"                ptr val
+    pokeField @"svg_document"        ptr val
+    pokeField @"svg_document_length" ptr val
+    pokeField @"glyph_index"         ptr val
+    pokeField @"metrics"             ptr val
+    pokeField @"units_per_EM"        ptr val
+    pokeField @"start_glyph_id"      ptr val
+    pokeField @"end_glyph_id"        ptr val
+    pokeField @"transform"           ptr val
+    pokeField @"delta"               ptr val

@@ -96,6 +96,7 @@ module FreeType.Core.Types
   , pattern FT_GLYPH_FORMAT_BITMAP
   , pattern FT_GLYPH_FORMAT_OUTLINE
   , pattern FT_GLYPH_FORMAT_PLOTTER
+  , pattern FT_GLYPH_FORMAT_SVG
     -- ** FT_IMAGE_TAG
     -- | [FT_IMAGE_TAG](https://www.freetype.org/freetype2/docs/reference/ft2-basic_types.html#ft_image_tag)
     --   is simply 'FT_MAKE_TAG' combined with a variable assignment.
@@ -132,9 +133,11 @@ pattern FT_GLYPH_FORMAT_NONE
       , FT_GLYPH_FORMAT_BITMAP
       , FT_GLYPH_FORMAT_OUTLINE
       , FT_GLYPH_FORMAT_PLOTTER
+      , FT_GLYPH_FORMAT_SVG
      :: (Eq a, Num a) => a
 pattern FT_GLYPH_FORMAT_NONE      = #const FT_GLYPH_FORMAT_NONE
 pattern FT_GLYPH_FORMAT_COMPOSITE = #const FT_GLYPH_FORMAT_COMPOSITE
 pattern FT_GLYPH_FORMAT_BITMAP    = #const FT_GLYPH_FORMAT_BITMAP
 pattern FT_GLYPH_FORMAT_OUTLINE   = #const FT_GLYPH_FORMAT_OUTLINE
 pattern FT_GLYPH_FORMAT_PLOTTER   = #const FT_GLYPH_FORMAT_PLOTTER
+pattern FT_GLYPH_FORMAT_SVG       = #const FT_GLYPH_FORMAT_SVG

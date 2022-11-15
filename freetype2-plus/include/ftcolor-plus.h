@@ -6,9 +6,10 @@
 
 FT_BEGIN_HEADER
 
-  FT_EXPORT ( FT_Error )
-  FT_Palette_Set_Foreground_Color_Plus ( FT_Face   face
-                                       , FT_Color *foreground_color
-                                       );
+  FT_EXPORT ( FT_Bool )
+  FT_Get_Paint_Plus ( FT_Face         face
+                    , FT_OpaquePaint* opaque_paint
+                    , FT_COLR_Paint*  paint
+                    );
 
 FT_END_HEADER

@@ -54,6 +54,12 @@ module FreeType.Core.Base
   , pattern FT_HAS_COLOR
     -- ** FT_HAS_MULTIPLE_MASTERS
   , pattern FT_HAS_MULTIPLE_MASTERS
+    -- ** FT_HAS_SVG
+  , pattern FT_HAS_SVG
+    -- ** FT_HAS_SBIX
+  , pattern FT_HAS_SBIX
+    -- ** FT_HAS_SBIX_OVERLAY
+  , pattern FT_HAS_SBIX_OVERLAY
     -- ** FT_IS_SFNT
   , pattern FT_IS_SFNT
     -- ** FT_IS_SCALABLE
@@ -125,13 +131,14 @@ module FreeType.Core.Base
   , FT_Size_Request
     -- ** FT_Set_Transform
   , ft_Set_Transform
+    -- ** FT_Get_Transform
+  , ft_Get_Transform
     -- ** FT_Load_Glyph
   , ft_Load_Glyph
     -- ** FT_Get_Char_Index
   , ft_Get_Char_Index
     -- ** FT_Get_First_Char
   , ft_Get_First_Char
-
     -- ** FT_Get_Next_Char
   , ft_Get_Next_Char
     -- ** FT_Get_Name_Index
@@ -197,6 +204,9 @@ module FreeType.Core.Base
   , pattern FT_FACE_FLAG_TRICKY
   , pattern FT_FACE_FLAG_COLOR
   , pattern FT_FACE_FLAG_VARIATION
+  , pattern FT_FACE_FLAG_SVG
+  , pattern FT_FACE_FLAG_SBIX
+  , pattern FT_FACE_FLAG_SBIX_OVERLAY
     -- ** FT_STYLE_FLAG_XXX
   , pattern FT_STYLE_FLAG_ITALIC
   , pattern FT_STYLE_FLAG_BOLD
@@ -212,6 +222,7 @@ module FreeType.Core.Base
   , pattern FT_LOAD_NO_HINTING
   , pattern FT_LOAD_RENDER
   , pattern FT_LOAD_NO_BITMAP
+  , pattern FT_LOAD_SBITS_ONLY
   , pattern FT_LOAD_VERTICAL_LAYOUT
   , pattern FT_LOAD_FORCE_AUTOHINT
   , pattern FT_LOAD_CROP_BITMAP
@@ -329,6 +340,33 @@ pattern FT_HAS_MULTIPLE_MASTERS <- _
     FT_HAS_MULTIPLE_MASTERS fac = do
       flgs <- peek $ offset @"face_flags" fac
       return $ (FT_FACE_FLAG_MULTIPLE_MASTERS .&. flgs) /= 0
+
+
+
+pattern FT_HAS_SVG :: FT_Face -> IO Bool
+pattern FT_HAS_SVG <- _
+  where
+    FT_HAS_SVG fac = do
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_SVG .&. flgs) /= 0
+
+
+
+pattern FT_HAS_SBIX :: FT_Face -> IO Bool
+pattern FT_HAS_SBIX <- _
+  where
+    FT_HAS_SBIX fac = do
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_SBIX .&. flgs) /= 0
+
+
+
+pattern FT_HAS_SBIX_OVERLAY :: FT_Face -> IO Bool
+pattern FT_HAS_SBIX_OVERLAY <- _
+  where
+    FT_HAS_SBIX_OVERLAY fac = do
+      flgs <- peek $ offset @"face_flags" fac
+      return $ (FT_FACE_FLAG_SBIX_OVERLAY .&. flgs) /= 0
 
 
 
@@ -537,6 +575,15 @@ foreign import ccall "FT_Set_Transform"
 
 
 
+foreign import ccall "FT_Get_Transform"
+  ft_Get_Transform
+    :: FT_Face       -- ^ face
+    -> Ptr FT_Matrix -- ^ matrix
+    -> Ptr FT_Vector -- ^ delta
+    -> IO ()
+
+
+
 foreign import ccall "FT_Load_Glyph"
   ft_Load_Glyph
     :: FT_Face     -- ^ face
@@ -724,6 +771,9 @@ pattern FT_FACE_FLAG_SCALABLE
       , FT_FACE_FLAG_TRICKY
       , FT_FACE_FLAG_COLOR
       , FT_FACE_FLAG_VARIATION
+      , FT_FACE_FLAG_SVG
+      , FT_FACE_FLAG_SBIX
+      , FT_FACE_FLAG_SBIX_OVERLAY
      :: (Eq a, Num a) => a
 pattern FT_FACE_FLAG_SCALABLE         = #const FT_FACE_FLAG_SCALABLE
 pattern FT_FACE_FLAG_FIXED_SIZES      = #const FT_FACE_FLAG_FIXED_SIZES
@@ -741,6 +791,9 @@ pattern FT_FACE_FLAG_CID_KEYED        = #const FT_FACE_FLAG_CID_KEYED
 pattern FT_FACE_FLAG_TRICKY           = #const FT_FACE_FLAG_TRICKY
 pattern FT_FACE_FLAG_COLOR            = #const FT_FACE_FLAG_COLOR
 pattern FT_FACE_FLAG_VARIATION        = #const FT_FACE_FLAG_VARIATION
+pattern FT_FACE_FLAG_SVG              = #const FT_FACE_FLAG_SVG
+pattern FT_FACE_FLAG_SBIX             = #const FT_FACE_FLAG_SBIX
+pattern FT_FACE_FLAG_SBIX_OVERLAY     = #const FT_FACE_FLAG_SBIX_OVERLAY
 
 
 
@@ -771,6 +824,7 @@ pattern FT_LOAD_DEFAULT
       , FT_LOAD_NO_HINTING
       , FT_LOAD_RENDER
       , FT_LOAD_NO_BITMAP
+      , FT_LOAD_SBITS_ONLY
       , FT_LOAD_VERTICAL_LAYOUT
       , FT_LOAD_FORCE_AUTOHINT
       , FT_LOAD_CROP_BITMAP
@@ -790,6 +844,7 @@ pattern FT_LOAD_NO_SCALE                    = #const FT_LOAD_NO_SCALE
 pattern FT_LOAD_NO_HINTING                  = #const FT_LOAD_NO_HINTING
 pattern FT_LOAD_RENDER                      = #const FT_LOAD_RENDER
 pattern FT_LOAD_NO_BITMAP                   = #const FT_LOAD_NO_BITMAP
+pattern FT_LOAD_SBITS_ONLY                  = #const FT_LOAD_SBITS_ONLY
 pattern FT_LOAD_VERTICAL_LAYOUT             = #const FT_LOAD_VERTICAL_LAYOUT
 pattern FT_LOAD_FORCE_AUTOHINT              = #const FT_LOAD_FORCE_AUTOHINT
 pattern FT_LOAD_CROP_BITMAP                 = #const FT_LOAD_CROP_BITMAP
