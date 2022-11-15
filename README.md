@@ -1,22 +1,27 @@
 # freetype2
 
-Bindings to the [FreeType2](https://www.freetype.org/) C library (version 2.10.1 as of when this was edited),
+Raw bindings to the [FreeType2](https://www.freetype.org/) C library (version 2.12.1 as of when this was edited),
 following the [API reference](https://www.freetype.org/freetype2/docs/reference/index.html)
-
-These are _mostly_ raw with a few key changes:
-- Every function that returns a `FT_Error` throws a `FtError` exception instead
-  (defined in `FreeType.Exception`);
-- A lot of the functions are wrappers that automatically allocate memory
-  so you do not have to `alloca`/`peek`/`withCString` constantly;
-- Deprecated values that are simply synonyms to other values are omitted;
-- Field names are prefixed, so none of them overlap;
-- Every function that was modified by this library has a raw counterpart
-  in a matching `*.Internal` module;
 
 This package reexports the
 [Foreign.Storable.Offset](https://hackage.haskell.org/package/storable-offset-0.1.0.0/docs/Foreign-Storable-Offset.html)
 module and implements the `Offset` instance for all the datatypes.
-Alas Haddock currently does not show this (as per [haddock#563](https://github.com/haskell/haddock/issues/563)).
+Alas Hackage currently does not show this (as per [haddock#563](https://github.com/haskell/haddock/issues/563)).
+
+Caveats of this library:
+- `FT_Get_Kerning` and all functions from `FreeType.Support.Computations` use unsafe FFI calls;
+
+- `DuplicateRecordFields` (since GHC 9.2 also `NoFieldSelectors`) are turned on in all modules with datatype
+  definitions, record field names are the same as in the C library.
+  You should use `GHC.Records.getField` or record dot syntax to access datatype fields;
+
+- `type` and `data` record fields are replaced with `type_` and `data_` respectively.
+  `GHC.Records.HasField` and `Foreign.Storable.Offset.Offset` instances are defined over both variants.
+
+- Union fields are accessible through `offset`, but `getField` is not defined for them;
+
+- `FreeType.Core.Color.ft_Palette_Set_Foreground_Color`, `FreeType.Core.Layer.ft_Get_Paint` and
+  `FreeType.Support.Bitmap.ft_Bitmap_Blend` do not match their C definitions as they rely on marshalling structs.
 
 ## Module structure
 

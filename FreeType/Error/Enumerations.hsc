@@ -22,7 +22,7 @@ import           Foreign.Ptr
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
--- | Default build does not set FT_CONFIG_OPTION_ERROR_STRINGS,
+-- | Default build does not set @FT_CONFIG_OPTION_ERROR_STRINGS@,
 --   so this always returns @NULL@.
 foreign import ccall "FT_Error_String"
   ft_Error_String

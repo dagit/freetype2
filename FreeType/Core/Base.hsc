@@ -258,7 +258,6 @@ module FreeType.Core.Base
   , pattern FT_FSTYPE_NO_SUBSETTING
   , pattern FT_FSTYPE_BITMAP_EMBEDDING_ONLY
     -- ** FT_HAS_FAST_GLYPHS
-    -- | Deprecated: 'FT_HAS_FAST_GLYPHS'.
   , pattern FT_HAS_FAST_GLYPHS
   ) where
 
