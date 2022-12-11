@@ -68,7 +68,7 @@ Extra-source-files:  freetype2/include/*.h
                      freetype2/src/winfonts/*.h
 
                      cbits/src/*.c
-                     cbits/include/*.h
+                     cbits/include/extra/*.h
 
 Library
   Exposed-modules: FreeType
@@ -148,7 +148,7 @@ Library
   Build-depends: base >= 4.10 && < 4.17
                , storable-offset
 
-  Build-tools: hsc2hs
+  Build-tools-depends: hsc2hs
   ghc-options: -Wall
 
   include-dirs: freetype2/include
@@ -179,11 +179,6 @@ Library
 
                 cbits/include
                 cbits/src
-
-  cc-options: -DFT_CONFIG_CONFIG_H=<ftconfig.h>
-              -DFT2_BUILD_LIBRARY
-              -DFT_CONFIG_MODULES_H=<ftmodule.h>
-              -DDARWIN_NO_CARBON
 
   c-sources: freetype2/src/autofit/autofit.c
              freetype2/src/base/ftbase.c
@@ -232,6 +227,8 @@ Library
              cbits/src/ftbitmap.c
              cbits/src/ftcolor.c
              cbits/src/ftlayer.c
+
+  cc-options: -DFT2_BUILD_LIBRARY
 
   if flag(stdcall)    
     cpp-options:      -DCALLCV=stdcall    
