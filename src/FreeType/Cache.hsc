@@ -9,7 +9,8 @@
 
 module FreeType.Cache
   ( -- ** FTC_Manager
-    FTC_Manager
+    FTC_ManagerRec
+  , FTC_Manager
     -- ** FTC_FaceID
   , FTC_FaceID
     -- ** FTC_Face_Requester
@@ -27,10 +28,12 @@ module FreeType.Cache
     -- ** FTC_Manager_RemoveFaceID
   , ftc_Manager_RemoveFaceID
     -- ** FTC_Node
+  , FTC_NodeRec
   , FTC_Node
     -- ** FTC_Node_Unref
   , ftc_Node_Unref
     -- ** FTC_ImageCache
+  , FTC_ImageCacheRec
   , FTC_ImageCache
     -- ** FTC_ImageCache_New
   , ftc_ImageCache_New
@@ -39,12 +42,14 @@ module FreeType.Cache
     -- ** FTC_SBit
   , FTC_SBit
     -- ** FTC_SBitCache
+  , FTC_SBitCacheRec
   , FTC_SBitCache
     -- ** FTC_SBitCache_New
   , ftc_SBitCache_New
     -- ** FTC_SBitCache_Lookup
   , ftc_SBitCache_Lookup
     -- ** FTC_CMapCache
+  , FTC_CMapCacheRec
   , FTC_CMapCache
     -- ** FTC_CMapCache_New
   , ftc_CMapCache_New

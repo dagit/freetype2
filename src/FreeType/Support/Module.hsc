@@ -12,7 +12,8 @@
 
 module FreeType.Support.Module
   ( -- ** FT_Module
-    FT_Module
+    FT_ModuleRec
+  , FT_Module
     -- ** FT_Module_Constructor
   , FT_Module_Constructor
     -- ** FT_Module_Destructor
@@ -45,8 +46,13 @@ module FreeType.Support.Module
     -- ** FT_Reference_Library
   , ft_Reference_Library
     -- ** FT_Renderer
+  , FT_RendererRec
   , FT_Renderer
     -- ** FT_Renderer_Class
+  , FT_Renderer_RenderFunc
+  , FT_Renderer_TransformFunc
+  , FT_Renderer_GetCBoxFunc
+  , FT_Renderer_SetModeFunc
   , FT_Renderer_Class (..)
     -- ** FT_Get_Renderer
   , ft_Get_Renderer
@@ -55,6 +61,7 @@ module FreeType.Support.Module
     -- ** FT_Set_Debug_Hook
   , ft_Set_Debug_Hook
     -- ** FT_Driver
+  , FT_DriverRec
   , FT_Driver
     -- ** FT_DebugHook_Func
   , FT_DebugHook_Func

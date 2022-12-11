@@ -10,7 +10,6 @@
 
 module FreeType.Core.Types.Types where
 
-import           Data.Bits
 import           Data.Int
 import           Data.Word
 import           Foreign.Ptr

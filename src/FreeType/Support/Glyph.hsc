@@ -11,7 +11,8 @@
 
 module FreeType.Support.Glyph
   ( -- ** FT_Stroker
-    FT_Stroker
+    FT_StrokerRec
+  , FT_Stroker
     -- ** FT_Stroker_LineJoin
   , FT_Stroker_LineJoin
   , pattern FT_STROKER_LINEJOIN_ROUND

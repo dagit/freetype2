@@ -12,7 +12,8 @@
 
 module FreeType.Core.Base
   ( -- ** FT_Library
-    FT_Library
+    FT_LibraryRec
+  , FT_Library
     -- ** FT_Face
   , FT_Face
     -- ** FT_Size
@@ -85,6 +86,7 @@ module FreeType.Core.Base
     -- ** FT_Glyph_Metrics
   , FT_Glyph_Metrics (..)
     -- ** FT_SubGlyph
+  , FT_SubGlyphRec
   , FT_SubGlyph
     -- ** FT_Bitmap_Size
   , FT_Bitmap_Size (..)
@@ -184,10 +186,13 @@ module FreeType.Core.Base
     -- ** FT_Get_SubGlyph_Info
   , ft_Get_SubGlyph_Info
     -- ** FT_Face_Internal
+  , FT_Face_InternalRec
   , FT_Face_Internal
     -- ** FT_Size_Internal
+  , FT_Size_InternalRec
   , FT_Size_Internal
     -- ** FT_Slot_Internal
+  , FT_Slot_InternalRec
   , FT_Slot_Internal
     -- ** FT_FACE_FLAG_XXX
   , pattern FT_FACE_FLAG_SCALABLE
@@ -266,7 +271,6 @@ module FreeType.Core.Base
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 
-import           Data.Bits
 #ifdef aarch64_HOST_ARCH
 import           Data.Word
 #else
@@ -651,10 +655,13 @@ foreign import CALLCV "freetype/freetype.h FT_Load_Char"
 
 
 
-pattern FT_LOAD_TARGET_MODE :: (Bits a, Num a) => a -> a
+foreign import capi unsafe "freetype/freetype.h FT_LOAD_TARGET_MODE"
+  ft_load_target_mode :: FT_Int32 -> FT_Render_Mode
+
+pattern FT_LOAD_TARGET_MODE :: FT_Int32 -> FT_Render_Mode
 pattern FT_LOAD_TARGET_MODE <- _
   where
-    FT_LOAD_TARGET_MODE a = (a `shiftR` 16) .&. 15
+    FT_LOAD_TARGET_MODE = ft_load_target_mode
 
 
 
@@ -925,9 +932,10 @@ pattern FT_FSTYPE_BITMAP_EMBEDDING_ONLY        = #const FT_FSTYPE_BITMAP_EMBEDDI
 
 
 
-pattern FT_HAS_FAST_GLYPHS
-  :: FT_Face -- ^ face
-  -> Bool
+foreign import capi unsafe "freetype/freetype.h FT_HAS_FAST_GLYPHS"
+  ft_has_fast_glyphs :: FT_Face -> IO FT_Bool
+
+pattern FT_HAS_FAST_GLYPHS :: FT_Face -> IO FT_Bool
 pattern FT_HAS_FAST_GLYPHS <- _
   where
-    FT_HAS_FAST_GLYPHS _ = False
+    FT_HAS_FAST_GLYPHS = ft_has_fast_glyphs

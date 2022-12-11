@@ -12,6 +12,7 @@ module FreeType.Core.Glyph
   ( -- ** FT_Glyph
     FT_Glyph
     -- ** FT_GlyphRec
+  , FT_Glyph_Class
   , FT_GlyphRec (..)
     -- ** FT_BitmapGlyph
   , FT_BitmapGlyph

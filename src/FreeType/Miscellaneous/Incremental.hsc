@@ -5,7 +5,8 @@
 
 module FreeType.Miscellaneous.Incremental
   ( -- ** FT_Incremental
-    FT_Incremental
+    FT_IncrementalRec
+  , FT_Incremental
     -- ** FT_Incremental_MetricsRec
   , FT_Incremental_MetricsRec (..)
     -- ** FT_Incremental_Metrics

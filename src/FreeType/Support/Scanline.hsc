@@ -7,7 +7,8 @@
 
 module FreeType.Support.Scanline
   ( -- ** FT_Raster
-    FT_Raster
+    FT_RasterRec
+  , FT_Raster
     -- ** FT_Span
   , FT_Span (..)
     -- ** FT_SpanFunc

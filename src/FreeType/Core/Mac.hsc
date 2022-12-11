@@ -13,9 +13,8 @@
      chapter of the reference.
  -}
 
-module FreeType.Core.Mac where
-{-
-#ifdef darwin_HOST_OS
+module FreeType.Core.Mac
+#if 0 // #ifdef darwin_HOST_OS
   ( -- ** FT_New_Face_From_FOND
     ft_New_Face_From_FOND
     -- ** FT_GetFile_From_Mac_Name
@@ -97,5 +96,6 @@ foreign import CALLCV "freetype/ftmac.h FT_New_Face_From_FSRef"
     -> FT_Long     -- ^ face_index
     -> Ptr FT_Face -- ^ aface
     -> IO FT_Error
+#else
+  where
 #endif
--}
