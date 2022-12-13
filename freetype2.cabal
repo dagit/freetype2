@@ -145,10 +145,10 @@ Library
 
   hs-source-dirs: src
 
-  Build-depends: base >= 4.10 && < 4.17
+  Build-depends: base >= 4.10 && < 5
                , storable-offset
 
-  Build-tools-depends: hsc2hs
+  Build-tool-depends: hsc2hs:hsc2hs
   ghc-options: -Wall
 
   include-dirs: freetype2/include
