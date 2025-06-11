@@ -70,11 +70,8 @@ import           FreeType.Circular.Types
 import           FreeType.Core.Base.Types
 import           FreeType.Core.Types.Types
 
-#ifdef aarch64_HOST_ARCH
 import           Data.Word
-#else
 import           Data.Int
-#endif
 import           Foreign.Ptr
 
 #include "ft2build.h"
@@ -150,7 +147,7 @@ foreign import ccall "FT_Open_Face"
 
 foreign import ccall "FT_Attach_File"
   ft_Attach_File'
-    :: FT_Face          
+    :: FT_Face
     -> Ptr #{type char} -- ^ face
     -> IO FT_Error      -- ^ filepathname
 

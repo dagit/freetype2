@@ -183,7 +183,7 @@ Library
                  FreeType.Miscellaneous.Incremental.Types
                  FreeType.Miscellaneous.TrueType.Types
 
-  Build-depends: base >= 4.10 && < 4.17
+  Build-depends: base >= 4.10 && < 5
                , storable-offset
 
   Build-tools: hsc2hs
