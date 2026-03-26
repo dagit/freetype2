@@ -13,6 +13,7 @@ import           Foreign.Storable.Offset
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
+#include FT_COLOR_H
 
 data FT_LayerIterator = FT_LayerIterator
                           { liNum_layers :: FT_UInt

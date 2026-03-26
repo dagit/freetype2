@@ -9,9 +9,7 @@ module FreeType.Format.BDF.Types where
 
 import           FreeType.Core.Types.Types
 
-#ifndef aarch64_HOST_ARCH
 import           Data.Int
-#endif
 import           Data.Word
 import           Foreign.Ptr
 import           Foreign.Storable

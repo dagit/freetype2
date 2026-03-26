@@ -183,7 +183,7 @@ Library
                  FreeType.Miscellaneous.Incremental.Types
                  FreeType.Miscellaneous.TrueType.Types
 
-  Build-depends: base >= 4.10 && < 4.17
+  Build-depends: base >= 4.10 && < 5
                , storable-offset
 
   Build-tools: hsc2hs
@@ -208,6 +208,8 @@ Library
                 freetype2/src/autofit
                 freetype2/src/pshinter
                 freetype2/src/raster
+                freetype2/src/sdf
+                freetype2/src/svg
                 freetype2/src/smooth
                 freetype2/src/cache
                 freetype2/src/gzip
@@ -254,7 +256,9 @@ Library
              freetype2/src/winfonts/winfnt.c
              freetype2/src/pcf/pcf.c
              freetype2/src/bdf/bdf.c
+             freetype2/src/sdf/sdf.c
              freetype2/src/sfnt/sfnt.c
+             freetype2/src/svg/svg.c
              freetype2/src/autofit/autofit.c
              freetype2/src/pshinter/pshinter.c
              freetype2/src/raster/raster.c
