@@ -52,6 +52,10 @@ Extra-source-files:  freetype2/include/*.h
                      freetype2/src/raster/*.h
                      freetype2/src/sfnt/*.c
                      freetype2/src/sfnt/*.h
+                     freetype2/src/sdf/*.c
+                     freetype2/src/sdf/*.h
+                     freetype2/src/svg/*.c
+                     freetype2/src/svg/*.h
                      freetype2/src/smooth/*.c
                      freetype2/src/smooth/*.h
                      freetype2/src/truetype/*.c
